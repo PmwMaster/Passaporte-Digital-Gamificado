@@ -6,7 +6,7 @@
 
 ## 📋 Tarefas e Entregas
 
-- [ ] **Tela 01** — *[Descrição ou nome da tela]*
+- [ ] **Tela 01** — *[tela inicial]*
 - [ ] **Tela 02** — *[Descrição ou nome da tela]*
 - [ ] **Tela 03** — *[Descrição ou nome da tela]*
 - [ ] **Tela 04** — *[Descrição ou nome da tela]*
