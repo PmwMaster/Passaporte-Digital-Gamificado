@@ -23,7 +23,7 @@
 
 ### 🚀 Plataformas e Tecnologias Adotadas
 * **Framework Principal:** Next.js
-* **Outras Tecnologias:** *[Ex.: React, Tailwind CSS, Prisma, PostgreSQL, etc.]*
+* **Outras Tecnologias:** *[Ex.: React, Tailwind CSS, TyperScript, etc.]*
 
 ### 🎲 Incorporação da Tecnologia / Prática Sorteada
 * *[Descreva aqui qual foi a tecnologia ou prática sorteada e como ela será aplicada na solução]*
