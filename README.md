@@ -1,4 +1,4 @@
-# 🛍️ Passaporte do Shopping
+# 🛍️ Passaporte Digital Gamificado — Plataforma de engajamento, experiências e fidelização de visitantes
 
 > **Desafio 05 — Engajamento e Fidelização de Visitantes:** Transformar visitas pontuais ao shopping center em um relacionamento contínuo e recorrente através de um **Passaporte Digital Gamificado** (Web App PWA, sem necessidade de instalação). A plataforma funciona como um ecossistema de *Tenant Mix* com vitrine aberta para anúncios e promoções do dia, onde o visitante acumula carimbos e pontos ao escanear QR Codes nas lojas e eventos (com validação antifraude por geolocalização em raio de 250 m) e troca seus créditos diretamente por cupons de desconto criados pelos próprios lojistas. *"Cada visita vale algo, e a próxima vale mais."*
 
