@@ -29,7 +29,7 @@ Box 3 anuncio com valor/preço para atrair cliques
 
 - [ ] **Tela 05** - tela de adm
 
-- [ ] **Tela 04** — *[tela do logista]*
+-
 
 ---
 
