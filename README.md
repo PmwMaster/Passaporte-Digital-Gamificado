@@ -201,6 +201,18 @@
 
 ---
 
+## 📐 Tech Spec — Divisão da Entrega
+
+| Parte | Documento | Foco |
+|---|---|---|
+| **1** | [Fundação e Jornada do Visitante](docs/tech-spec/parte-1-fundacao-e-visitante.md) | Setup, vitrine, autenticação + OTP, check-in com GPS, carimbos, missões e extrato |
+| **2** | [Lojista, Cupons e Tempo Real](docs/tech-spec/parte-2-lojista-cupons-tempo-real.md) | Portal do lojista, ofertas, resgate de vouchers e baixa ao vivo via SSE |
+| **3** | [Administração, PWA e Entrega Final](docs/tech-spec/parte-3-admin-pwa-entrega.md) | Painel do shopping, aprovação, QR Codes, indicadores, PWA, deploy e demo |
+
+Visão geral: [docs/tech-spec/README.md](docs/tech-spec/README.md)
+
+---
+
 ## 📄 Documentação Inicial do Projeto
 
 ### 💻 Linguagem de Programação
