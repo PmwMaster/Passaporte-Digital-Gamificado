@@ -19,9 +19,17 @@ Box 3 anuncio com valor/preço para atrair cliques
 
 
 
-- [ ] **Tela 02** — *[Descrição ou nome da tela]*
-- [ ] **Tela 03** — *[Descrição ou nome da tela]*
-- [ ] **Tela 04** — *[Descrição ou nome da tela]*
+- [ ] **Tela 02** — *[Login.Logout.cadastro]*
+
+    
+- [ ] **Tela 03** — *[Cupom e pontos]*
+
+    
+- [ ] **Tela 04** — *[tela do logista]*
+
+- [ ] **Tela 05** - tela de adm
+
+- [ ] **Tela 04** — *[tela do logista]*
 
 ---
 
