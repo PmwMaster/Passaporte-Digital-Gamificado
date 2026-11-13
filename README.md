@@ -9,7 +9,7 @@
 - [ ] **Tela 01** — *[tela inicial]*
 Box1 com scroll automatico, com opção do usuario scrolar (principais promoçoes do dia com os pontos)
 
-Box 2 anuncio principal ( Anuncio para atrair o cliente) "Scaneei o  QR cold para ganhar pontos)
+Box 2 anuncio principal ( Anuncio para atrair o cliente) "Scaneei o  QR code para ganhar pontos)
 
  *NO MOBILE ADICIONAR CAMPO DE CHAMADA DO WEBAPP PARA TELAINICIAL".
 
