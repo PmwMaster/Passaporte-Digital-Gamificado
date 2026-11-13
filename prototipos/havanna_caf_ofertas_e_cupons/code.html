@@ -1,0 +1,364 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><meta content="mobile_tab" name="shell-type"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&amp;family=Playfair+Display:wght@600;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "tertiary-fixed": "#ffe088", "on-tertiary-container": "#463600", "on-error": "#ffffff", "surface-variant": "#e5e2e1", "outline-variant": "#d2c5b3", "surface-bright": "#fcf9f8", "surface-tint": "#7a580f", "on-background": "#1c1b1b", "secondary-fixed": "#a3f69c", "on-primary-fixed-variant": "#5e4200", "tertiary": "#735c00", "on-secondary-fixed": "#002204", "secondary-fixed-dim": "#88d982", "on-secondary-fixed-variant": "#005312", "primary": "#7a580f", "on-primary-fixed": "#271900", "error": "#ba1a1a", "secondary-container": "#a0f399", "background": "#fcf9f8", "on-surface": "#1c1b1b", "surface-container-low": "#f6f3f2", "primary-fixed": "#ffdea8", "inverse-on-surface": "#f3f0ef", "on-primary-container": "#4c3400", "surface-container-high": "#eae7e7", "on-primary": "#ffffff", "on-tertiary-fixed-variant": "#574500", "inverse-primary": "#edc06f", "on-surface-variant": "#4e4638", "surface-container": "#f0eded", "inverse-surface": "#313030", "on-error-container": "#93000a", "tertiary-fixed-dim": "#e9c349", "secondary": "#1b6d24", "error-container": "#ffdad6", "on-secondary": "#ffffff", "surface": "#fcf9f8", "on-tertiary-fixed": "#241a00", "primary-container": "#c59b4e", "tertiary-container": "#c19e26", "on-tertiary": "#ffffff", "primary-fixed-dim": "#edc06f", "surface-container-lowest": "#ffffff", "surface-dim": "#dcd9d9", "surface-container-highest": "#e5e2e1", "on-secondary-container": "#217128", "outline": "#807666" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-md": "1rem", "space-lg": "1.5rem", "space-sm": "0.5rem", "space-xl": "2.25rem", "margin": "1.25rem", "space-xs": "0.25rem", "gutter": "1rem" }, "fontFamily": { "display-lg": ["Playfair Display"], "title-md": ["Outfit"], "headline-lg": ["Playfair Display"], "label-lg": ["Outfit"], "body-sm": ["Outfit"], "body-md": ["Outfit"], "label-sm": ["Outfit"], "label-md": ["Outfit"], "headline-md": ["Playfair Display"], "body-lg": ["Outfit"], "headline-sm": ["Outfit"] }, "fontSize": { "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "title-md": ["16px", { "lineHeight": "22px", "letterSpacing": "0.01em", "fontWeight": "600" }], "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "0em", "fontWeight": "600" }], "label-lg": ["14px", { "lineHeight": "18px", "letterSpacing": "0.04em", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "label-sm": ["10px", { "lineHeight": "14px", "letterSpacing": "0.08em", "fontWeight": "600" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }], "headline-md": ["22px", { "lineHeight": "28px", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }] } } } };</script><style>@layer base{html,body{width:100%;margin:0;padding:0;background-color:#fcf9f8;color:#1c1b1b;}body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head><body class="bg-surface text-on-surface font-body-md text-body-md flex flex-col min-h-screen relative antialiased selection:bg-primary-fixed selection:text-on-primary-fixed"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(163,124,44,0.06)]"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center gap-space-sm"><div class="flex items-center justify-center"><span class="material-symbols-outlined text-primary text-[28px]">spa</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-surface leading-tight tracking-tight">Capim Dourado</span><span class="font-label-sm text-label-sm text-primary uppercase tracking-widest font-semibold">Início</span></div></div><div class="flex items-center gap-space-sm"><button class="min-h-[44px] px-space-sm py-1 rounded-full bg-primary-fixed/40 hover:bg-primary-fixed/70 text-on-primary-fixed flex items-center gap-1.5 transition-all shadow-[0_2px_8px_rgba(197,155,78,0.12)]" type="button"><span class="material-symbols-outlined text-primary text-[18px]">stars</span><span class="font-label-md text-label-md font-bold text-on-primary-fixed">150 pts</span></button><div class="flex items-center justify-center p-0.5 rounded-full bg-gradient-to-tr from-primary-container to-tertiary-fixed"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/ALJJyrDN7Ab6dk0r_DJrJa_8sRDdKNRrKiLy9wg3DxCAJP9gC9yriA2e0KdG9Su5Mg0rlJ4QsXhebJMzHcXXhyI_Y6H-TE1-TMLqO5waJnRmjdtLjfOGNYQGFdlaiIcY41Hwd7hJAxmt_akTzE5IQltaSrkUdk3BU5N9liXzayeFrlJgeDQkNLip78KtdIW58Hgr70CJ7mwYzwBFkMKNMQGraGVqaYc6gHX4lIQB7aj0NmaX_9iNu29_MWPg9VU"></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-24 bg-surface px-margin"><div class="flex flex-col w-full pb-8">
+<!-- Top Navigation Bar & Action -->
+<div class="flex items-center justify-between py-space-sm mb-space-sm">
+<button aria-label="Voltar para a vitrine" class="flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-low text-on-surface hover:bg-surface-container-high transition-colors shadow-sm" onclick="history.back()" type="button">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+</button>
+<div class="flex items-center gap-space-xs">
+<button aria-label="Favoritar loja" class="flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-low text-on-surface hover:text-primary transition-colors shadow-sm" id="btn-favorite" type="button">
+<span class="material-symbols-outlined text-[20px]" id="fav-icon">bookmark_border</span>
+</button>
+<button aria-label="Compartilhar loja" class="flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-low text-on-surface hover:text-primary transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[20px]">share</span>
+</button>
+</div>
+</div>
+<!-- Store Hero Card -->
+<div class="relative w-full rounded-xl overflow-hidden bg-surface-container-lowest shadow-[0_4px_20px_-2px_rgba(163,124,44,0.1)] mb-space-lg">
+<!-- Cover Banner -->
+<div class="relative w-full h-36 bg-surface-container overflow-hidden">
+<div class="w-full h-full bg-cover bg-center" data-alt="Chic modern Havanna espresso café interior inside a luxury mall with warm golden lighting, wooden finishes, marble coffee bar, and displays of golden dulce de leche jars and pastries. High-end gourmet lifestyle photography." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDftdEmbI0BcDjXBre8CNRE3lOwEiqf8rLTp0o-lBCkCJHFYnOnxUqGXu2vWnJSsbTW-X40IQKU6fl9WctSi4uP4pkMBonBbGqwneNT0z9ShLLkGUXZeEb4LkZBHlKdzzisyr4OGP-k23Jdlu2hzxyZhTPKLDPGF33-8ykBfZUiUoeghkPEj4yrQ_69sPPCOv5f9w_nLdCMjVQiFQDUPusLL9Xl24Vv0lHcRg94owM')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent"></div>
+<div class="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur-md shadow-sm flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold">Aberto agora</span>
+</div>
+</div>
+<!-- Store Profile Body -->
+<div class="relative px-margin pt-10 pb-space-md">
+<!-- Floating Logo Avatar -->
+<div class="absolute -top-9 left-margin w-[68px] h-[68px] rounded-full p-1 bg-surface-container-lowest shadow-md">
+<div class="w-full h-full rounded-full overflow-hidden bg-surface-container-high flex items-center justify-center">
+<img class="w-full h-full object-cover" data-alt="Havanna Café official circular brand logo badge with golden yellow and royal burgundy crest on crisp background, ultra-sharp vector rendering." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRDm1z7fMdrgI_xB7A0d1MltL8kTwvbb65lXPYw8k8bPFSJxjnBu-bwe3lDHe3lHgCqNQqnFZVvLG4ZZL_TCMv_HiB79yDmstBUUz0SNoMn-gshQevLZo-6u7rVh31C8J8WInzbDyb3_8y6qqFxxvH9TZ24IXJmT4xFR8z3Sj8LyagQIIMipR0QTrxwe1Bl6Gq6o5iJvgToEpsar0KkK5GcnJ5SvlAiajhgMXQ5DA">
+</div>
+</div>
+<div class="flex flex-col gap-0.5 mt-1">
+<div class="flex items-center justify-between">
+<h1 class="font-headline-md text-headline-md text-on-surface tracking-tight">Havanna Café</h1>
+<div class="flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary-fixed/40">
+<span class="material-symbols-outlined text-primary text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md font-bold text-on-primary-fixed">4.9</span>
+</div>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant font-medium">Piso L2 · Gastronomia &amp; Cafeteria</p>
+<p class="font-body-sm text-body-sm text-outline flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[15px]">schedule</span>
+          Segunda a Domingo: 10h às 22h
+        </p>
+</div>
+<!-- Passport Stamp Badge -->
+<div class="mt-space-md p-space-sm rounded-lg bg-surface-container-low flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-primary-fixed/70 flex items-center justify-center text-primary shadow-sm shrink-0">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md font-bold text-on-surface leading-tight">Loja do Passaporte</span>
+<span class="font-body-sm text-body-sm text-primary font-medium truncate">+10 pts por check-in presencial</span>
+</div>
+</div>
+<button class="px-3 py-1.5 rounded-full bg-primary text-on-primary font-label-md text-label-md font-semibold shrink-0 shadow-sm active:scale-95 transition-transform" id="btn-checkin" type="button">
+          Fazer Check-in
+        </button>
+</div>
+</div>
+</div>
+<!-- Internal Tabs / Filter -->
+<div class="flex items-center gap-2 overflow-x-auto pb-2 mb-space-md" style="scrollbar-width: none;">
+<button class="filter-chip px-4 py-2 rounded-full font-label-md text-label-md bg-primary text-on-primary font-semibold shadow-sm shrink-0 transition-colors" onclick="switchFilter('todos', this)" type="button">
+      Todas as Vantagens
+    </button>
+<button class="filter-chip px-4 py-2 rounded-full font-label-md text-label-md bg-surface-container-lowest text-on-surface-variant font-medium shrink-0 shadow-sm hover:bg-surface-container transition-colors" onclick="switchFilter('ofertas', this)" type="button">
+      🔥 Ofertas do Dia
+    </button>
+<button class="filter-chip px-4 py-2 rounded-full font-label-md text-label-md bg-surface-container-lowest text-on-surface-variant font-medium shrink-0 shadow-sm hover:bg-surface-container transition-colors" onclick="switchFilter('pontos', this)" type="button">
+      ⭐ Trocar por Pontos
+    </button>
+</div>
+<!-- SECTION 1: Ofertas do Dia -->
+<section class="flex flex-col w-full mb-space-xl" id="section-ofertas">
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[20px]">local_fire_department</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface tracking-tight">Ofertas do Dia</h2>
+</div>
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-wider font-semibold">Exclusivo na Loja</span>
+</div>
+<div class="flex flex-col gap-space-md w-full"><!-- Item 1: Combo Café da Tarde -->
+<div class="w-full rounded-xl bg-surface-container-lowest p-space-sm shadow-sm flex items-center justify-between gap-space-sm border border-outline-variant/30">
+  <div class="flex items-center gap-space-sm min-w-0">
+    <div class="relative w-20 h-20 rounded-lg overflow-hidden bg-surface-container shrink-0">
+      <img class="w-full h-full object-cover" data-alt="Combo Café da Tarde" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhn-7XtsNDgp0RnMHhr8KW4q0EfzSypHp-Eg4PqHUqGvtyaWdnc9kHKMGCna8dT94HxJ8GTejZTwBefcBlPgSbOJmXZmOa12e56D3EpZPzfdsa0c0pdIIlVCniq2JbNlpdiCMHhnbgs1AvakLb1ktMc1FnjyB5hp3B-7c5devCyEFd0yYiE5a_V-fLDI-KZX-KL7L0TSEolTAw6eZrQcgUns1FKRWD3ygjaXuLrH0">
+      <span class="absolute top-1 left-1 px-1.5 py-0.5 rounded bg-secondary text-on-secondary font-label-sm text-[10px] font-bold leading-none">28%</span>
+    </div>
+    <div class="flex flex-col min-w-0">
+      <div class="flex items-center gap-1.5">
+        <h3 class="font-title-md text-title-md text-on-surface font-semibold truncate">Combo Café da Tarde</h3>
+        <span class="px-1.5 py-0.5 rounded bg-primary-fixed/50 text-on-primary-fixed font-label-sm text-[10px] font-bold shrink-0">Hoje</span>
+      </div>
+      <p class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">Cappuccino Italiano + 1 Alfajor Clássico</p>
+      <div class="flex items-baseline gap-2 mt-1">
+        <span class="font-title-md text-title-md text-primary font-bold">R$ 24,90</span>
+        <span class="font-label-sm text-label-sm text-outline line-through">R$ 34,90</span>
+      </div>
+    </div>
+  </div>
+  <button class="px-3 py-1.5 rounded-full bg-surface-container-high hover:bg-primary hover:text-on-primary text-on-surface font-label-md text-label-md font-semibold transition-colors flex items-center gap-0.5 shrink-0" onclick="showModalOffer('Combo Café da Tarde', 'Válido exclusivamente para consumo no balcão do Havanna Café (Piso L2) hoje. Apresente no caixa antes do fechamento.')" type="button">
+    Regras
+    <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+  </button>
+</div>
+
+<!-- Item 2: Fatia Torta Havanna -->
+<div class="w-full rounded-xl bg-surface-container-lowest p-space-sm shadow-sm flex items-center justify-between gap-space-sm border border-outline-variant/30">
+  <div class="flex items-center gap-space-sm min-w-0">
+    <div class="relative w-20 h-20 rounded-lg overflow-hidden bg-surface-container shrink-0">
+      <img class="w-full h-full object-cover" data-alt="Fatia Torta Havanna" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBCCcanrreWhcuLvuLFh8VTGIqmvx8eOHzUKVyrQF0SLz5IDxRUVdZQXDKElh39lDCWIukTRzS1dEJVgql0dPT_ksfzBd_eZi69JvTdHCXoImlMCDwDnuE_6Mt9kuOAvblCXAoTxkg5RXZ--NSHH7ES_HrAr5rrt24Jnrc30iz9FZexWz0cvnnvqKg_v_LzQdwzSQ0COuORxRT1dURJc5NxLHsvFN4yWl5femiLaw">
+      <span class="absolute top-1 left-1 px-1.5 py-0.5 rounded bg-secondary text-on-secondary font-label-sm text-[10px] font-bold leading-none">20%</span>
+    </div>
+    <div class="flex flex-col min-w-0">
+      <h3 class="font-title-md text-title-md text-on-surface font-semibold truncate">Fatia Torta Havanna</h3>
+      <p class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">Massa folhada com puro doce de leite</p>
+      <div class="flex items-baseline gap-2 mt-1">
+        <span class="font-title-md text-title-md text-primary font-bold">R$ 20,80</span>
+        <span class="font-label-sm text-label-sm text-outline line-through">R$ 26,00</span>
+      </div>
+    </div>
+  </div>
+  <button class="px-3 py-1.5 rounded-full bg-surface-container-high hover:bg-primary hover:text-on-primary text-on-surface font-label-md text-label-md font-semibold transition-colors flex items-center gap-0.5 shrink-0" onclick="showModalOffer('Fatia Torta Havanna', 'Válido para consumo ou viagem. Limitado a 2 fatias por cliente no mesmo pedido.')" type="button">
+    Regras
+    <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+  </button>
+</div>
+
+<!-- Item 3: Pote Dulce de Leite 450g -->
+<div class="w-full rounded-xl bg-surface-container-lowest p-space-sm shadow-sm flex items-center justify-between gap-space-sm border border-outline-variant/30">
+  <div class="flex items-center gap-space-sm min-w-0">
+    <div class="relative w-20 h-20 rounded-lg overflow-hidden bg-surface-container shrink-0">
+      <img class="w-full h-full object-cover" data-alt="Pote Dulce de Leite Havanna" src="https://lh3.googleusercontent.com/aida-public/AB6AXuALSwWISo6naNOpQenVYc_ZzGkYqd4cSrqMXRkUWtk581p80WvWDe8coKQ-MqXYeRIq5YCFvxBqg5w0Aphsnuobc2MnXZAQ9ajUOewFOXGxi63DX6FK7BvqrLwFveVI-sCtfpKiZJEP3D2fgl7TuRhl3MSUyjsZGQmCoLB5NIy4Vzu4BPtYsCXbCIyL4N_j1Met3x2V6TyOQZe2I2OPsQcW2pUnTMzjDeNvaoMp42k">
+      <span class="absolute top-1 left-1 px-1.5 py-0.5 rounded bg-secondary text-on-secondary font-label-sm text-[10px] font-bold leading-none">-40% 2º</span>
+    </div>
+    <div class="flex flex-col min-w-0">
+      <h3 class="font-title-md text-title-md text-on-surface font-semibold truncate">Pote Dulce de Leite 450g</h3>
+      <p class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">Compre 1 e o 2º com 40% OFF</p>
+      <div class="flex items-baseline gap-2 mt-1">
+        <span class="font-title-md text-title-md text-primary font-bold">R$ 68,60</span>
+        <span class="font-label-sm text-label-sm text-outline font-normal">(2 un.)</span>
+      </div>
+    </div>
+  </div>
+  <button class="px-3 py-1.5 rounded-full bg-surface-container-high hover:bg-primary hover:text-on-primary text-on-surface font-label-md text-label-md font-semibold transition-colors flex items-center gap-0.5 shrink-0" onclick="showModalOffer('Pote Dulce de Leite 450g', 'Desconto aplicado diretamente no caixa ao levar dois potes de 450g da linha tradicional.')" type="button">
+    Regras
+    <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+  </button>
+</div></div>
+</section>
+<!-- SECTION 2: Cupons para Trocar por Pontos -->
+<section class="flex flex-col w-full" id="section-pontos">
+<!-- Points Balance Banner -->
+<div class="w-full rounded-xl p-space-md bg-gradient-to-r from-primary-fixed to-tertiary-fixed text-on-primary-fixed shadow-sm mb-space-md flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-surface-container-lowest/80 flex items-center justify-center text-primary shadow-sm">
+<span class="material-symbols-outlined text-[24px]">stars</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm uppercase tracking-wider font-bold text-on-primary-fixed-variant">Saldo Disponível</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-primary-fixed" id="user-points-display">150 pontos</span>
+</div>
+</div>
+<a class="font-label-sm text-label-sm font-semibold underline text-on-primary-fixed-variant" href="#">Extrato</a>
+</div>
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[20px]">hotel_class</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface tracking-tight">Trocar por Pontos</h2>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">3 opções</span>
+</div>
+<!-- Redemption Cards List -->
+<div class="flex flex-col gap-space-md w-full"><!-- Voucher 1: Cappuccino Tradicional -->
+<div class="w-full rounded-xl bg-surface-container-lowest p-space-sm shadow-sm flex flex-col gap-2 border border-outline-variant/30">
+  <div class="flex items-center justify-between gap-space-sm">
+    <div class="flex items-center gap-space-sm min-w-0">
+      <div class="w-14 h-14 rounded-lg bg-surface-container overflow-hidden shrink-0">
+        <img class="w-full h-full object-cover" data-alt="Cappuccino" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA35KMLWXi2B97XXmWwvv9sliRvTRpgxO3iRFGw2dSqg6RsTgxOyBhlS2UirnBEDjY00G-_Q3G624HkYqMK6FeRF7zQpM9yOD_zJ8T14JmLCX1ltCYV7r9qVc2dpKfkjxaCD7HnlvbAU00--wpRej8gr8xE7bjb0zIeSL4Jm0QI_x_aI3BgBcIHcjBhzvODgDez9H4u2BApLVrKBht-kJeyWpvYx25Ffrcu2jq_Bp8">
+      </div>
+      <div class="flex flex-col min-w-0">
+        <div class="flex items-center gap-2">
+          <span class="px-2 py-0.5 rounded-full bg-primary-fixed/50 text-on-primary-fixed font-label-sm text-label-sm font-bold">80 pts</span>
+          <span class="font-body-sm text-body-sm text-outline truncate">14 restantes</span>
+        </div>
+        <h4 class="font-title-md text-title-md text-on-surface font-semibold truncate mt-0.5">Cappuccino Tradicional</h4>
+        <p class="font-body-sm text-body-sm text-on-surface-variant truncate">150ml com chantilly e raspas</p>
+      </div>
+    </div>
+    <button class="px-3.5 py-2 rounded-full bg-secondary text-on-secondary font-label-md text-label-md font-bold shadow-sm active:scale-95 transition-transform shrink-0" onclick="redeemCoupon('Cappuccino Tradicional Cortesia', 80)" type="button">
+      Resgatar
+    </button>
+  </div>
+</div>
+
+<!-- Voucher 2: Pote Mini Alfajores -->
+<div class="w-full rounded-xl bg-surface-container-lowest p-space-sm shadow-sm flex flex-col gap-2 border border-outline-variant/30">
+  <div class="flex items-center justify-between gap-space-sm">
+    <div class="flex items-center gap-space-sm min-w-0">
+      <div class="w-14 h-14 rounded-lg bg-surface-container overflow-hidden shrink-0">
+        <img class="w-full h-full object-cover" data-alt="Mini Alfajores" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSPP6mSSL_BvnD2eS_UXKxigsCnoOugwrWF_3WJRewW89rVnkIK--ORkkYuJXyxDMwi6LYLY47a8GqBDLGrtJGRuV3XCay7dQFJzo091BXkUW5PGX6JiWwswznTt20RPzh7yd3SsQDoUAkpD19qMTc6HEajP2__qLqAkwOYh7M9S_MCFPjGIqrqaZPoBue2oa_gdjioUVsIdSnb18M1aA8uDTdquNn00zcVZQtx1Q">
+      </div>
+      <div class="flex flex-col min-w-0">
+        <div class="flex items-center gap-2">
+          <span class="px-2 py-0.5 rounded-full bg-primary-fixed/50 text-on-primary-fixed font-label-sm text-label-sm font-bold">120 pts</span>
+          <span class="font-body-sm text-body-sm text-outline truncate">5 restantes</span>
+        </div>
+        <h4 class="font-title-md text-title-md text-on-surface font-semibold truncate mt-0.5">Pote Mini Alfajores</h4>
+        <p class="font-body-sm text-body-sm text-on-surface-variant truncate">6 unidades sortidas clássicas</p>
+      </div>
+    </div>
+    <button class="px-3.5 py-2 rounded-full bg-secondary text-on-secondary font-label-md text-label-md font-bold shadow-sm active:scale-95 transition-transform shrink-0" onclick="redeemCoupon('Pote Mini Alfajores Havanna', 120)" type="button">
+      Resgatar
+    </button>
+  </div>
+</div>
+
+<!-- Voucher 3: Taça Dulce Furor (Locked State) -->
+<div class="w-full rounded-xl bg-surface-container-low p-space-sm flex flex-col gap-2 border border-outline-variant/30 opacity-75">
+  <div class="flex items-center justify-between gap-space-sm">
+    <div class="flex items-center gap-space-sm min-w-0">
+      <div class="w-14 h-14 rounded-lg bg-surface-container overflow-hidden shrink-0 grayscale">
+        <img class="w-full h-full object-cover" data-alt="Taça Furor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTYVH2GDOm-6pu-AXTJVcz5kSAwTEiOP46XVkAE2T9-7oVFiK6m5seJnEGRckU-NmNjroFQiTZSUOYRlwqhR-CxRLiLlQRhf8Efgt_YhinBW3Nwn42bBxuyWZ3XhJM73DdlklWWqhWm_5kkotqFAY0kohabdsHnuwfTtN2tEBQbRQomEQREb-LgqQ9lBjKA-tJYNxTR_8jGbdF86Js-k-aMYfbO9hDw4R0tnM03eQ">
+      </div>
+      <div class="flex flex-col min-w-0">
+        <div class="flex items-center gap-2">
+          <span class="px-2 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm font-bold">180 pts</span>
+          <span class="font-body-sm text-body-sm text-outline truncate">Faltam 30 pts</span>
+        </div>
+        <h4 class="font-title-md text-title-md text-on-surface font-semibold truncate mt-0.5">Taça Dulce Furor</h4>
+        <p class="font-body-sm text-body-sm text-on-surface-variant truncate">Sorvete, farofa e doce de leite</p>
+      </div>
+    </div>
+    <button class="px-3 py-2 rounded-full bg-surface-container-highest text-outline font-label-md text-label-md font-semibold cursor-not-allowed shrink-0 flex items-center gap-1" disabled="" type="button">
+      <span class="material-symbols-outlined text-[16px]">lock</span>
+      Bloqueado
+    </button>
+  </div>
+</div></div>
+<!-- Redemption Rules Footer Disclaimer -->
+<div class="mt-space-md p-space-sm rounded-lg bg-surface-container-low flex items-start gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-[18px] shrink-0 mt-0.5">info</span>
+<p class="font-body-sm text-body-sm leading-relaxed">
+<strong>Atenção:</strong> Vouchers resgatados têm validade estrita de <strong>2 horas</strong> para ativação e validação no caixa do Havanna Café (Piso L2). Não acumulativo com outras promoções.
+      </p>
+</div>
+</section>
+<!-- Interactive Feedback Drawer / Modal Backdrop -->
+<div class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-end justify-center p-0 transition-opacity" id="modal-container">
+<div class="w-full max-w-md bg-surface-container-lowest rounded-t-2xl p-space-lg flex flex-col gap-space-md transform transition-transform shadow-2xl">
+<div class="w-12 h-1.5 rounded-full bg-outline-variant mx-auto"></div>
+<div class="flex flex-col text-center items-center gap-1 pt-2">
+<div class="w-14 h-14 rounded-full bg-primary-fixed/60 text-primary flex items-center justify-center mb-1" id="modal-icon-container">
+<span class="material-symbols-outlined text-[32px]" id="modal-icon">redeem</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold" id="modal-title">Regulamento</h3>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xs mt-1" id="modal-description">Instruções da oferta.</p>
+</div>
+<div class="flex flex-col gap-2 pt-2">
+<button class="w-full py-3 rounded-full bg-primary text-on-primary font-label-lg text-label-lg font-bold shadow-md active:scale-95 transition-transform" id="modal-primary-btn" onclick="closeModal()" type="button">
+          Entendi
+        </button>
+<button class="w-full py-2.5 rounded-full text-on-surface-variant font-label-md text-label-md font-semibold hover:bg-surface-container transition-colors" onclick="closeModal()" type="button">
+          Fechar
+        </button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  let currentPoints = 150;
+
+  function switchFilter(type, btnElement) {
+    document.querySelectorAll('.filter-chip').forEach(btn => {
+      btn.className = 'filter-chip px-4 py-2 rounded-full font-label-md text-label-md bg-surface-container-lowest text-on-surface-variant font-medium shrink-0 shadow-sm hover:bg-surface-container transition-colors';
+    });
+    btnElement.className = 'filter-chip px-4 py-2 rounded-full font-label-md text-label-md bg-primary text-on-primary font-semibold shadow-sm shrink-0 transition-colors';
+
+    const secOfertas = document.getElementById('section-ofertas');
+    const secPontos = document.getElementById('section-pontos');
+
+    if (type === 'todos') {
+      secOfertas.classList.remove('hidden');
+      secPontos.classList.remove('hidden');
+    } else if (type === 'ofertas') {
+      secOfertas.classList.remove('hidden');
+      secPontos.classList.add('hidden');
+    } else if (type === 'pontos') {
+      secOfertas.classList.add('hidden');
+      secPontos.classList.remove('hidden');
+    }
+  }
+
+  function showModalOffer(title, desc) {
+    const modal = document.getElementById('modal-container');
+    document.getElementById('modal-icon').innerText = 'receipt_long';
+    document.getElementById('modal-title').innerText = title;
+    document.getElementById('modal-description').innerText = desc;
+    document.getElementById('modal-primary-btn').innerText = 'Ok, Entendido';
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  }
+
+  function redeemCoupon(itemName, cost) {
+    if (currentPoints >= cost) {
+      currentPoints -= cost;
+      document.getElementById('user-points-display').innerText = currentPoints + ' pontos';
+      
+      const modal = document.getElementById('modal-container');
+      document.getElementById('modal-icon').innerText = 'qr_code_2';
+      document.getElementById('modal-title').innerText = 'Voucher Gerado!';
+      document.getElementById('modal-description').innerHTML = 'Você resgatou <strong>' + itemName + '</strong>. Apresente este código no caixa da Havanna Café (Piso L2) em até 2 horas.<br><br><span class="font-headline-sm text-primary tracking-widest font-mono">HVN-' + Math.floor(1000 + Math.random() * 9000) + '</span>';
+      document.getElementById('modal-primary-btn').innerText = 'Ver Meus Vouchers';
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+  }
+
+  function closeModal() {
+    const modal = document.getElementById('modal-container');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+
+  const checkinBtn = document.getElementById('btn-checkin');
+  if (checkinBtn) {
+    checkinBtn.addEventListener('click', function() {
+      if (!this.dataset.checked) {
+        this.dataset.checked = 'true';
+        this.classList.remove('bg-primary', 'text-on-primary');
+        this.classList.add('bg-secondary', 'text-on-secondary');
+        this.innerHTML = '<span class="material-symbols-outlined text-[16px]">check</span> Check-in Feito';
+        currentPoints += 10;
+        document.getElementById('user-points-display').innerText = currentPoints + ' pontos';
+      }
+    });
+  }
+
+  const favBtn = document.getElementById('btn-favorite');
+  const favIcon = document.getElementById('fav-icon');
+  if (favBtn && favIcon) {
+    favBtn.addEventListener('click', function() {
+      const isFav = favIcon.innerText === 'bookmark';
+      favIcon.innerText = isFav ? 'bookmark_border' : 'bookmark';
+      favIcon.style.fontVariationSettings = isFav ? "'FILL' 0" : "'FILL' 1";
+      favBtn.classList.toggle('text-primary');
+    });
+  }
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-4px_20px_rgba(163,124,44,0.08)]" data-active-classes="text-primary font-bold"><div class="flex justify-around items-center h-20 px-gutter relative"><a class="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] gap-space-xs text-on-surface-variant hover:text-primary transition-colors" data-path="inicio" href="#"><span class="material-symbols-outlined text-[24px]">home</span><span class="font-label-sm text-label-sm">Início</span></a><a class="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] gap-space-xs text-on-surface-variant hover:text-primary transition-colors" data-path="cupons" href="#"><span class="material-symbols-outlined text-[24px]">confirmation_number</span><span class="font-label-sm text-label-sm">Cupons</span></a><div class="relative -top-5 flex flex-col items-center"><a class="flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-b from-primary-container to-primary text-on-primary shadow-[0_10px_22px_rgba(197,155,78,0.35)] active:scale-95 transition-transform" data-path="escanear-qr" href="#"><span class="material-symbols-outlined text-[28px]">qr_code_scanner</span></a><span class="font-label-sm text-label-sm text-on-surface-variant mt-1 font-medium">Escanear</span></div><a class="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] gap-space-xs text-on-surface-variant hover:text-primary transition-colors" data-path="meu-passaporte" href="#"><span class="material-symbols-outlined text-[24px]">hotel_class</span><span class="font-label-sm text-label-sm">Passaporte</span></a><a class="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] gap-space-xs text-on-surface-variant hover:text-primary transition-colors" data-path="perfil" href="#"><span class="material-symbols-outlined text-[24px]">person</span><span class="font-label-sm text-label-sm">Perfil</span></a></div></nav>
+
+
+</body></html>

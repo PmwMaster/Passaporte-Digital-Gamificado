@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&amp;family=Outfit:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"secondary-fixed-dim":"#88d982","tertiary-container":"#c19e26","on-error-container":"#93000a","tertiary-fixed":"#ffe088","surface":"#fcf9f8","tertiary":"#735c00","inverse-surface":"#313030","on-surface-variant":"#4e4638","primary":"#7a580f","error-container":"#ffdad6","surface-container-low":"#f6f3f2","inverse-primary":"#edc06f","primary-fixed-dim":"#edc06f","tertiary-fixed-dim":"#e9c349","error":"#ba1a1a","outline-variant":"#d2c5b3","secondary":"#1b6d24","on-tertiary-container":"#463600","primary-fixed":"#ffdea8","on-tertiary-fixed":"#241a00","secondary-fixed":"#a3f69c","surface-container-lowest":"#ffffff","inverse-on-surface":"#f3f0ef","surface-tint":"#7a580f","primary-container":"#c59b4e","on-tertiary":"#ffffff","surface-container-highest":"#e5e2e1","surface-bright":"#fcf9f8","on-error":"#ffffff","surface-variant":"#e5e2e1","secondary-container":"#a0f399","outline":"#807666","on-primary-fixed-variant":"#5e4200","on-secondary-fixed":"#002204","on-primary-fixed":"#271900","background":"#fcf9f8","on-secondary-container":"#217128","on-primary":"#ffffff","on-tertiary-fixed-variant":"#574500","on-background":"#1c1b1b","surface-dim":"#dcd9d9","on-secondary-fixed-variant":"#005312","surface-container":"#f0eded","on-primary-container":"#4c3400","surface-container-high":"#eae7e7","on-secondary":"#ffffff","on-surface":"#1c1b1b"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"space-xl":"2.25rem","space-md":"1rem","space-xs":"0.25rem","margin":"1.25rem","space-lg":"1.5rem","gutter":"1rem","space-sm":"0.5rem"},fontFamily:{"headline-lg":["Playfair Display"],"headline-md":["Playfair Display"],"label-md":["Outfit"],"body-sm":["Outfit"],"body-lg":["Outfit"],"label-lg":["Outfit"],"headline-sm":["Outfit"],"display-lg":["Playfair Display"],"body-md":["Outfit"],"label-sm":["Outfit"],"title-md":["Outfit"]},fontSize:{"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"0em","fontWeight":"600"}],"headline-md":["22px",{"lineHeight":"28px","fontWeight":"600"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.05em","fontWeight":"500"}],"body-sm":["12px",{"lineHeight":"16px","fontWeight":"400"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}],"label-lg":["14px",{"lineHeight":"18px","letterSpacing":"0.04em","fontWeight":"600"}],"headline-sm":["18px",{"lineHeight":"24px","fontWeight":"600"}],"display-lg":["36px",{"lineHeight":"44px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"label-sm":["10px",{"lineHeight":"14px","letterSpacing":"0.08em","fontWeight":"600"}],"title-md":["16px",{"lineHeight":"22px","letterSpacing":"0.01em","fontWeight":"600"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed"><header class="fixed top-0 left-0 w-full z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_12px_rgba(122,88,15,0.06)]"><div class="h-20 w-full px-margin flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg shrink-0"><div class="flex items-center gap-space-sm"><div class="w-11 h-11 rounded-full bg-gradient-to-tr from-primary to-primary-container p-0.5 shadow-[0_2px_10px_rgba(197,155,78,0.3)] flex items-center justify-center"><div class="w-full h-full rounded-full bg-surface-container-lowest flex items-center justify-center"><span class="material-symbols-outlined text-primary text-xl font-bold">local_florist</span></div></div><div class="flex flex-col"><span class="font-headline-md text-headline-sm text-primary tracking-tight leading-none">Capim Dourado</span><span class="font-label-sm text-label-sm tracking-wider uppercase text-on-surface-variant font-semibold mt-0.5">Shopping · Passaporte</span></div></div><div class="hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-low text-on-surface-variant hover:text-primary transition-colors cursor-pointer"><span class="material-symbols-outlined text-primary text-sm">pin_drop</span><span class="font-label-md text-label-md font-medium">Piso L1 · Principal</span><span class="material-symbols-outlined text-xs">expand_more</span></div></div><nav class="hidden lg:flex items-center gap-1 xl:gap-2 px-space-sm" data-active-classes="text-primary font-bold bg-primary-fixed/40 rounded-full"><a class="px-3 py-1.5 font-label-lg text-label-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all" data-path="inicio-vitrine" href="#">Início</a><a class="px-3 py-1.5 font-label-lg text-label-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all" data-path="lojas" href="#">Lojas</a><a aria-current="page" class="px-3 py-1.5 transition-all text-primary font-bold bg-primary-fixed/40 rounded-full" data-path="cupons-e-pontos" href="#">Cupons &amp; Pontos</a><a class="px-3 py-1.5 font-label-lg text-label-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all" data-path="missoes" href="#">Missões</a><a class="px-3 py-1.5 font-label-lg text-label-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all" data-path="portal-do-lojista" href="#">Lojista</a><a class="px-3 py-1.5 font-label-lg text-label-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all" data-path="admin-concierge" href="#">Admin</a></nav><div class="flex items-center gap-space-md shrink-0"><div class="hidden md:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-container-low text-on-surface-variant hover:bg-surface-container transition-all w-52"><span class="material-symbols-outlined text-outline text-lg">search</span><span class="font-body-sm text-body-sm text-outline flex-1">Buscar lojas, ofertas...</span><kbd class="px-1.5 py-0.5 rounded text-[10px] bg-surface-container-highest text-on-surface-variant font-label-sm">⌘K</kbd></div><div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-primary-fixed/60 to-tertiary-fixed/60 text-on-primary-container shadow-[0_2px_8px_rgba(197,155,78,0.15)]"><span class="material-symbols-outlined text-primary text-base font-bold">stars</span><span class="font-label-lg text-label-lg font-bold">150</span><span class="font-label-sm text-label-sm text-primary font-semibold uppercase">pts</span></div><div class="flex items-center gap-2 pl-1 cursor-pointer group"><img alt="Profile" class="w-9 h-9 rounded-full object-cover shadow-[0_2px_6px_rgba(0,0,0,0.1)] group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida/ALJJyrDpGI09usp1fchf7xC0ke7EZt73LF0VPWzqzw5kkRC3RbEGbNsFyYVD5kgq-PnrUfi6LQpFTU3zR2iL_pUAarrYjLo7l8ksKTQS3BwW638fy4kh8b2-YqjLNVyTcIdyy2ibkKMos1Mz6sYsRg23u7iEWu6hg-mzJG9d28GdgsuMRkIybsv2Ir9T1FPgjUH0KhIYb6fp1st4NvjadxnTNk6tCelqA0-_9oO2eCVix04vhRt0WEc19ZMfA3WQB4BQPQyYAakDYEyWuA"/><span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors text-sm">expand_more</span></div></div></div></header><main class="w-full pt-20 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<div class="w-full px-margin py-space-lg max-w-[1560px] mx-auto">
+<!-- Breadcrumb & Welcome Banner Minimalist -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-space-lg">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2 text-on-surface-variant font-label-md text-label-md uppercase tracking-widest">
+<span class="text-primary font-bold">Passaporte Dourado</span>
+<span class="text-outline">·</span>
+<span>Fidelidade &amp; Concierge Gastronômico</span>
+<span class="text-outline">·</span>
+<span class="text-secondary font-semibold flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-secondary inline-block animate-pulse"></span>
+            Conta Sincronizada
+          </span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">Carteira Privativa &amp; Passaporte</h1>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary-container text-on-primary font-label-lg text-label-lg shadow-md hover:bg-primary transition-all active:scale-95 group" onclick="openScannerModal()">
+<span class="material-symbols-outlined text-lg group-hover:rotate-12 transition-transform">qr_code_scanner</span>
+<span>Escanear QR Code Presencial</span>
+</button>
+<button class="p-2.5 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface-variant transition-colors" title="Ajuda &amp; Concierge">
+<span class="material-symbols-outlined text-xl">support_agent</span>
+</button>
+</div>
+</div>
+<!-- Main Desktop Two-Column Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- LEFT COLUMN: Status, Passport Card, Quick Ledger & Vertical Nav (4 Cols) -->
+<aside class="lg:col-span-4 flex flex-col gap-space-md sticky top-24">
+<!-- Luxury Passport Physical-Inspired Card -->
+<div class="relative w-full rounded-2xl overflow-hidden shadow-xl bg-gradient-to-br from-[#7a580f] via-[#946e1c] to-[#4c3400] text-surface p-6 flex flex-col justify-between aspect-[1.58/1]">
+<!-- Shimmer & Texture Overlay -->
+<div class="absolute inset-0 opacity-20 pointer-events-none mix-blend-overlay bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white via-transparent to-black"></div>
+<svg class="absolute -right-8 -bottom-10 w-52 h-52 text-primary-fixed-dim/20 pointer-events-none" fill="none" viewbox="0 0 200 200">
+<circle cx="100" cy="100" r="80" stroke="currentColor" stroke-dasharray="4 4" stroke-width="1.5"></circle>
+<circle cx="100" cy="100" r="60" stroke="currentColor" stroke-width="2"></circle>
+<path d="M100 20 L100 180 M20 100 L180 100" stroke="currentColor" stroke-width="1"></path>
+</svg>
+<!-- Card Header -->
+<div class="relative z-10 flex items-start justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-white/15 backdrop-blur-md p-1.5 flex items-center justify-center border border-white/20">
+<span class="material-symbols-outlined text-tertiary-fixed text-2xl font-bold">local_florist</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm uppercase tracking-widest text-primary-fixed opacity-90">Passaporte Oficial</p>
+<h2 class="font-headline-md text-headline-sm text-white font-bold leading-none tracking-tight">Capim Dourado</h2>
+</div>
+</div>
+<div class="px-3 py-1 rounded-full bg-surface-container-lowest/20 backdrop-blur-md border border-white/25 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-tertiary-fixed text-sm">stars</span>
+<span class="font-label-sm text-label-sm font-bold text-white tracking-wider uppercase">Nível Ouro</span>
+</div>
+</div>
+<!-- Card Balance Highlight -->
+<div class="relative z-10 my-3">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed block mb-0.5">Saldo Disponível</span>
+<div class="flex items-baseline gap-2">
+<span class="font-display-lg text-display-lg text-white font-bold tracking-tight">150</span>
+<span class="font-headline-sm text-headline-sm text-primary-fixed font-light">pts dourados</span>
+</div>
+</div>
+<!-- Card Footer & Identification -->
+<div class="relative z-10 pt-3 border-t border-white/15 flex items-end justify-between">
+<div>
+<p class="font-body-sm text-body-sm text-white/70 font-medium">Titular do Passaporte</p>
+<p class="font-title-md text-title-md text-white font-semibold tracking-wide">Mariana Silva</p>
+</div>
+<div class="text-right">
+<p class="font-label-sm text-label-sm text-white/60 tracking-mono uppercase">ID · CPD-9842-BR</p>
+<div class="flex items-center justify-end gap-1 mt-0.5 text-primary-fixed-dim">
+<span class="material-symbols-outlined text-sm">contactless</span>
+<span class="font-label-sm text-label-sm font-semibold">NFC Ativo</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Scan Physical QR Code Action Button -->
+<button class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-primary to-primary-container text-on-primary flex items-center justify-center gap-3 shadow-md hover:shadow-lg transition-all hover:brightness-105 active:scale-[0.99]" onclick="openScannerModal()">
+<span class="material-symbols-outlined text-2xl">photo_camera</span>
+<span class="font-label-lg text-label-lg font-bold">Escanear QR Code no Caixa</span>
+</button>
+<!-- Fast Ledger Card -->
+<div class="w-full bg-surface-container-lowest rounded-xl p-5 shadow-sm">
+<div class="flex items-center justify-between pb-3 mb-3 border-b border-surface-container">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-base">receipt_long</span>
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Extrato Rápido</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary font-bold uppercase tracking-wider">+80 pts esta semana</span>
+</div>
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-base">local_cafe</span>
+</div>
+<div>
+<h4 class="font-title-md text-body-md font-semibold text-on-surface leading-tight">Havanna Café</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Hoje, 14:12 · Piso L1</p>
+</div>
+</div>
+<span class="font-label-lg text-label-lg font-bold text-secondary">+10 pts</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-base">movie</span>
+</div>
+<div>
+<h4 class="font-title-md text-body-md font-semibold text-on-surface leading-tight">Cinemark Premier</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Ontem, 20:30 · Sala 02</p>
+</div>
+</div>
+<span class="font-label-lg text-label-lg font-bold text-secondary">+40 pts</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-base">shopping_bag</span>
+</div>
+<div>
+<h4 class="font-title-md text-body-md font-semibold text-on-surface leading-tight">L'Occitane au Brésil</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">18 Nov · Piso L2</p>
+</div>
+</div>
+<span class="font-label-lg text-label-lg font-bold text-secondary">+30 pts</span>
+</div>
+</div>
+</div>
+<!-- Vertical Dynamic Navigation Tabs -->
+<nav class="w-full bg-surface-container-lowest rounded-xl p-2 shadow-sm flex flex-col gap-1" id="passportNav">
+<button class="tab-button w-full flex items-center justify-between px-4 py-3 rounded-lg text-left transition-colors bg-primary-fixed/40 text-primary font-bold" id="tabBtn-vouchers" onclick="switchTab('vouchers')">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-xl">confirmation_number</span>
+<span class="font-label-lg text-label-lg">Meus Cupons Ativos</span>
+</div>
+<span class="w-5 h-5 rounded-full bg-primary text-on-primary text-[11px] font-bold flex items-center justify-center leading-none">2</span>
+</button>
+<button class="tab-button w-full flex items-center justify-between px-4 py-3 rounded-lg text-left transition-colors text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-medium" id="tabBtn-missoes" onclick="switchTab('missoes')">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-xl">verified</span>
+<span class="font-label-lg text-label-lg">Missões &amp; Carimbos</span>
+</div>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed font-bold">Em curso</span>
+</button>
+<button class="tab-button w-full flex items-center justify-between px-4 py-3 rounded-lg text-left transition-colors text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-medium" id="tabBtn-catalogo" onclick="switchTab('catalogo')">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-xl">card_giftcard</span>
+<span class="font-label-lg text-label-lg">Trocar Pontos (Catálogo)</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-semibold">12 prêmios</span>
+</button>
+<button class="tab-button w-full flex items-center justify-between px-4 py-3 rounded-lg text-left transition-colors text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-medium" id="tabBtn-extrato" onclick="switchTab('extrato')">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-xl">history_edu</span>
+<span class="font-label-lg text-label-lg">Extrato Completo</span>
+</div>
+<span class="material-symbols-outlined text-base text-outline">chevron_right</span>
+</button>
+</nav>
+</aside>
+<!-- RIGHT COLUMN: Dynamic Tab Content Area (8 Cols) -->
+<main class="lg:col-span-8 flex flex-col gap-space-lg">
+<!-- SECTION 1: Active Vouchers Tab (Default) -->
+<div class="tab-pane flex flex-col gap-space-lg" id="tab-vouchers">
+<!-- Live Realtime POS Connected Voucher Banner -->
+<div class="w-full bg-surface-container-lowest rounded-2xl shadow-md overflow-hidden p-6 md:p-8 flex flex-col gap-6 relative">
+<!-- Header status row -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-surface-container">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-secondary inline-block animate-ping"></span>
+<span class="font-label-md text-label-md font-bold uppercase tracking-wider text-secondary flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base">bolt</span> Conectado ao caixa da loja · Atualiza ao vivo na validação
+                </span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1 rounded-full bg-error-container text-on-error-container font-label-md text-label-md font-bold">
+<span class="material-symbols-outlined text-base animate-spin">timer</span>
+<span>Expira em: <span class="font-mono" id="fraudCountdown">01:45:20</span></span>
+</div>
+</div>
+<!-- Voucher Core Box: Splitted Layout for QR & Details -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+<!-- QR Presentation Box with Anti-Fraud Shield -->
+<div class="md:col-span-5 flex flex-col items-center justify-center p-5 rounded-xl bg-surface-container-low text-center relative group">
+<div class="p-3 bg-surface-container-lowest rounded-lg shadow-sm">
+<!-- Clean High-Contrast Inline SVG QR Representation -->
+<svg class="w-44 h-44" fill="currentColor" viewbox="0 0 160 160">
+<!-- Outer Top-Left Target -->
+<rect class="text-primary" height="40" rx="4" width="40" x="10" y="10"></rect>
+<rect fill="#ffffff" height="24" rx="2" width="24" x="18" y="18"></rect>
+<rect class="text-primary" height="12" width="12" x="24" y="24"></rect>
+<!-- Outer Top-Right Target -->
+<rect class="text-primary" height="40" rx="4" width="40" x="110" y="10"></rect>
+<rect fill="#ffffff" height="24" rx="2" width="24" x="118" y="18"></rect>
+<rect class="text-primary" height="12" width="12" x="124" y="24"></rect>
+<!-- Outer Bottom-Left Target -->
+<rect class="text-primary" height="40" rx="4" width="40" x="10" y="110"></rect>
+<rect fill="#ffffff" height="24" rx="2" width="24" x="18" y="118"></rect>
+<rect class="text-primary" height="12" width="12" x="24" y="124"></rect>
+<!-- Data Pattern Grid Bits -->
+<rect class="text-on-surface" height="8" width="8" x="60" y="14"></rect>
+<rect class="text-on-surface" height="8" width="16" x="76" y="14"></rect>
+<rect class="text-on-surface" height="8" width="12" x="60" y="30"></rect>
+<rect class="text-on-surface" height="12" width="14" x="80" y="30"></rect>
+<rect class="text-on-surface" height="10" width="20" x="60" y="50"></rect>
+<rect class="text-on-surface" height="12" width="10" x="14" y="60"></rect>
+<rect class="text-on-surface" height="8" width="14" x="34" y="60"></rect>
+<rect class="text-primary" height="8" width="40" x="60" y="70"></rect>
+<rect class="text-on-surface" height="14" width="12" x="110" y="60"></rect>
+<rect class="text-on-surface" height="8" width="18" x="130" y="60"></rect>
+<rect class="text-on-surface" height="8" width="34" x="14" y="80"></rect>
+<rect class="text-on-surface" height="18" width="12" x="60" y="86"></rect>
+<rect class="text-on-surface" height="8" width="20" x="80" y="86"></rect>
+<rect class="text-on-surface" height="14" width="14" x="110" y="86"></rect>
+<rect class="text-on-surface" height="24" width="14" x="134" y="86"></rect>
+<rect class="text-on-surface" height="12" width="14" x="60" y="110"></rect>
+<rect class="text-on-surface" height="20" width="16" x="82" y="110"></rect>
+<rect class="text-on-surface" height="18" width="14" x="60" y="130"></rect>
+<rect class="text-on-surface" height="14" width="24" x="110" y="120"></rect>
+<rect class="text-on-surface" height="10" width="28" x="120" y="140"></rect>
+</svg>
+</div>
+<div class="mt-3 flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Código Verificador</span>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="font-headline-md text-headline-md font-bold tracking-widest text-primary font-mono select-all">CPD-7492</span>
+<button class="p-1 text-on-surface-variant hover:text-primary transition-colors" onclick="navigator.clipboard.writeText('CPD-7492'); showToast('Código copiado!')" title="Copiar código">
+<span class="material-symbols-outlined text-sm">content_copy</span>
+</button>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1">Apresente este código no caixa</span>
+</div>
+</div>
+<!-- Voucher Offer Details -->
+<div class="md:col-span-7 flex flex-col gap-3">
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-1 rounded bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-bold uppercase tracking-wide">Benefício Ativo</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Resgatado há 15 min</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary font-bold">25% OFF em Pratos Principais + Sobremesa Especial</h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                  Válido exclusivamente na unidade Capim Dourado Shopping do Coco Bambu. Inclui entrada e seleção da carta de drinks artesanais de buriti.
+                </p>
+<div class="grid grid-cols-2 gap-3 p-3 rounded-xl bg-surface-container-low mt-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg">storefront</span>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Restaurante</p>
+<p class="font-label-lg text-label-lg font-bold text-on-surface">Coco Bambu · Piso L2</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg">price_check</span>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Custo do Resgate</p>
+<p class="font-label-lg text-label-lg font-bold text-secondary">40 Pontos (Quitado)</p>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-3 pt-2">
+<button class="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md font-semibold transition-colors" onclick="showToast('Voucher pronto para impressão')">
+<span class="material-symbols-outlined text-base">print</span>
+<span>Imprimir Cupom</span>
+</button>
+<button class="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md font-semibold transition-colors" onclick="showToast('Regulamento completo enviado ao seu e-mail')">
+<span class="material-symbols-outlined text-base">gavel</span>
+<span>Ver Regras</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Secondary Active Voucher -->
+<div class="w-full bg-surface-container-lowest rounded-xl p-5 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-xl bg-primary-fixed/30 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-3xl">local_cafe</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-secondary font-bold uppercase tracking-wider">Ativo por 48h</span>
+<span class="text-outline">·</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Havanna Café</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-bold">1 Café Espresso + Alfajor Tradicional</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Código: <span class="font-mono font-bold text-primary">HAV-3091</span> · Apresente na retirada</p>
+</div>
+</div>
+<button class="shrink-0 px-5 py-2.5 rounded-full bg-surface-container hover:bg-primary-container hover:text-on-primary text-on-surface font-label-lg text-label-lg transition-all" onclick="showToast('Exibindo QR Code do Havanna...')">
+              Abrir QR Code
+            </button>
+</div>
+</div>
+<!-- SECTION 2: Missions & Stamp Card Tab -->
+<div class="tab-pane hidden flex-col gap-space-lg" id="tab-missoes">
+<!-- Passport Digital Punch Card Section -->
+<div class="w-full bg-surface-container-lowest rounded-2xl p-6 md:p-8 shadow-sm flex flex-col gap-6">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div>
+<span class="font-label-sm text-label-sm text-primary font-bold uppercase tracking-widest">Trilha de Recompensas do Mall</span>
+<h3 class="font-headline-md text-headline-md text-on-surface font-bold">Carteira de Carimbos Digitais</h3>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container text-on-surface-variant font-label-md text-label-md">
+<span class="material-symbols-outlined text-primary text-base">verified</span>
+<span>Faltam 2 carimbos para destravar <strong>+100 pts</strong></span>
+</div>
+</div>
+<!-- Visual Stamp Cards Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+<!-- Stamp 1: Stamped -->
+<div class="p-5 rounded-2xl bg-surface-container-low flex flex-col items-center text-center relative overflow-hidden shadow-inner group">
+<div class="absolute -right-3 -top-3 w-12 h-12 bg-secondary/15 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-sm font-bold">check</span>
+</div>
+<div class="w-16 h-16 rounded-full bg-secondary-fixed/50 flex items-center justify-center text-secondary mb-3 shadow-[0_2px_8px_rgba(27,109,36,0.2)]">
+<span class="material-symbols-outlined text-3xl">check_circle</span>
+</div>
+<span class="font-label-sm text-label-sm font-bold text-secondary uppercase tracking-wider mb-1">Carimbado</span>
+<h5 class="font-headline-sm text-title-md font-bold text-on-surface">Havanna Café</h5>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Check-in validado hoje às 14:12</p>
+</div>
+<!-- Stamp 2: Stamped -->
+<div class="p-5 rounded-2xl bg-surface-container-low flex flex-col items-center text-center relative overflow-hidden shadow-inner group">
+<div class="absolute -right-3 -top-3 w-12 h-12 bg-secondary/15 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-sm font-bold">check</span>
+</div>
+<div class="w-16 h-16 rounded-full bg-secondary-fixed/50 flex items-center justify-center text-secondary mb-3 shadow-[0_2px_8px_rgba(27,109,36,0.2)]">
+<span class="material-symbols-outlined text-3xl">check_circle</span>
+</div>
+<span class="font-label-sm text-label-sm font-bold text-secondary uppercase tracking-wider mb-1">Carimbado</span>
+<h5 class="font-headline-sm text-title-md font-bold text-on-surface">Cinemark Premier</h5>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Sessão validada em 19 Nov</p>
+</div>
+<!-- Stamp 3: Pending -->
+<div class="p-5 rounded-2xl bg-surface-container-lowest border-2 border-dashed border-outline-variant flex flex-col items-center text-center relative group hover:border-primary transition-colors">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center text-outline mb-3 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-3xl">restaurant</span>
+</div>
+<span class="font-label-sm text-label-sm font-bold text-outline uppercase tracking-wider mb-1">Pendente</span>
+<h5 class="font-headline-sm text-title-md font-bold text-on-surface">Praça Gourmet</h5>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Consuma R$ 40 em qualquer restaurante</p>
+</div>
+<!-- Stamp 4: Pending / Lock -->
+<div class="p-5 rounded-2xl bg-surface-container-lowest border-2 border-dashed border-outline-variant flex flex-col items-center text-center relative group hover:border-primary transition-colors">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center text-outline mb-3 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-3xl">spa</span>
+</div>
+<span class="font-label-sm text-label-sm font-bold text-outline uppercase tracking-wider mb-1">Pendente</span>
+<h5 class="font-headline-sm text-title-md font-bold text-on-surface">L'Occitane / Beleza</h5>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Faça uma compra nas lojas de cosméticos</p>
+</div>
+</div>
+<!-- Missions Progress Tracking -->
+<div class="flex flex-col gap-4 pt-4 border-t border-surface-container">
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-bold">Missões da Temporada</h4>
+<div class="flex flex-col gap-3">
+<!-- Mission 1 -->
+<div class="p-4 rounded-xl bg-surface-container-low flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-fixed/50 flex items-center justify-center text-primary font-bold">
+<span class="material-symbols-outlined">explore</span>
+</div>
+<div>
+<p class="font-title-md text-title-md font-bold text-on-surface">Desbravador Gastronômico (2/3)</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Visite 3 restaurantes diferentes no Piso L2 neste mês.</p>
+</div>
+</div>
+<div class="w-full md:w-48 flex flex-col gap-1">
+<div class="flex justify-between text-xs font-semibold text-on-surface-variant">
+<span>Progresso</span>
+<span class="text-primary font-bold">66%</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-highest overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 66%"></div>
+</div>
+</div>
+</div>
+<!-- Mission 2 -->
+<div class="p-4 rounded-xl bg-surface-container-low flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary font-bold">
+<span class="material-symbols-outlined">event_seat</span>
+</div>
+<div>
+<p class="font-title-md text-title-md font-bold text-on-surface">Cinema &amp; Pipoca Dourada (1/2)</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Assista 2 filmes no Cinemark e ganhe 1 voucher de pipoca doce.</p>
+</div>
+</div>
+<div class="w-full md:w-48 flex flex-col gap-1">
+<div class="flex justify-between text-xs font-semibold text-on-surface-variant">
+<span>Progresso</span>
+<span class="text-secondary font-bold">50%</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-highest overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 50%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- SECTION 3: Catalog for Point Exchange Tab -->
+<div class="tab-pane hidden flex-col gap-space-lg" id="tab-catalogo">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<span class="font-label-sm text-label-sm text-primary font-bold uppercase tracking-widest">Recompensas Imediatas</span>
+<h3 class="font-headline-md text-headline-md text-on-surface font-bold">Catálogo de Troca de Pontos</h3>
+</div>
+<!-- Points Filter Chips -->
+<div class="flex items-center gap-2 overflow-x-auto pb-1" id="filterContainer">
+<button class="filter-chip px-4 py-1.5 rounded-full font-label-md text-label-md font-bold transition-all bg-primary-fixed/60 text-primary" onclick="filterCatalog('todos')">Todos (12)</button>
+<button class="filter-chip px-4 py-1.5 rounded-full font-label-md text-label-md font-medium transition-all bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container" onclick="filterCatalog('ate-50')">Até 50 pts</button>
+<button class="filter-chip px-4 py-1.5 rounded-full font-label-md text-label-md font-medium transition-all bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container" onclick="filterCatalog('50-100')">50 a 100 pts</button>
+<button class="filter-chip px-4 py-1.5 rounded-full font-label-md text-label-md font-medium transition-all bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container" onclick="filterCatalog('100-plus')">100+ pts</button>
+</div>
+</div>
+<!-- Catalog Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md" id="catalogGrid">
+<!-- Item 1: Estacionamento VIP (30 pts) -->
+<div class="catalog-item bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between" data-pts="30">
+<div class="relative h-44 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Modern indoor luxury covered parking area inside Capim Dourado shopping mall in Palmas with golden directional signage, sleek polished concrete floor, and clean high-end illumination." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeQlw98UzJWmuqQRDZEuHkRfZPSDMQ4tCFJI8HecgkWcOYecGP1cTSEE98SUFsGojq7A1IqHQcs1UF2pL7WOgijsTjP5yM28oxRQS8yq8nyXR7vN6M-o-Aximp1IfbbI2qMwLLDLU7pv-qNQ8UHGkpfHuII4QdIvnbwhxLC3ipE6m3lFsuiDuI1DKQN_-zdb5pVOjGq99L4y9LMTu9UNw0uH1LLNTtO4weYfkHoKU"/>
+<div class="absolute top-3 left-3 px-2.5 py-1 rounded bg-surface/90 backdrop-blur-md text-primary font-label-sm text-label-sm font-bold uppercase tracking-wider">
+                  Estacionamento
+                </div>
+<div class="absolute bottom-3 right-3 px-3 py-1 rounded-full bg-primary text-on-primary font-label-lg text-label-lg font-bold shadow-md">
+                  30 pts
+                </div>
+</div>
+<div class="p-5 flex flex-col gap-3 flex-1 justify-between">
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-bold leading-tight">Diária Cortesia Estacionamento Coberto</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Valide sua estadia diretamente no totem ou no balcão Concierge com liberação automática de cancela.</p>
+</div>
+<div class="flex items-center justify-between pt-3 border-t border-surface-container">
+<span class="font-label-sm text-label-sm text-secondary font-bold">Disponível imediatamente</span>
+<button class="px-4 py-2 rounded-full bg-primary text-on-primary font-label-md text-label-md font-bold hover:bg-primary-container transition-colors" onclick="openRedeemModal('Diária Cortesia Estacionamento', 30)">
+                    Resgatar
+                  </button>
+</div>
+</div>
+</div>
+<!-- Item 2: Sobremesa Gelato (45 pts) -->
+<div class="catalog-item bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between" data-pts="45">
+<div class="relative h-44 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Artisanal Italian gelato cup topped with passion fruit and Tocantins regional cashew nut coulis served on a marble table with elegant golden spoon." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMEF-YIgiyhS2HcMjDWYGOJZuRMWNlm_ExOcU6_feohZZ6b6MOjW4xmFagnw38UjAAMp4locDxb_OHOD6xAJgudFBQz1oZ3-kOxlCxzQ-cvWehW1Ad9kl8jvH8VyIboKpOulcvirZUSHY2vQngrGTwejVNU1yljM2s68GIPWNIFKHfuw-3nlVVQfYpO_7DMpVjK3rxHN_joFXcW7_w-6XlYD9J68huRoge25r7NcE"/>
+<div class="absolute top-3 left-3 px-2.5 py-1 rounded bg-surface/90 backdrop-blur-md text-primary font-label-sm text-label-sm font-bold uppercase tracking-wider">
+                  Gastronomia
+                </div>
+<div class="absolute bottom-3 right-3 px-3 py-1 rounded-full bg-primary text-on-primary font-label-lg text-label-lg font-bold shadow-md">
+                  45 pts
+                </div>
+</div>
+<div class="p-5 flex flex-col gap-3 flex-1 justify-between">
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-bold leading-tight">Taça Gelato Artesanal Grande (2 Sabores)</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Bacio di Latte · Piso L1. Escolha qualquer sabor clássico ou sazonal com calda quente de caramelo tocantinense.</p>
+</div>
+<div class="flex items-center justify-between pt-3 border-t border-surface-container">
+<span class="font-label-sm text-label-sm text-secondary font-bold">Validade de 7 dias após resgate</span>
+<button class="px-4 py-2 rounded-full bg-primary text-on-primary font-label-md text-label-md font-bold hover:bg-primary-container transition-colors" onclick="openRedeemModal('Taça Gelato Artesanal (Bacio di Latte)', 45)">
+                    Resgatar
+                  </button>
+</div>
+</div>
+</div>
+<!-- Item 3: Ingresso Cinemark VIP (80 pts) -->
+<div class="catalog-item bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between" data-pts="80">
+<div class="relative h-44 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Cinemark luxury cinema hall with plush reclining dark leather seats, warm golden floor accent lights, and a massive illuminated 4K screen playing a movie teaser." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXZEFppOriCrrbTIvYfJKXURaP6XRE22xx7UMB0Cu2dg2a7yqv6H7C47GDg7TbOlh2BoXN5t48K3G_iH4VpuT7mK0Qx8IdHo_OWTkcPfKAIfFZOPANrpf8ELi_LMuxhKz5_Esohxd7wEv6hTl17A5KVeVQy1iJU4DgrGjOmmwj3wfVet8_wtQ_fiWu1LAy1utAEJ0G2bckd7S3ad14XnbYZmBqu4kx7-2yVPfoo08"/>
+<div class="absolute top-3 left-3 px-2.5 py-1 rounded bg-surface/90 backdrop-blur-md text-primary font-label-sm text-label-sm font-bold uppercase tracking-wider">
+                  Cinema &amp; Lazer
+                </div>
+<div class="absolute bottom-3 right-3 px-3 py-1 rounded-full bg-primary text-on-primary font-label-lg text-label-lg font-bold shadow-md">
+                  80 pts
+                </div>
+</div>
+<div class="p-5 flex flex-col gap-3 flex-1 justify-between">
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-bold leading-tight">Ingresso Sala VIP Cinemark (2D/3D)</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Válido de segunda a domingo para qualquer sessão em cartaz, incluindo poltronas reclináveis D-BOX.</p>
+</div>
+<div class="flex items-center justify-between pt-3 border-t border-surface-container">
+<span class="font-label-sm text-label-sm text-secondary font-bold">Restam 8 vouchers hoje</span>
+<button class="px-4 py-2 rounded-full bg-primary text-on-primary font-label-md text-label-md font-bold hover:bg-primary-container transition-colors" onclick="openRedeemModal('Ingresso Sala VIP Cinemark', 80)">
+                    Resgatar
+                  </button>
+</div>
+</div>
+</div>
+<!-- Item 4: Kit Capim Dourado Artesanato Nobre (120 pts) -->
+<div class="catalog-item bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between" data-pts="120">
+<div class="relative h-44 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Refined handwoven Capim Dourado golden grass artisanal mandala tray and jewelry box crafted with golden metallic threads on an ivory linen tablecloth." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpV8d7Wif3_vylwihqhpNNAUGuzHmndjStG-g6aFwYn-RSHhg6T-LT_Ma22MZJx5TpsEMERrBaUd91kJHl2xAterQe1qhWsv7g0VD50zXSgsGmpOR-_MkRdXAhPC-_-05wSMgHoFk2UsZy-cJLnE00_TXN8UtWu5g8atK32JE_myOUDh8BtA4pYZkKfB0IqJBCtJ1fxzz6OVDdGhTxr82fbxw9Qmh_zQJBvF3owGc"/>
+<div class="absolute top-3 left-3 px-2.5 py-1 rounded bg-surface/90 backdrop-blur-md text-primary font-label-sm text-label-sm font-bold uppercase tracking-wider">
+                  Edição Limitada · Jalapão
+                </div>
+<div class="absolute bottom-3 right-3 px-3 py-1 rounded-full bg-primary text-on-primary font-label-lg text-label-lg font-bold shadow-md">
+                  120 pts
+                </div>
+</div>
+<div class="p-5 flex flex-col gap-3 flex-1 justify-between">
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-bold leading-tight">Kit Mandalas em Capim Dourado Original</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Artesanato autêntico produzido pela Associação de Artesãos do Jalapão. Retirada exclusiva no balcão Concierge.</p>
+</div>
+<div class="flex items-center justify-between pt-3 border-t border-surface-container">
+<span class="font-label-sm text-label-sm text-primary font-bold">Saldo suficiente (150 pts)</span>
+<button class="px-4 py-2 rounded-full bg-primary text-on-primary font-label-md text-label-md font-bold hover:bg-primary-container transition-colors" onclick="openRedeemModal('Kit Mandalas em Capim Dourado', 120)">
+                    Resgatar
+                  </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- SECTION 4: Full Ledger Tab -->
+<div class="tab-pane hidden flex-col gap-space-lg" id="tab-extrato">
+<div class="w-full bg-surface-container-lowest rounded-2xl p-6 md:p-8 shadow-sm flex flex-col gap-6">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div>
+<span class="font-label-sm text-label-sm text-primary font-bold uppercase tracking-widest">Histórico Completo</span>
+<h3 class="font-headline-md text-headline-md text-on-surface font-bold">Extrato de Pontuação</h3>
+</div>
+<button class="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md font-semibold transition-colors self-start sm:self-auto" onclick="showToast('Relatório em PDF enviado para seu e-mail')">
+<span class="material-symbols-outlined text-base">download</span>
+<span>Exportar PDF</span>
+</button>
+</div>
+<!-- Ledger Table -->
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-surface-container text-on-surface-variant font-label-md text-label-md uppercase tracking-wider">
+<th class="py-3 px-2">Data / Hora</th>
+<th class="py-3 px-4">Estabelecimento / Ação</th>
+<th class="py-3 px-4">Tipo</th>
+<th class="py-3 px-4 text-right">Pontos</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container text-body-md font-body-md">
+<tr>
+<td class="py-3.5 px-2 text-on-surface-variant">Hoje, 14:12</td>
+<td class="py-3.5 px-4 font-semibold text-on-surface">Havanna Café (QR no Balcão)</td>
+<td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold">Consumo</span></td>
+<td class="py-3.5 px-4 text-right font-bold text-secondary">+10 pts</td>
+</tr>
+<tr>
+<td class="py-3.5 px-2 text-on-surface-variant">Hoje, 13:45</td>
+<td class="py-3.5 px-4 font-semibold text-on-surface">Resgate Cupom 25% Coco Bambu</td>
+<td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded bg-error-container text-on-error-container font-label-sm text-label-sm font-bold">Resgate</span></td>
+<td class="py-3.5 px-4 text-right font-bold text-error">-40 pts</td>
+</tr>
+<tr>
+<td class="py-3.5 px-2 text-on-surface-variant">19 Nov, 20:30</td>
+<td class="py-3.5 px-4 font-semibold text-on-surface">Cinemark Premier (2 Ingressos)</td>
+<td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold">Consumo</span></td>
+<td class="py-3.5 px-4 text-right font-bold text-secondary">+40 pts</td>
+</tr>
+<tr>
+<td class="py-3.5 px-2 text-on-surface-variant">18 Nov, 16:15</td>
+<td class="py-3.5 px-4 font-semibold text-on-surface">L'Occitane au Brésil</td>
+<td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold">Consumo</span></td>
+<td class="py-3.5 px-4 text-right font-bold text-secondary">+30 pts</td>
+</tr>
+<tr>
+<td class="py-3.5 px-2 text-on-surface-variant">15 Nov, 11:00</td>
+<td class="py-3.5 px-4 font-semibold text-on-surface">Bônus de Boas-Vindas Passaporte</td>
+<td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm font-bold">Bônus</span></td>
+<td class="py-3.5 px-4 text-right font-bold text-secondary">+110 pts</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+<!-- MODAL 1: QR Scanner Simulation Modal -->
+<div class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4" id="scannerModal">
+<div class="bg-surface-container-lowest rounded-2xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-5 animate-in fade-in zoom-in duration-200">
+<div class="flex items-center justify-between pb-3 border-b border-surface-container">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">qr_code_scanner</span>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Escanear no Balcão</h3>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface p-1 rounded-full" onclick="closeScannerModal()">
+<span class="material-symbols-outlined text-xl">close</span>
+</button>
+</div>
+<!-- Simulated Camera Viewfinder -->
+<div class="relative w-full aspect-square bg-inverse-surface rounded-xl overflow-hidden flex items-center justify-center text-surface">
+<div class="absolute inset-8 border-2 border-primary-fixed-dim/60 rounded-xl pointer-events-none flex flex-col justify-between p-2">
+<div class="flex justify-between">
+<span class="w-4 h-4 border-t-2 border-l-2 border-primary-fixed"></span>
+<span class="w-4 h-4 border-t-2 border-r-2 border-primary-fixed"></span>
+</div>
+<div class="w-full h-0.5 bg-gradient-to-r from-transparent via-primary-fixed to-transparent animate-pulse"></div>
+<div class="flex justify-between">
+<span class="w-4 h-4 border-b-2 border-l-2 border-primary-fixed"></span>
+<span class="w-4 h-4 border-b-2 border-r-2 border-primary-fixed"></span>
+</div>
+</div>
+<div class="flex flex-col items-center gap-2 text-center z-10 px-4">
+<span class="material-symbols-outlined text-4xl text-primary-fixed animate-bounce">center_focus_strong</span>
+<p class="font-body-sm text-body-sm text-surface/80">Aponte a câmera para o QR Code no totem da loja do Capim Dourado Shopping</p>
+</div>
+</div>
+<!-- Quick Manual Code Entry Fallback -->
+<div class="flex flex-col gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-semibold">Problemas com a câmera? Digite o código da loja:</span>
+<div class="flex gap-2">
+<input class="flex-1 px-3.5 py-2 rounded-lg bg-surface-container-low text-on-surface font-mono font-bold uppercase placeholder:font-normal placeholder:normal-case focus:outline-none focus:ring-2 focus:ring-primary" id="manualCodeInput" placeholder="Ex: HAV-9921" type="text"/>
+<button class="px-4 py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-bold hover:bg-primary-container transition-colors" onclick="simulateScanSuccess()">
+            Confirmar
+          </button>
+</div>
+</div>
+<button class="w-full py-2.5 rounded-xl bg-secondary text-on-secondary font-label-lg text-label-lg font-bold shadow-md hover:brightness-110 transition-all flex items-center justify-center gap-2" onclick="simulateScanSuccess()">
+<span class="material-symbols-outlined text-lg">check_circle</span>
+<span>Simular Leitura Instantânea</span>
+</button>
+</div>
+</div>
+<!-- MODAL 2: Confirmation of Points Redemption -->
+<div class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4" id="redeemModal">
+<div class="bg-surface-container-lowest rounded-2xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-5">
+<div class="flex items-center justify-between pb-3 border-b border-surface-container">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">card_giftcard</span>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Confirmar Resgate</h3>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface p-1 rounded-full" onclick="closeRedeemModal()">
+<span class="material-symbols-outlined text-xl">close</span>
+</button>
+</div>
+<div class="flex flex-col gap-3">
+<p class="font-body-md text-body-md text-on-surface-variant">Você está prestes a resgatar o benefício exclusivo:</p>
+<div class="p-4 rounded-xl bg-surface-container-low flex flex-col gap-1">
+<h4 class="font-title-md text-title-md font-bold text-on-surface" id="modalItemTitle">Item Title</h4>
+<div class="flex items-center justify-between mt-2 pt-2 border-t border-surface-container">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Custo em pontos:</span>
+<span class="font-label-lg text-label-lg font-bold text-primary" id="modalItemCost">0 pts</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Saldo após resgate:</span>
+<span class="font-label-lg text-label-lg font-bold text-secondary" id="modalRemainingBalance">150 pts</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3 pt-2">
+<button class="flex-1 py-2.5 rounded-xl bg-surface-container text-on-surface font-label-lg text-label-lg font-semibold hover:bg-surface-container-high transition-colors" onclick="closeRedeemModal()">
+          Cancelar
+        </button>
+<button class="flex-1 py-2.5 rounded-xl bg-primary text-on-primary font-label-lg text-label-lg font-bold hover:bg-primary-container shadow-md transition-all" onclick="executeRedemption()">
+          Confirmar e Gerar Cupom
+        </button>
+</div>
+</div>
+</div>
+<!-- TOAST NOTIFICATION FLOATER -->
+<div class="fixed bottom-6 right-6 z-50 bg-inverse-surface text-inverse-on-surface px-5 py-3 rounded-xl shadow-2xl font-label-md text-label-md font-semibold hidden items-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-300" id="toastNotification">
+<span class="material-symbols-outlined text-tertiary-fixed text-lg">check_circle</span>
+<span id="toastMessage">Operação realizada com sucesso!</span>
+</div>
+<!-- Interactive Logic Script -->
+<script>
+    let currentBalance = 150;
+    let pendingRedeemCost = 0;
+
+    // Tab Switching System
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-pane').forEach(el => {
+        el.classList.add('hidden');
+        el.classList.remove('flex');
+      });
+      const activePane = document.getElementById('tab-' + tabId);
+      if (activePane) {
+        activePane.classList.remove('hidden');
+        activePane.classList.add('flex');
+      }
+
+      // Update Nav Buttons
+      document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.classList.remove('bg-primary-fixed/40', 'text-primary', 'font-bold');
+        btn.classList.add('text-on-surface-variant', 'font-medium');
+      });
+
+      const activeBtn = document.getElementById('tabBtn-' + tabId);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-primary-fixed/40', 'text-primary', 'font-bold');
+        activeBtn.classList.remove('text-on-surface-variant', 'font-medium');
+      }
+    }
+
+    // Catalog Filter
+    function filterCatalog(filter) {
+      const items = document.querySelectorAll('.catalog-item');
+      const buttons = document.querySelectorAll('#filterContainer .filter-chip');
+      
+      buttons.forEach(b => {
+        b.classList.remove('bg-primary-fixed/60', 'text-primary', 'font-bold');
+        b.classList.add('bg-surface-container-lowest', 'text-on-surface-variant');
+      });
+
+      event.target.classList.add('bg-primary-fixed/60', 'text-primary', 'font-bold');
+      event.target.classList.remove('bg-surface-container-lowest', 'text-on-surface-variant');
+
+      items.forEach(item => {
+        const pts = parseInt(item.getAttribute('data-pts') || '0', 10);
+        if (filter === 'todos') {
+          item.classList.remove('hidden');
+        } else if (filter === 'ate-50' && pts <= 50) {
+          item.classList.remove('hidden');
+        } else if (filter === '50-100' && pts > 50 && pts <= 100) {
+          item.classList.remove('hidden');
+        } else if (filter === '100-plus' && pts > 100) {
+          item.classList.remove('hidden');
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+    }
+
+    // Modal Control: Scanner
+    function openScannerModal() {
+      const modal = document.getElementById('scannerModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+    function closeScannerModal() {
+      const modal = document.getElementById('scannerModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+    function simulateScanSuccess() {
+      closeScannerModal();
+      currentBalance += 15;
+      showToast('QR Code reconhecido com sucesso! +15 pontos creditados.');
+    }
+
+    // Modal Control: Redeem
+    function openRedeemModal(title, cost) {
+      pendingRedeemCost = cost;
+      document.getElementById('modalItemTitle').innerText = title;
+      document.getElementById('modalItemCost').innerText = cost + ' pts';
+      const remaining = currentBalance - cost;
+      document.getElementById('modalRemainingBalance').innerText = remaining + ' pts';
+
+      const modal = document.getElementById('redeemModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+    function closeRedeemModal() {
+      const modal = document.getElementById('redeemModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+    function executeRedemption() {
+      if (currentBalance >= pendingRedeemCost) {
+        currentBalance -= pendingRedeemCost;
+        closeRedeemModal();
+        showToast('Resgate concluído! Novo cupom gerado na sua carteira.');
+        switchTab('vouchers');
+      } else {
+        alert('Saldo insuficiente para este resgate.');
+      }
+    }
+
+    // Toast Utility
+    function showToast(msg) {
+      const toast = document.getElementById('toastNotification');
+      document.getElementById('toastMessage').innerText = msg;
+      toast.classList.remove('hidden');
+      toast.classList.add('flex');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+        toast.classList.remove('flex');
+      }, 4000);
+    }
+
+    // Anti-Fraud Realtime Countdown Simulation
+    (function startCountdown() {
+      let seconds = 1 * 3600 + 45 * 60 + 20;
+      setInterval(() => {
+        if (seconds > 0) {
+          seconds--;
+          const h = String(Math.floor(seconds / 3600)).padStart(2, '0');
+          const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+          const s = String(seconds % 60).padStart(2, '0');
+          const el = document.getElementById('fraudCountdown');
+          if (el) el.innerText = `${h}:${m}:${s}`;
+        }
+      }, 1000);
+    })();
+  </script>
+</div></main><footer class="w-full bg-surface-container-low text-on-surface mt-space-xl"><div class="w-full px-margin py-space-xl"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-space-lg mb-space-xl"><div class="lg:col-span-2 flex flex-col gap-space-sm pr-space-md"><div class="flex items-center gap-space-sm"><div class="w-9 h-9 rounded-full bg-primary-container flex items-center justify-center text-on-primary shadow-sm"><span class="material-symbols-outlined text-base">local_florist</span></div><span class="font-headline-md text-headline-sm text-primary font-bold">Capim Dourado Shopping</span></div><p class="font-body-md text-body-md text-on-surface-variant max-w-md mt-2">O destino gastronômico, cultural e de compras mais nobre do Tocantins. Acumule pontos no seu Passaporte, destrave benefícios exclusivos e vivencie a sofisticação do cerrado.</p><div class="flex items-center gap-3 mt-3"><div class="flex items-center justify-center w-8 h-8 rounded-full bg-surface-container text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-sm">share</span></div><div class="flex items-center justify-center w-8 h-8 rounded-full bg-surface-container text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-sm">chat</span></div><div class="flex items-center justify-center w-8 h-8 rounded-full bg-surface-container text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-sm">mail</span></div></div></div><div class="flex flex-col gap-space-xs"><span class="font-label-lg text-label-lg font-bold text-on-surface uppercase tracking-wider mb-2">Horário de Funcionamento</span><div class="flex flex-col gap-1"><span class="font-body-md text-body-md text-on-surface font-semibold">Segunda a Sábado</span><span class="font-body-sm text-body-sm text-on-surface-variant">Lojas e Alimentação: 10h às 22h</span></div><div class="flex flex-col gap-1 mt-2"><span class="font-body-md text-body-md text-on-surface font-semibold">Domingos e Feriados</span><span class="font-body-sm text-body-sm text-on-surface-variant">Alimentação &amp; Lazer: 11h às 22h</span><span class="font-body-sm text-body-sm text-on-surface-variant">Lojas Satélites: 14h às 20h</span></div></div><div class="flex flex-col gap-space-xs"><span class="font-label-lg text-label-lg font-bold text-on-surface uppercase tracking-wider mb-2">Localização &amp; Contato</span><p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">Quadra 107 Norte, Av. JK, s/n<br/>Plano Diretor Norte · Palmas - TO<br/>CEP 77001-070</p><p class="font-body-sm text-body-sm text-on-surface-variant mt-2">SAC: (63) 3215-9600<br/>concierge@capimdourado.com.br</p></div><div class="flex flex-col gap-space-xs"><span class="font-label-lg text-label-lg font-bold text-on-surface uppercase tracking-wider mb-2">Portal &amp; Institucional</span><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors py-1" data-path="portal-do-lojista" href="#">Portal do Lojista</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors py-1" data-path="admin-concierge" href="#">Acesso Administrativo</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors py-1" href="#">Regulamento do Passaporte</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors py-1" href="#">Comitê de Sustentabilidade</a></div></div><div class="pt-space-md flex flex-col md:flex-row items-center justify-between gap-4 text-on-surface-variant font-label-md text-label-md"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-base">verified</span><span>© 2025 Condomínio Capim Dourado Shopping. Todos os direitos reservados.</span></div><div class="flex items-center gap-6"><a class="hover:text-primary transition-colors" href="#">Privacidade &amp; LGPD</a><a class="hover:text-primary transition-colors" href="#">Termos de Uso</a><a class="hover:text-primary transition-colors" href="#">Preferências de Cookies</a><a class="hover:text-primary transition-colors" href="#">Canal de Ética</a></div></div></div></footer></body></html>

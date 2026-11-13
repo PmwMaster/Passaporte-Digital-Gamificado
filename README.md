@@ -1,216 +1,203 @@
 # 🛍️ Passaporte do Shopping
 
-> *[Insira aqui a descrição do desafio / objetivo principal do projeto]*
+> **Desafio 05 — Engajamento e Fidelização de Visitantes:** Transformar visitas pontuais ao shopping center em um relacionamento contínuo e recorrente através de um **Passaporte Digital Gamificado** (Web App PWA, sem necessidade de instalação). A plataforma funciona como um ecossistema de *Tenant Mix* com vitrine aberta para anúncios e promoções do dia, onde o visitante acumula carimbos e pontos ao escanear QR Codes físicos nas lojas e eventos (com validação antifraude por geolocalização em raio de 250 m) e troca seus créditos diretamente por cupons de desconto criados pelos próprios lojistas. *"Cada visita vale algo, e a próxima vale mais."*
 
 ---
 
 ## 📋 Tarefas e Entregas
 
-> **Referências de interface:** as telas do visitante seguem o padrão de apps de **delivery** (carrossel de lojas, cards de oferta, filtro por loja, carrinho/checkout rápido) e de **programas de pontos** (saldo sempre visível, extrato, catálogo de troca, carteira de cupons). As regras de pontuação seguem a *Especificação Atualizada* (1 carimbo por local/dia, validação por GPS em raio de 250 m, Missões Explorador/Frequente/Evento).
+> **Referências de interface e Design System (*Aura Dourada Mobile*):** as telas seguem o protótipo oficial **Capim Dourado Shopping**, combinando o padrão de apps de **delivery** (carrossel horizontal de lojas parceiras, página dedicada da loja com ofertas do dia e resgate de cupons, filtros rápidos) e de **programas de pontos** (saldo dourado sempre visível, carteira de carimbos, missões periódicas, extrato e carteira de vouchers com atualização em tempo real via SSE). A identidade visual adota estética *Warm Editorial Mall* com paleta dourada (`#7a580f` / `#c59b4e`), verde esmeralda (`#1b6d24`) para validações/recompensas, fundo marfim (`#fcf9f8`) e tipografia `Playfair Display` + `Outfit`.
 
 ---
 
-- [ ] **Tela 01** — *[Tela inicial / Vitrine aberta]* — rota `/`
+- [ ] **Tela 01** — *[Tela Inicial / Vitrine Aberta & Página da Loja Parceira]* — rotas `/` e `/loja/[slug]`
 
-  **Objetivo:** atrair o visitante **sem exigir login**. Qualquer pessoa vê lojas, promoções, missões e cupons. O login só é pedido quando ele tenta pontuar ou resgatar.
+  **Objetivo:** atrair o visitante **sem exigir login**. Qualquer pessoa navega pelas lojas parceiras, promoções do dia, missões e recompensas do shopping. O login só é solicitado quando o visitante tenta pontuar (check-in) ou resgatar um voucher.
 
   **Cabeçalho fixo (topo)**
-  - Logo do shopping à esquerda.
-  - À direita: botão **"Entrar"** (deslogado) **ou** chip de saldo **"⭐ 150 pts"** + avatar (logado). Tocar no saldo leva à Tela 03.
-  - Barra de busca: *"Buscar loja, cupom ou promoção"*.
+  - Emblema dourado e marca **Capim Dourado Shopping** (*Tocantins · Palmas*) à esquerda.
+  - À direita: chip de saldo **"⭐ 150 pts"** + botão **"Entrar"** (ou avatar do titular quando logado).
+  - Barra de busca unificada: *"Buscar lojas, cafés ou cupons..."* com botão de filtro rápido (`tune`).
 
-  **Carrossel de lojas (estilo delivery)**
-  - Linha horizontal com logos redondas das lojas + nome abaixo, deslizável com o dedo.
-  - Primeiro item fixo: **"Todas"**. Tocar em uma loja filtra os Boxes 1 e 3 para mostrar apenas ofertas daquela loja (item selecionado fica destacado).
-  - Chips de categoria logo abaixo: *Alimentação · Moda · Lazer · Serviços · Eventos*.
+  **Box 1 — Destaques do Dia (carrossel automático de banners)**
+  - Banners promocionais com rotação automática (~4,5 s) e **swipe manual** com indicadores de página.
+  - Exemplos do protótipo:
+    - **Havanna Café:** *"Compre 1 Cappuccino, Ganhe 1 Alfajor"* — selo **`80 pts`** e validade **`⏰ Até 18h`**.
+    - **Outback Steakhouse:** *"Bloomin' Onion Cortesia no Almoço"* — selo **`Grátis hoje`** e validade **`⏰ Até 15h`**.
+    - **Cinemark:** *"50% OFF no Combo Mega + Pipoca"* — selo **`50 pts`** e validade **`⏰ Só hoje`**.
+  - Tocar em qualquer banner abre um **bottom sheet de detalhes do benefício** com regras de uso, estoque disponível no dia e botão **"Resgatar Agora"**.
 
-  **Box 1 — Promoções do dia (carrossel automático)**
-  - Banners que passam sozinhos a cada ~4 s, com **swipe manual** liberado (o auto-scroll pausa enquanto o usuário interage).
-  - Indicadores de página (bolinhas) abaixo.
-  - Cada banner: imagem, nome da loja, título da oferta, selo de custo **"80 pts"** ou **"Grátis hoje"**, e validade (*"até 18h"*).
-  - Tocar no banner abre o **detalhe do cupom** (bottom sheet): descrição, regras, estoque restante (*"restam 12"*), botão **"Resgatar por 80 pts"**.
+  **Box 2 — Passaporte Digital (chamada principal para pontuar + missão em destaque)**
+  - Card escuro/dourado em destaque com selo **`PASSAPORTE DIGITAL`**: *"Escaneie o QR Code nas lojas e ganhe pontos!"*.
+  - Botão principal **"📷 Escanear agora"** → se deslogado, abre a Tela 02; se logado, abre o leitor óptico de QR Code com validação de GPS (raio de 250 m).
+  - Subcard integrado de **Missão Ativa**: **Missão Explorador** (*"1/3 locais visitados esta semana"*) + selo **`+50 pts`** e barra de progresso dourada.
 
-  **Box 2 — Anúncio principal (chamada para pontuar)**
-  - Card grande e colorido: **"Escaneie o QR Code nas lojas e ganhe pontos!"**
-  - Botão principal **"📷 Escanear agora"** → se deslogado, abre a Tela 02; se logado, abre o leitor de QR (câmera + GPS).
-  - Abaixo, resumo das missões ativas com barra de progresso (ex.: *Explorador 1/3 locais esta semana · +50 pts*).
+  **Carrossel de Lojas Parceiras (estilo iFood / Delivery)**
+  - Linha horizontal deslizável com avatares circulares das lojas e nome abaixo: **Todas** (item ativo em destaque), **Havanna**, **Outback**, **Cinemark**, **Renner**, **Zara**, **Boticário**.
+  - Chips de categoria logo abaixo: **Todas** · **Alimentação** · **Moda** · **Lazer** · **Serviços** · **Eventos**.
+  - Tocar em uma loja do carrossel abre a **Subtela da Loja Parceira** (ex.: *Havanna Café*).
 
-  **Box 3 — Ofertas com valor/preço (grade de cards)**
-  - Grade de 2 colunas (mobile) / 4 colunas (desktop), estilo cardápio de delivery.
-  - Card: foto, loja, título, **preço "de/por"** (ex.: ~~R$ 39,90~~ **R$ 29,90**) ou percentual (**-20%**), e custo em pontos quando houver.
-  - Selos: **"Novo"**, **"Últimas unidades"**, **"Só hoje"**.
+  **Subtela 01.1 — Página da Loja Parceira (ex.: *Havanna Café — Ofertas e Cupons*)**
+  - **Cabeçalho de navegação:** botão **Voltar** para a vitrine, botão **Favoritar** (`bookmark`) e **Compartilhar** (`share`).
+  - **Hero Card da Loja:** foto de capa com selo **`● Aberto agora`**, logo circular sobreposta, nome da loja (**Havanna Café**), nota **`★ 4.9`**, localização e segmento (*"Piso L2 · Gastronomia & Cafeteria"*) e horário (*"Segunda a Domingo: 10h às 22h"*).
+  - **Card "Loja do Passaporte" (Check-in Presencial):** destaca **"+10 pts por check-in presencial"** com botão **"📷 Fazer Check-in"** (que valida presença e muda para **"✓ Check-in Feito"**, somando +10 pts ao saldo).
+  - **Abas/Chips internos da loja:** **Todas as Vantagens** · **🔥 Ofertas do Dia** · **⭐ Trocar por Pontos**.
+  - **Seção 1 — 🔥 Ofertas do Dia (`Exclusivo na Loja`):**
+    - Cards horizontais de ofertas diretas sem gasto de pontos, com selo de desconto (**`28% OFF`**, **`20% OFF`**, **`-40% 2º`**), tag **`Hoje`**, título, descrição, preço **"de/por"** (ex.: ~~R$ 34,90~~ **R$ 24,90**) e botão **"Regras >"** (abre modal com regulamento completo da promoção).
+  - **Seção 2 — ⭐ Trocar por Pontos (Catálogo da Loja):**
+    - Banner de saldo: **`SALDO DISPONÍVEL: 150 pontos`** + atalho **`Extrato`**.
+    - Lista de recompensas da loja com custo em pontos, estoque em tempo real e ação:
+      - *Cappuccino Tradicional* (**`80 pts`** · *14 restantes*) → botão verde **"Resgatar"** (gera voucher único `HVN-XXXX` em modal de confirmação e desconta os pontos).
+      - *Pote Mini Alfajores* (**`120 pts`** · *5 restantes*) → botão verde **"Resgatar"**.
+      - *Taça Dulce Furor* (**`180 pts`** · **`Faltam 30 pts`**) → card opaco com botão desabilitado **"🔒 Bloqueado"**.
+    - Rodapé informativo da loja: *"Atenção: Vouchers resgatados têm validade estrita de 2 horas para ativação e validação no caixa do Havanna Café (Piso L2). Não acumulativo com outras promoções."*
 
-  **Chamada para instalar o web app (somente mobile)**
-  - Banner discreto no rodapé: *"Adicione o Passaporte à sua tela inicial"* + botão **"Adicionar"** (PWA) e **"X"** para dispensar (não reaparece por 7 dias).
-  - No iPhone, onde não existe o prompt automático, mostrar instrução: *Compartilhar → Adicionar à Tela de Início*.
-
-  **Barra de navegação inferior (mobile)**
-  - 🏠 Início · 🎟️ Cupons · 📷 Escanear (botão central em destaque) · 👤 Perfil.
-
-  **Estados:** carregando (skeleton dos cards), sem ofertas na loja filtrada (*"Essa loja ainda não publicou ofertas hoje"*), sem conexão (aviso + botão tentar novamente).
-
----
-
-- [ ] **Tela 02** — *[Login / Cadastro / Logout]* — modal/bottom sheet sobre a Tela 01
-
-  **Objetivo:** criar conta ou entrar em poucos segundos, sem tirar o usuário do contexto (ele volta para a ação que tentou fazer).
-
-  **Abertura**
-  - Aparece como **bottom sheet** no mobile e modal central no desktop.
-  - Mensagem de contexto conforme a origem: *"Entre para ganhar seus pontos"* (veio do escanear) ou *"Entre para resgatar este cupom"* (veio de um cupom).
-  - Duas abas no topo: **Entrar** | **Criar conta**.
-
-  **Aba "Entrar"**
-  - Campo **E-mail ou telefone** (detecta o formato e aplica máscara `(63) 99999-9999` quando for telefone).
-  - Campo **Senha** com ícone 👁️ mostrar/ocultar.
-  - Link **"Esqueci minha senha"** (fluxo de redefinição — previsto nos próximos passos).
-  - Botão **"Entrar"** (desabilitado até os campos estarem válidos; mostra spinner ao enviar).
-  - Erro genérico: *"E-mail/telefone ou senha incorretos"* (não revela qual dos dois está errado).
-
-  **Aba "Criar conta"**
-  - **Nome**, **E-mail ou telefone**, **Senha** (mín. 8 caracteres, com indicador de força) e **Confirmar senha**.
-  - Checkbox obrigatório: *"Li e aceito os Termos de Uso e a Política de Privacidade"* (links abrem em nova aba) — exigência da LGPD.
-  - Checkbox opcional: *"Quero receber ofertas do shopping"*.
-  - Botão **"Criar conta e ganhar meu passaporte"**.
-  - Erro de duplicidade: *"Este e-mail/telefone já está cadastrado. Deseja entrar?"* (troca para a aba Entrar com o campo preenchido).
-
-  **Após sucesso**
-  - Toast *"Bem-vindo(a), Maria! 🎉"*; o cabeçalho passa a mostrar o saldo.
-  - O usuário retorna **automaticamente à ação pendente** (abre o leitor de QR ou finaliza o resgate do cupom).
-  - Primeiro acesso: mini-tutorial em 3 cards deslizáveis (*Escaneie → Acumule → Troque*).
-
-  **Logout**
-  - Em **Perfil → Sair**, com confirmação *"Deseja sair da sua conta?"*.
-  - Remove o token de sessão e volta para a vitrine aberta (Tela 01).
-
-  **Perfil (acessível pelo avatar)**
-  - Nome, e-mail/telefone, alterar senha, preferências de notificação, **excluir minha conta** (LGPD) e Sair.
+  **Banner de instalação PWA & Barra de navegação inferior (mobile)**
+  - Card flutuante: **"Passaporte Capim Dourado — Instale o Web App para acesso rápido"** com botão **"Instalar"** e **"✕"** para dispensar.
+  - Barra inferior fixa com 5 atalhos: **Início** · **Cupons** · **📷 Escanear** (botão central dourado elevado) · **Passaporte** · **Perfil**.
 
 ---
 
-- [ ] **Tela 03** — *[Cupons e pontos / Meu Passaporte]* — rota `/passaporte` (exige login)
+- [ ] **Tela 02** — *[Autenticação do Visitante: Entrar, Criar Conta e Confirmação WhatsApp (OTP)]* — modal / fluxo de acesso
 
-  **Objetivo:** concentrar tudo o que o visitante tem: saldo, carimbos, missões e cupons — no padrão de apps de pontos.
+  **Objetivo:** autenticar ou cadastrar o visitante em poucos segundos com incentivo de boas-vindas e verificação antifraude via código de 6 dígitos no WhatsApp, devolvendo-o diretamente para a ação que tentou realizar.
 
-  **Cartão de saldo (topo)**
-  - Card destacado em formato de "passaporte": **saldo atual em pontos**, nome do visitante e botão **"📷 Escanear QR Code"**.
-  - Linha abaixo: *"+80 pts ganhos esta semana"*.
+  **Etapa 2A — Modal / Bottom Sheet "Entrar"**
+  - Abre sobre a vitrine desfocada com aviso contextual: *"Entre para resgatar seus cupons e acumular pontos!"*.
+  - Seletor segmentado no topo: **Entrar** | **Criar conta**.
+  - Campos de login: **E-mail ou celular \*** e **Sua senha \*** (com botão 👁️ mostrar/ocultar e link **"Esqueci minha senha"**).
+  - Botão principal dourado: **"Entrar no Passaporte →"**.
+  - Login social rápido: botão **"Continuar com o Google"**.
+  - Card educativo no rodapé (**"Como funciona seu Passaporte (Grátis)"**) em 3 passos visuais:
+    1. **1. Escaneie** (*nas lojas do mall*)
+    2. **2. Acumule** (*pontos e selos*)
+    3. **3. Troque** (*por cortesias*)
 
-  **Abas**
+  **Etapa 2B — Tela "Criar Conta / Cadastro"**
+  - **Banner de incentivo no topo:** **`🎁 PRESENTE DE CHEGADA`** — *"Ganhe **+50 pontos dourados** logo no seu cadastro!"*.
+  - Seletor segmentado: **Entrar** | **Criar conta** (ativo).
+  - Formulário completo de cadastro:
+    1. **Nome completo** (*Obrigatório*).
+    2. **E-mail** (*Para receber vouchers*).
+    3. **Telefone / WhatsApp** com prefixo fixo **`🇧🇷 +55`** e máscara automática `(63) 98412-3456`.
+    4. **Senha** com botão mostrar/ocultar e **Indicador Visual de Força da Senha** em tempo real (`✓ Forte e segura`, barra tripla de progresso e 3 selos de validação: **`✓ +8 letras`**, **`✓ 1 número`**, **`✓ Especial (*#)`**).
+    5. **Confirmar senha** com ícone de verificação imediata (`task_alt`).
+  - **Consentimentos (LGPD):**
+    - Checkbox obrigatório: *"Li e aceito os **Termos de Uso** e a **Política de Privacidade** do Passaporte Capim Dourado (LGPD)."*
+    - Checkbox opcional: *"Quero receber ofertas relâmpago e novidades gastronômicas exclusivas das lojas do shopping por WhatsApp/E-mail."*
+  - Botão principal: **"Criar conta e ganhar meu passaporte"** + link *"Já tem uma conta? Entrar agora →"*.
 
-  **1. Carimbos (carteira de carimbos)**
-  - Grade com os locais do shopping em formato de **selo/carimbo**: colorido = já visitado hoje/esta semana; cinza = ainda não visitado.
-  - Cada carimbo mostra nome do local, tipo (loja/alimentação/evento) e pontos que vale.
-  - Regra visível: *"1 carimbo por local por dia — volte amanhã para pontuar de novo"*.
-
-  **2. Missões**
-  - Lista de cards com barra de progresso e prazo:
-    - **Explorador** — visitar 3 locais diferentes na semana → **+50 pts** (ex.: 2/3, *termina domingo*).
-    - **Frequente** — visitar o shopping em 2 dias diferentes no mês → **+100 pts**.
-    - **Evento** — 1 check-in em evento no mês → **+30 pts**.
-  - Missão concluída: selo **"✓ Concluída"** e animação de confete ao receber o bônus.
-
-  **3. Trocar pontos (catálogo)**
-  - Mesma grade de cupons da vitrine, com filtros: **Até 50 pts · 50–100 · 100+**, por loja e por categoria.
-  - Cards com saldo insuficiente ficam opacos com o texto *"Faltam 30 pts"*.
-  - **Fluxo de resgate (estilo checkout de delivery):**
-    1. Toca no cupom → bottom sheet com regras, validade e estoque.
-    2. Resumo: *Saldo atual 150 → Custo 80 → Saldo após 70*.
-    3. Botão **"Confirmar troca"** → tela de sucesso e o cupom vai para "Meus cupons".
-
-  **4. Meus cupons (carteira)**
-  - Subabas: **Ativos · Utilizados · Expirados**.
-  - Cupom ativo aberto em tela cheia para mostrar no caixa:
-    - Logo e nome da loja, benefício, **QR Code + código de 6 dígitos** do voucher.
-    - Validade e regras de uso.
-    - Instrução: *"Mostre esta tela ao atendente"*.
-    - Brilho da tela aumentado e elemento animado (relógio em tempo real) para dificultar o uso de print.
-  - **⚡ Tempo real:** com o cupom aberto, a tela fica "escutando" o servidor. Quando o atendente confirma o uso (Tela 04), **a tela do cliente muda sozinha, sem recarregar**: fundo verde, ✅ **"Cupom utilizado em Havanna Café às 14:32"**, QR Code e código ficam bloqueados/riscados e o cupom passa para **Utilizados**.
-  - Se a conexão cair, a tela mostra *"Reconectando…"* e, ao voltar, busca o status atual do cupom.
-
-  **5. Extrato**
-  - Linha do tempo de movimentações: **+10 Carimbo — Praça de Alimentação**, **+50 Bônus Missão Explorador**, **−80 Cupom Outback**, com data e hora.
-  - Filtros: Ganhos | Gastos | Todos.
-
-  **Leitor de QR Code (sobreposição da câmera)**
-  - Câmera em tela cheia com moldura de mira; botão de lanterna.
-  - Ao ler: *"Verificando sua localização…"* (solicita permissão de GPS na primeira vez, com explicação do porquê).
-  - **Sucesso:** animação de carimbo + *"+10 pts — Havanna Café"* + progresso da missão atualizado.
-  - **Erros tratados:**
-    - Fora do raio: *"Você precisa estar no shopping para pontuar."*
-    - Já carimbado hoje: *"Você já carimbou este local hoje. Volte amanhã!"*
-    - GPS negado: instrução para liberar a localização nas configurações do navegador.
-    - QR inválido: *"Este QR Code não pertence ao Passaporte do Shopping."*
+  **Etapa 2C — Tela de "Confirmação de Código WhatsApp (OTP)"**
+  - Cabeçalho com botão voltar e selo **`🛡️ ACESSO SEGURO`**.
+  - Emblema dourado com ícone de mensagem verificada e título **"Confirme seu número"**: *"Enviamos um código de 6 dígitos para o número **(63) 98412-3456** via WhatsApp para autenticar o seu Passaporte."* + botão **"✏️ Alterar número"**.
+  - **Card Código de Verificação:**
+    - Indicador de status (`● Aguardando dígitos` → `✓ Código completo`).
+    - **6 campos numéricos individuais (OTP)** divididos em dois blocos (`3 + 3`) com avanço automático de foco, suporte a colar código completo (`paste`) e navegação por `Backspace`.
+    - Cronômetro regressivo (**`⏱️ Reenviar código em 00:48`**) e botão **"↻ Reenviar código via WhatsApp"**.
+  - Botão principal **"🛡️ Confirmar e Entrar"**, alternativa *"Não recebeu no WhatsApp? **Enviar por SMS ↗**"* e card de suporte **"Precisa de assistência? Concierge Capim Dourado"**.
 
 ---
 
-- [ ] **Tela 04** — *[Painel do Lojista]* — rota `/lojista` (login próprio de cada loja)
+- [ ] **Tela 03** — *[Meu Passaporte & Carteira de Cupons]* — rota `/passaporte` (exige login)
 
-  **Objetivo:** dar autonomia para cada loja publicar suas ofertas e cupons e validar os vouchers no caixa — no modelo de painel de parceiros de apps de delivery.
+  **Objetivo:** centralizar a jornada gamificada do visitante — cartão de membro, carimbos colecionados, missões periódicas, catálogo de troca, carteira de cupons com baixa ao vivo e extrato detalhado.
 
-  **Login do lojista**
-  - Usuário da loja + senha (contas criadas pela administração do shopping na Tela 05).
+  **Cartão de Membro "Passaporte Dourado" (topo)**
+  - Card premium dourado com textura de filigrana: selo **`✦ Explorador Dourado`**, nome do titular (**Maria Oliveira**), saldo em destaque (**`150 Pontos`**) e botão rápido **"📷 Escanear QR"**.
+  - Rodapé do cartão: indicador **`↗ +80 pts ganhos esta semana`** e badge **`Nível Ouro`**.
 
-  **Dashboard (início)**
-  - Cards: **cupons resgatados hoje**, **cupons utilizados no caixa**, **taxa de uso** (utilizados ÷ resgatados), **check-ins no QR da loja** hoje/semana.
-  - Lista das ofertas ativas com status e estoque restante.
+  **Navegação interna em 5 abas deslizáveis**
+  - **Carimbos** · **Missões** · **Trocar Pontos** · **● Meus Cupons (1)** · **Extrato**.
 
-  **Validar cupom (ação principal — botão grande no topo)**
-  - Opção 1: **escanear o QR Code** do cupom na tela do cliente.
-  - Opção 2: **digitar o código de 6 dígitos**.
-  - Resultado imediato:
-    - ✅ **Válido** — mostra benefício, nome do cliente e botão **"Confirmar uso"** → status muda para *utilizado* e **o celular do cliente é atualizado na hora** (⚡ tempo real). O painel exibe *"Cliente notificado ✓"*.
-    - ❌ **Já utilizado** — mostra data/hora do uso anterior.
-    - ❌ **De outra loja / expirado / inexistente** — mensagem clara para o atendente.
-  - Pensado para o caixa: botões grandes, poucos toques, funciona no celular do atendente.
+  **1. Aba "Meus Cupons" (Carteira com Validação em Tempo Real via SSE)**
+  - **Banner de status ao vivo:** **`⚡ CONECTADO AO CAIXA EM TEMPO REAL`** (*"Quando o atendente validar seu código, esta tela atualizará sozinha instantaneamente"*).
+  - **Card de Voucher Ativo (ex.: *Havanna Café · Piso L2*):**
+    - Cabeçalho com logo da loja, localização, badge verde **`● Pronto para uso`** e alerta **`⏰ Expira em 48min`**.
+    - Benefício em destaque: **"Cappuccino Especial + Alfajor"** (*"Apresente este código ao caixa antes do pagamento"*).
+    - **QR Code de alta densidade** com emblema central Capim Dourado + **Código do Voucher (`CAPIM-84920`)** com botão de copiar.
+    - Status dinâmico: **`● Aguardando leitura do leitor óptico`** e botão de demonstração **"⚡ Simular Validação Instantânea no Caixa"**.
+    - **⚡ Atualização automática (SSE):** assim que o caixa confirma a baixa na Tela 04, o card muda sozinho para **Utilizado** e exibe o modal comemorativo **"Validação Confirmada! Bom Apetite, Maria! O caixa do Havanna Café (POS #02) acabou de confirmar a leitura do seu voucher CAPIM-84920 às [hora]"**, creditando o carimbo da visita.
 
-  **Minhas ofertas e cupons (CRUD)**
-  - Lista com filtros: **Ativas · Agendadas · Encerradas**.
-  - Botão **"+ Nova oferta"** abre formulário:
-    - **Tipo:** *Promoção do dia* (aberta, sem custo em pontos) ou *Cupom por pontos*.
-    - Título, descrição, imagem (upload), preço "de/por" ou percentual de desconto.
-    - Custo em pontos (se for cupom), **estoque máximo**, limite por cliente.
-    - **Período de validade** (data/hora de início e fim) e regras de uso.
-    - **Pré-visualização** de como o card aparecerá na vitrine.
-  - Ações em cada oferta: editar, pausar/ativar, duplicar, encerrar.
-  - Obs.: ofertas podem passar por **aprovação do shopping** antes de ir ao ar (padrão visual/regras do empreendimento).
+  **2. Aba "Carimbos" (Caderneta do Shopping)**
+  - Progresso da coleção (ex.: *3 de 6 carimbos conquistados*) e aviso de regra antifraude: **"1 carimbo por local/dia · Raio GPS 250m"**.
+  - Grade de selos carimbados (coloridos com data e `+10 pts`, como *Havanna Café*, *Praça de Alimentação*, *Cinemark*) e selos bloqueados/pendentes (*Outback*, *Renner*, *Evento Jazz*).
 
-  **Histórico**
-  - Tabela de cupons resgatados/utilizados com data, código, oferta e status; exportar CSV.
+  **3. Aba "Missões"**
+  - Cards com barra de progresso, prazo e recompensa:
+    - **Explorador da Semana** (*Visite 3 locais diferentes até domingo* — `2/3` · **`+50 pts`**).
+    - **Visitante Frequente** (*Visite o shopping em 2 dias diferentes no mês* — **`✓ Concluída · +100 pts`**).
+    - **Cultura & Eventos** (*Faça 1 check-in em evento oficial no mês* — `0/1` · **`+30 pts`**).
 
-  **Perfil da loja**
-  - Logo, nome, categoria, piso/localização e horário (exibidos no carrossel da vitrine).
+  **4. Aba "Trocar Pontos" & 5. Aba "Extrato"**
+  - Catálogo rápido de recompensas resgatáveis com 1 toque (descontando do saldo atual) e histórico cronológico de entradas (`+10 pts Check-in`, `+50 pts Bônus`) e saídas (`-80 pts Resgate Voucher`).
 
 ---
 
-- [ ] **Tela 05** — *[Painel Administrativo do Shopping]* — rota `/admin` (senha de administrador)
+- [ ] **Tela 04** — *[Portal e Painel do Lojista — Acesso, Validação de Caixa e Ofertas]* — rotas `/lojista/login` e `/lojista`
 
-  **Objetivo:** visão gerencial do programa e controle sobre lojas, conteúdo e QR Codes.
+  **Objetivo:** oferecer um portal exclusivo para as operações do shopping (*Tenant Mix*) autenticarem seus terminais de caixa, darem baixa instantânea em vouchers dos clientes e gerenciarem suas próprias ofertas do dia e cupons.
 
-  **Dashboard de indicadores**
-  - Cards: **visitantes cadastrados**, **ativos nos últimos 7 dias**, **taxa de retorno**, **check-ins do dia**, **cupons resgatados x utilizados**.
-  - Gráficos: check-ins por hora (horários de pico), check-ins por dia (últimos 30 dias), **ranking de locais mais visitados**, ranking de lojas por cupons utilizados.
+  **Etapa 4A — Tela de Login do Lojista (`/lojista/login`)**
+  - Identidade corporativa Capim Dourado Shopping com badge **`🛡️ PORTAL DO LOJISTA & CAIXA`** e título **"Acesso do Lojista"**.
+  - **Formulário de autenticação empresarial:**
+    - **CNPJ da Operação** (`Formato Oficial` com máscara automática `00.000.000/0001-00` e ícone verde de validação).
+    - **Senha de Acesso** com botão mostrar/ocultar e link **"Esqueci a senha"** (abre modal de *Recuperação de Acesso* orientando o Responsável Legal a acionar o SAC Operacional / Administração).
+    - Checkbox **"Lembrar este dispositivo no caixa"** (`⚡ Rápido`).
+    - Botão principal **"🏪 Acessar Painel do Lojista →"** e opção de acesso rápido **"👆 Entrar com Touch ID / Face ID"**.
+  - **Card de Credenciamento Comercial:** informa que o acesso é exclusivo para operações credenciadas pela Administração do Shopping, com botões diretos para **Ramal `(63) 3215-9000 (Ramal 204)`** e **`admin@capimdourado.com.br`**.
+  - Rodapé com selo **`🔒 Conexão Segura SSL 256-bit`** e link *"É um cliente ou visitante? **Voltar ao Passaporte**"*
 
-  **Gestão de lojas**
-  - Cadastrar/editar loja (nome, logo, categoria, piso), **criar login do lojista**, ativar/desativar.
+  **Etapa 4B — Painel Operacional do Lojista (`/lojista`)**
+  - **Cabeçalho da operação:** logo e nome da loja (**Havanna Café** · *Piso L2*), status **`● POS Ativo`**, identificação do operador (**`Caixa 01 · Lucas R.`**) e barra técnica **`⚡ Sincronizado SSE / POS · Terminal Integrado v2.4`**.
+  - **KPIs do Turno (3 cards rápidos):**
+    - **Resgatados:** `18` (*Hoje na loja*)
+    - **No Caixa:** `14` (**`78% Taxa de baixa`**)
+    - **Check-ins:** `42` (*QR na bancada*)
+  - **Módulo Principal — Validar Cupom / Passe:**
+    - Botão de destaque **"📷 Escanear QR Code do Cliente"** (*"Abre câmera ou leitor óptico USB"*).
+    - Campo manual para digitação do código (**`CAPIM-84920`**) + botão **"⚡ Verificar"**.
+    - **Card de Conferência ("✓ VOUCHER VÁLIDO — Cód: 84920"):** exibe o item (*Cappuccino Especial + Alfajor Clássico*), pontos debitados (`80 pts`), titular (**Maria Oliveira** · *Passaporte Dourado*), validade (`Expira em 48min`), aviso de disparo SSE em tempo real e botão verde **"✓ Confirmar Uso e Baixar Cupom"**.
+  - **Gestão de Campanhas na Loja & Últimos Atendimentos:**
+    - Botão **"+ Oferta Express"** (abre modal para criar promoção do dia ou cupom por pontos com título, custo, estoque e validade).
+    - Abas **Ativas (3)** · **Agendadas (1)** · **Encerradas**, com controle de estoque em barra e ações rápidas (**Pausar**, **Editar**, **+Estoque**).
+    - Lista de **Últimos Atendimentos** com horário, código validado e status **`✓ Baixado`**.
+  - **Barra inferior do lojista:** **Validar** · **Ofertas** · **Histórico** · **Loja**.
 
-  **Gestão de anúncios e banners**
-  - Definir banners da vitrine (Box 1 e Box 2), ordem de exibição e período.
-  - **Fila de aprovação** das ofertas enviadas pelos lojistas (aprovar/reprovar com motivo).
+---
 
-  **Locais e QR Codes** (gerador — rota `/qrcodes`)
-  - Cadastrar locais (loja, evento, praça de alimentação) com pontos por carimbo.
-  - Gerar e **baixar/imprimir** o QR Code de cada local (PNG/PDF), com nome e instrução *"Escaneie e ganhe pontos"*.
+- [ ] **Tela 05** — *[Painel Administrativo do Shopping]* — rota `/admin` (acesso restrito à Administração)
 
-  **Missões e regras**
-  - Visualizar/ajustar missões (pontos de bônus, período) e o raio de validação do GPS.
+  **Objetivo:** entregar à administração do shopping a visão executiva em tempo real do programa de fidelidade, curadoria do *Tenant Mix*, aprovação de campanhas, gestão de credenciais de lojistas e emissão de totens QR Code com geocerca.
 
-  **Cupons resgatados**
-  - Lista geral com filtros por loja, status e período; exportar CSV.
+  **Cabeçalho Executivo & Filtros de Período**
+  - Identificação **Capim Dourado · ADMIN GERAL — Dashboard Indicadores** e barra de status **`● SISTEMA OPERACIONAL · SSE ATIVO · Tempo Real`**.
+  - Filtros rápidos de período (**Hoje** | **Últimos 7d** | **Este Mês**) + botão **`⚡ SEED MOCK`** para popular dados de demonstração para a banca avaliadora.
 
-  **Demonstração**
-  - Botão **"Popular dados de demonstração"** (visitantes fictícios, anúncios e cupons) — usar apenas em ambiente de teste.
+  **KPIs Executivos & Conversão de Resgates**
+  - Grade de 4 indicadores principais:
+    1. **Cadastrados:** `14.820` (`↗ +12,4% vs mês ant.`)
+    2. **Ativos (7d):** `3.490` (**`Retorno: 41%`**)
+    3. **Check-ins Dia:** `684` (`Pico: 19h–20h`)
+    4. **Conversão:** `77,7%` (`692 / 890 cupons`)
+  - Card de **Resgates com Queima no PDV:** barra comparativa entre cupons **Liquidados no caixa (692)** e **Em aberto (198)**.
 
+  **Análise de Fluxo & Ranking de Locais**
+  - **Gráfico de Pico de Check-ins por Horário (`10h` às `22h`):** barras verticais destacando os horários nobres de fluxo no mall (`12h–14h` almoço e `19h–21h` jantar/lazer).
+  - **Top Locais Frequentados:** ranking em tempo real com barra de proporção (*1. Praça de Alimentação — 248 check-ins*, *2. Havanna Café (L2) — 164 check-ins*, *3. Cinemark — 119 check-ins*, *4. Outback Steakhouse — 92 check-ins*).
+
+  **Curadoria da Vitrine & Fila de Aprovação (Governança do Shopping)**
+  - **Fila de Aprovação (`2 pendentes`):** cards de ofertas submetidas pelos lojistas (ex.: *Outback Steakhouse — Chopp Brahma 50% OFF*, *Boticário — Brinde Malbec 10ml*) com botões **"✓ Aprovar Oferta"** e **"✕ Recusar"** (solicita motivo da recusa para o lojista).
+  - **Vitrine Aberta — Ordem dos Banners:** controle de ordenação (`↑` / `↓`) dos destaques `B1` e `B2` exibidos na Tela 01.
+
+  **Gestão de Lojas & Credenciais de Caixa**
+  - Botão **"+ Nova Loja"** (cadastra operação, segmento/piso e usuário de acesso) e busca instantânea por nome, piso ou login.
+  - Lista de operações credenciadas (*Havanna Café*, *Outback*, *Cinemark*) com status ativo e botão **"Redefinir POS"** (gera PIN temporário de 6 dígitos para o terminal da loja).
+
+  **Gerador de Totens Oficiais QR Code & Raio de Geocerca (GPS)**
+  - Pré-visualização do **Totem Oficial Capim Dourado (`+10 Pts`)** pronto para impressão.
+  - Seletor do **Raio de Validação GPS (Haversine):** **`150m`** · **`250m (Padrão)`** · **`400m`**.
+  - Botões de exportação gráfica: **"📄 Baixar PDF (A4)"** e **"🖼️ Baixar PNG Totem"**.
+  - Card de **Exportação de Auditoria:** botão **"📥 Exportar Relatório Geral de Cupons (CSV)"** para conciliação financeira e auditoria do FPP (Fundo de Promoção e Propaganda).
 
 ---
 
@@ -220,11 +207,20 @@
 * **TypeScript**
 
 ### 🏗️ Arquitetura Proposta
-* *[Descreva aqui a arquitetura do sistema — ex.: MVC, Clean Architecture, Feature-based, Serverless, etc.]*
+* **Arquitetura Monolítica Modular Full-Stack (baseada em Next.js App Router):** A aplicação centraliza front-end e back-end em uma única base de código TypeScript, dividida em quatro camadas lógicas:
+  * **Camada de Apresentação (UI / Client Components):** Interfaces responsivas e PWA divididas por perfil de acesso (Vitrine Aberta, Passaporte do Visitante, Portal do Lojista e Painel Administrativo do Shopping).
+  * **Camada de API e Tempo Real (Next.js Route Handlers):** Endpoints RESTful para autenticação, check-in e gestão de ofertas, combinados com canais persistentes de **Server-Sent Events (SSE)** para comunicação unidirecional em tempo real entre o caixa do lojista e a tela do cliente.
+  * **Camada de Serviços e Regras de Negócio (Domain Services):** Módulos isolados responsáveis pelo cálculo de perímetro geográfico (Fórmula de Haversine para trava de GPS), apuração automática de missões periódicas (semanal/mensal), controle atômico de estoque de cupons e emissão/baixa de vouchers.
+  * **Camada de Persistência (ORM + Banco Relacional):** Modelagem relacional com integridade referencial para isolamento multi-loja (*Tenant Mix*), histórico de transações (extrato) e auditoria de uso de cupons.
 
 ### 🚀 Plataformas e Tecnologias Adotadas
 * **Framework Principal:** Next.js
-* **Outras Tecnologias:** *[Ex.: React, Tailwind CSS, TyperScript, etc.]*
+* **Outras Tecnologias:**
+  * **Interface e Estilização:** React, Tailwind CSS, PWA (Manifest + Service Worker para instalação na tela inicial) e HTML5 Geolocation API (`navigator.geolocation`).
+  * **Comunicação em Tempo Real:** Server-Sent Events (SSE) nativo via Web Streams API no servidor e `EventSource` no cliente.
+  * **Banco de Dados e ORM:** SQLite (desenvolvimento/MVP) / PostgreSQL (produção) gerenciados via Prisma ORM.
+  * **Segurança e Autenticação:** JWT (JSON Web Tokens) com cookies `HttpOnly`, hash de senhas com `bcryptjs` e validação de esquemas com `Zod`.
+  * **Leitura e Geração de QR Codes:** `html5-qrcode` (leitura via câmera no navegador) e `qrcode` (geração de vouchers e placas das lojas).
 
 ### 🎲 Incorporação da Tecnologia / Prática Sorteada
 **Tecnologia sorteada:** 🔴 **Backend e Dados — Dados em tempo real** (*"A tela atualiza sozinha quando o dado muda"*).
