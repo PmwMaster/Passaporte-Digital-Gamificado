@@ -3,7 +3,7 @@
 // ==============================================================================
 
 export const SHOPPING_CONFIG = {
-  name: 'Capim Dourado Shopping',
+  name: 'Passe Dourado Shopping',
   city: 'Palmas - TO',
   timezone: 'America/Araguaia',
   defaultCoordinates: {
@@ -55,7 +55,7 @@ export const PASSPORT_LEVELS = {
   },
   GOLD: {
     id: 'GOLD',
-    label: 'Ouro Capim Dourado',
+    label: 'Ouro Passe Dourado',
     minLifetimePoints: 1200,
     nextLevelPoints: 3000,
   },

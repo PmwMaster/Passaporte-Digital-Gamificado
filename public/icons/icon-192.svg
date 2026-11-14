@@ -1,5 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
-  <rect width="192" height="192" rx="36" fill="#7a580f"/>
-  <circle cx="96" cy="96" r="68" fill="none" stroke="#c59b4e" stroke-width="4"/>
-  <text x="96" y="112" text-anchor="middle" fill="#fcf9f8" font-family="Georgia, serif" font-size="52" font-weight="bold">CD</text>
+  <rect width="192" height="192" rx="44" fill="#C39953"/>
+  <!-- 5 hastes do Feixe (Logo 1 · Feixe) -->
+  <g fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Haste central -->
+    <path d="M96 144 L96 46"/>
+    <!-- Hastes intermediárias -->
+    <path d="M96 144 C92 108 76 78 58 60"/>
+    <path d="M96 144 C100 108 116 78 134 60"/>
+    <!-- Hastes externas -->
+    <path d="M96 144 C82 122 64 110 42 108"/>
+    <path d="M96 144 C110 122 128 110 150 108"/>
+  </g>
+  <!-- Base triangular inferior do feixe -->
+  <path d="M84 128 L96 150 L108 128 Z" fill="#FFFFFF"/>
+  <!-- Laço horizontal do feixe -->
+  <rect x="76" y="122" width="40" height="11" rx="5.5" fill="#FAF6EE"/>
 </svg>
