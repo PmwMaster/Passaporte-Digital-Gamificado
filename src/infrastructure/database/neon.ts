@@ -181,11 +181,15 @@ export async function ensureNeonTables(): Promise<void> {
       );
     `;
 
-    // 5. Seed inicial idempotente do visitante padrão (vis_01) e das 3 missões oficiais
+    // 5. Seed inicial idempotente do visitante padrão (vis_01), admin padrão (usr_admin_01) e das 3 missões oficiais
     await sql`
       INSERT INTO app_users (id, name, email, phone, password_hash, role, is_phone_verified)
-      VALUES ('usr_visitor_01', 'Mariana Alves Tocantins', 'mariana.alves@exemplo.com.br', '+5563992114455', '$2a$10$mockhashedpassword', 'VISITOR', TRUE)
-      ON CONFLICT (id) DO NOTHING;
+      VALUES
+        ('usr_visitor_01', 'Mariana Silva', 'mariana.alves@exemplo.com.br', '+5563992114455', '$2a$10$mockhashedpassword', 'VISITOR', TRUE),
+        ('usr_admin_01', 'Supervisão Passe Dourado', 'admin@passedourado.com.br', '+556332150000', '$2a$10$mockadminhashedpassword', 'ADMIN', TRUE)
+      ON CONFLICT (id) DO UPDATE SET
+        role = EXCLUDED.role,
+        email = EXCLUDED.email;
     `;
 
     await sql`
