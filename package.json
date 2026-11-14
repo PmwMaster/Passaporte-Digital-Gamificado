@@ -4,6 +4,7 @@
   "private": true,
   "description": "Plataforma web gamificada (PWA) de fidelização e engajamento do Capim Dourado Shopping (Palmas - TO)",
   "scripts": {
+    "vercel-build": "next build",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -14,6 +15,7 @@
     "db:studio": "prisma studio"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.0.0",
     "@prisma/client": "^6.4.1",
     "bcryptjs": "^3.0.2",
     "html5-qrcode": "^2.3.8",
