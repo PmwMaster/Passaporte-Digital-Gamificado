@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { AdministrationService } from '@/modules/administration';
 import { Campaign, Reward, Store, StoreCategory } from '@/shared/types/domain';
-import { EditorialCard, ModuleHeader } from '@/components/ui/EditorialCard';
+import { EditorialCard } from '@/components/ui/EditorialCard';
 
 export default function AdminDashboardPage() {
   const initialData = AdministrationService.getExecutiveDashboard();
@@ -14,16 +14,14 @@ export default function AdminDashboardPage() {
   const [geofence, setGeofence] = useState(initialData.shoppingConfig);
   const [feedback, setFeedback] = useState<string | null>(null);
 
-  // Estado para formulário de Nova Loja (Fase 2 - F09 + F01)
   const [storeName, setStoreName] = useState('');
   const [storeCategory, setStoreCategory] =
     useState<StoreCategory>('GASTRONOMIA');
-  const [storeFloor, setStoreFloor] = useState('Piso 2 • Praça Central');
+  const [storeFloor, setStoreFloor] = useState('Piso 2');
   const [storeUnit, setStoreUnit] = useState('L-215');
   const [storeDesc, setStoreDesc] = useState('');
   const [storePoints, setStorePoints] = useState(50);
 
-  // Estado para Geofence (Fase 4 - F09)
   const [latInput, setLatInput] = useState(
     initialData.shoppingConfig.defaultCoordinates.latitude
   );
@@ -54,9 +52,7 @@ export default function AdminDashboardPage() {
       setStores((prev) => [json.data.store, ...prev]);
       setStoreName('');
       setStoreDesc('');
-      setFeedback(
-        `Loja "${json.data.store.name}" criada com QR Code oficial ${json.data.store.qrCodeToken} e publicada na Vitrine Pública!`
-      );
+      setFeedback(`Loja "${json.data.store.name}" cadastrada (${json.data.store.qrCodeToken}).`);
     } else {
       setFeedback(json.error?.message ?? 'Erro ao cadastrar loja.');
     }
@@ -85,9 +81,7 @@ export default function AdminDashboardPage() {
           )
         );
       }
-      setFeedback(
-        `Item ${targetId} (${targetType}) atualizado para ${decision} com sucesso!`
-      );
+      setFeedback(`Status atualizado para ${decision}.`);
     }
   }
 
@@ -105,210 +99,145 @@ export default function AdminDashboardPage() {
     const json = await res.json();
     if (json.success) {
       setGeofence(json.data.geofence);
-      setFeedback(
-        `Geofence atualizado! Novo raio Haversine: ${json.data.geofence.defaultGeofenceRadiusMeters} metros.`
-      );
+      setFeedback(`Raio atualizado para ${json.data.geofence.defaultGeofenceRadiusMeters}m.`);
     }
   }
 
   return (
-    <div>
-      <ModuleHeader
-        categoryBadge="Gestão Executiva • Capim Dourado Shopping"
-        title="Painel Administrativo do Shopping"
-        subtitle="Acompanhamento de indicadores, cadastro de lojas parceiras, aprovação de ofertas e configurações de check-in presencial."
-      />
+    <div className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="font-serif text-2xl font-bold text-brand-ink">
+          Administração do Shopping
+        </h1>
+        <a
+          href="/api/admin/audit/export?format=csv"
+          download="auditoria-passaporte.csv"
+          className="rounded-xl bg-brand-goldDark px-4 py-2 text-xs font-semibold text-white"
+        >
+          Exportar CSV ↓
+        </a>
+      </div>
 
       {feedback && (
-        <div className="mb-6 rounded-2xl border border-brand-emerald bg-brand-emerald/10 p-4 text-xs font-semibold text-brand-emerald">
+        <div className="rounded-2xl border border-brand-emerald bg-brand-emerald/10 p-3.5 text-xs font-semibold text-brand-emerald">
           {feedback}
         </div>
       )}
 
-      {/* KPIs Executivos + Exportação de Auditoria */}
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <h2 className="font-serif text-xl font-bold text-brand-ink">
-          Indicadores Executivos do Programa
-        </h2>
-        <div className="flex flex-wrap gap-2">
-          <a
-            href="/api/admin/audit/export?format=csv"
-            download="auditoria-passaporte-capim-dourado.csv"
-            className="rounded-xl bg-brand-goldDark px-4 py-2 text-xs font-semibold text-white transition hover:opacity-95"
-          >
-            Exportar Auditoria (CSV) ↓
-          </a>
-          <a
-            href="/api/admin/audit/export?format=json"
-            target="_blank"
-            rel="noreferrer"
-            className="rounded-xl border border-brand-border bg-white px-4 py-2 text-xs font-semibold text-brand-ink transition hover:border-brand-goldDark"
-          >
-            Ver JSON de Auditoria
-          </a>
-        </div>
-      </div>
-
-      <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <EditorialCard>
-          <span className="text-xs uppercase text-brand-muted">
-            Visitantes Ativos
-          </span>
-          <p className="mt-1 font-serif text-3xl font-bold text-brand-ink">
+          <span className="text-xs uppercase text-brand-muted">Visitantes</span>
+          <p className="mt-1 font-serif text-2xl font-bold text-brand-ink">
             {initialData.kpis.activeVisitors.toLocaleString('pt-BR')}
           </p>
         </EditorialCard>
         <EditorialCard>
-          <span className="text-xs uppercase text-brand-muted">
-            Lojas Parceiras Ativas
-          </span>
-          <p className="mt-1 font-serif text-3xl font-bold text-brand-emerald">
+          <span className="text-xs uppercase text-brand-muted">Lojas</span>
+          <p className="mt-1 font-serif text-2xl font-bold text-brand-emerald">
             {stores.length}
           </p>
         </EditorialCard>
         <EditorialCard>
-          <span className="text-xs uppercase text-brand-muted">
-            Pontos Emitidos vs. Resgatados
-          </span>
+          <span className="text-xs uppercase text-brand-muted">Pontos Emitidos</span>
           <p className="mt-1 font-serif text-2xl font-bold text-brand-goldDark">
-            {initialData.kpis.totalPointsIssued.toLocaleString('pt-BR')} /{' '}
-            {initialData.kpis.totalPointsRedeemed.toLocaleString('pt-BR')}
+            {initialData.kpis.totalPointsIssued.toLocaleString('pt-BR')}
           </p>
         </EditorialCard>
         <EditorialCard>
-          <span className="text-xs uppercase text-brand-muted">
-            Raio Haversine Atual
-          </span>
-          <p className="mt-1 font-serif text-3xl font-bold text-brand-ink">
+          <span className="text-xs uppercase text-brand-muted">Raio GPS</span>
+          <p className="mt-1 font-serif text-2xl font-bold text-brand-ink">
             {geofence.defaultGeofenceRadiusMeters}m
           </p>
         </EditorialCard>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-2">
-        {/* 1. Cadastro de Nova Loja + Emissão de QR Code Oficial */}
+      <div className="grid gap-6 lg:grid-cols-2">
+        {/* Cadastro de Loja */}
         <EditorialCard>
-          <h2 className="font-serif text-2xl font-bold text-brand-ink">
-            1. Cadastrar Loja Parceira & Emitir QR Code Oficial
+          <h2 className="font-serif text-xl font-bold text-brand-ink">
+            Cadastrar Loja Parceira
           </h2>
-          <p className="mt-1 text-xs text-brand-muted">
-            Lojas criadas aqui geram automaticamente seu token QR assinado e aparecem imediatamente na Vitrine Pública (`/`).
-          </p>
 
           <form onSubmit={handleCreateStore} className="mt-4 space-y-3">
             <div className="grid gap-3 sm:grid-cols-2">
-              <div>
-                <label className="block text-xs font-semibold uppercase text-brand-muted">
-                  Nome da Loja
-                </label>
-                <input
-                  type="text"
-                  value={storeName}
-                  onChange={(e) => setStoreName(e.target.value)}
-                  placeholder="Ex.: Havanna Café Capim Dourado"
-                  className="mt-1 w-full rounded-xl border border-brand-border bg-brand-ivory px-3.5 py-2 text-xs"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold uppercase text-brand-muted">
-                  Categoria
-                </label>
-                <select
-                  value={storeCategory}
-                  onChange={(e) =>
-                    setStoreCategory(e.target.value as StoreCategory)
-                  }
-                  className="mt-1 w-full rounded-xl border border-brand-border bg-brand-ivory px-3.5 py-2 text-xs"
-                >
-                  <option value="GASTRONOMIA">Gastronomia & Cafés</option>
-                  <option value="MODA">Moda & Acessórios</option>
-                  <option value="BELEZA">Beleza & Bem-Estar</option>
-                  <option value="LAZER">Cinema & Lazer</option>
-                  <option value="SERVICOS">Serviços</option>
-                  <option value="TECNOLOGIA">Tecnologia</option>
-                </select>
-              </div>
+              <input
+                type="text"
+                value={storeName}
+                onChange={(e) => setStoreName(e.target.value)}
+                placeholder="Nome da Loja"
+                className="w-full rounded-xl border border-brand-border bg-brand-ivory px-3.5 py-2 text-xs"
+                required
+              />
+              <select
+                value={storeCategory}
+                onChange={(e) => setStoreCategory(e.target.value as StoreCategory)}
+                className="w-full rounded-xl border border-brand-border bg-brand-ivory px-3.5 py-2 text-xs"
+              >
+                <option value="GASTRONOMIA">Gastronomia & Cafés</option>
+                <option value="MODA">Moda & Acessórios</option>
+                <option value="BELEZA">Beleza & Bem-Estar</option>
+                <option value="LAZER">Cinema & Lazer</option>
+                <option value="SERVICOS">Serviços</option>
+                <option value="TECNOLOGIA">Tecnologia</option>
+              </select>
             </div>
 
             <div className="grid grid-cols-3 gap-3">
-              <div>
-                <label className="block text-xs font-semibold uppercase text-brand-muted">
-                  Piso / Corredor
-                </label>
-                <input
-                  type="text"
-                  value={storeFloor}
-                  onChange={(e) => setStoreFloor(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-brand-border bg-brand-ivory px-3 py-2 text-xs"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold uppercase text-brand-muted">
-                  Unidade
-                </label>
-                <input
-                  type="text"
-                  value={storeUnit}
-                  onChange={(e) => setStoreUnit(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-brand-border bg-brand-ivory px-3 py-2 text-xs"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold uppercase text-brand-muted">
-                  Pts / Check-in
-                </label>
-                <input
-                  type="number"
-                  min={5}
-                  value={storePoints}
-                  onChange={(e) => setStorePoints(Number(e.target.value))}
-                  className="mt-1 w-full rounded-xl border border-brand-border bg-brand-ivory px-3 py-2 text-xs"
-                  required
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold uppercase text-brand-muted">
-                Descrição Editorial da Loja
-              </label>
               <input
                 type="text"
-                value={storeDesc}
-                onChange={(e) => setStoreDesc(e.target.value)}
-                placeholder="Ex.: Dulce de leche argentino, alfajores e cafés especiais."
-                className="mt-1 w-full rounded-xl border border-brand-border bg-brand-ivory px-3.5 py-2 text-xs"
+                value={storeFloor}
+                onChange={(e) => setStoreFloor(e.target.value)}
+                placeholder="Piso"
+                className="w-full rounded-xl border border-brand-border bg-brand-ivory px-3 py-2 text-xs"
+                required
+              />
+              <input
+                type="text"
+                value={storeUnit}
+                onChange={(e) => setStoreUnit(e.target.value)}
+                placeholder="Unidade"
+                className="w-full rounded-xl border border-brand-border bg-brand-ivory px-3 py-2 text-xs"
+                required
+              />
+              <input
+                type="number"
+                min={5}
+                value={storePoints}
+                onChange={(e) => setStorePoints(Number(e.target.value))}
+                placeholder="Pontos"
+                className="w-full rounded-xl border border-brand-border bg-brand-ivory px-3 py-2 text-xs"
                 required
               />
             </div>
+
+            <input
+              type="text"
+              value={storeDesc}
+              onChange={(e) => setStoreDesc(e.target.value)}
+              placeholder="Descrição curta"
+              className="w-full rounded-xl border border-brand-border bg-brand-ivory px-3.5 py-2 text-xs"
+              required
+            />
 
             <button
               type="submit"
               className="w-full rounded-xl bg-brand-emerald py-2.5 text-xs font-semibold text-white"
             >
-              Cadastrar Loja & Gerar QR Code Oficial
+              Cadastrar Loja
             </button>
           </form>
 
-          <h3 className="mt-6 font-serif text-lg font-bold text-brand-ink">
-            QR Codes Oficiais Ativos ({stores.length})
-          </h3>
-          <div className="mt-3 max-h-60 space-y-2 overflow-y-auto pr-1">
+          <div className="mt-5 max-h-56 space-y-2 overflow-y-auto pr-1">
             {stores.map((store) => (
               <div
                 key={store.id}
-                className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-brand-border bg-brand-ivory p-3 text-xs"
+                className="flex items-center justify-between rounded-xl border border-brand-border bg-brand-ivory p-2.5 text-xs"
               >
                 <div>
                   <strong className="text-brand-ink">{store.name}</strong>
-                  <span className="ml-2 text-brand-muted">
-                    ({store.floor} • +{store.checkInPoints} pts)
-                  </span>
+                  <span className="ml-2 text-brand-muted">+{store.checkInPoints} pts</span>
                 </div>
-                <code className="rounded bg-white px-2.5 py-1 font-mono text-[11px] font-bold text-brand-goldDark">
+                <code className="rounded bg-white px-2 py-0.5 font-mono text-[11px] font-bold text-brand-goldDark">
                   {store.qrCodeToken}
                 </code>
               </div>
@@ -316,59 +245,39 @@ export default function AdminDashboardPage() {
           </div>
         </EditorialCard>
 
-        {/* 2. Moderação de Campanhas/Ofertas + Configuração de Geofence */}
-        <div className="space-y-8">
+        {/* Moderação + Geofence */}
+        <div className="space-y-6">
           <EditorialCard>
-            <h2 className="font-serif text-2xl font-bold text-brand-ink">
-              2. Moderação de Campanhas & Ofertas (RN-09)
+            <h2 className="font-serif text-xl font-bold text-brand-ink">
+              Aprovação de Campanhas & Ofertas
             </h2>
-            <p className="mt-1 text-xs text-brand-muted">
-              Aprove ou rejeite campanhas e recompensas submetidas pelos lojistas.
-            </p>
 
-            <div className="mt-4 space-y-3">
+            <div className="mt-4 space-y-2.5">
               {campaigns.map((camp) => (
                 <div
                   key={camp.id}
-                  className="rounded-xl border border-brand-border bg-brand-ivory p-3.5 text-xs"
+                  className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-brand-border bg-brand-ivory p-3 text-xs"
                 >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="font-semibold text-brand-goldDark">
-                      [CAMPANHA] {camp.storeName ?? 'Shopping Global'}
-                    </span>
-                    <span
-                      className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
-                        camp.status === 'APPROVED'
-                          ? 'bg-brand-emerald/15 text-brand-emerald'
-                          : camp.status === 'REJECTED'
-                          ? 'bg-red-100 text-red-800'
-                          : 'bg-amber-100 text-amber-800'
-                      }`}
-                    >
-                      {camp.status}
-                    </span>
+                  <div>
+                    <p className="font-serif text-sm font-bold text-brand-ink">
+                      {camp.title}
+                    </p>
+                    <span className="text-[11px] text-brand-muted">{camp.status}</span>
                   </div>
-                  <p className="mt-1 font-serif text-base font-bold text-brand-ink">
-                    {camp.title}
-                  </p>
-                  <div className="mt-2.5 flex gap-2">
+                  <div className="flex gap-1.5">
                     <button
                       type="button"
-                      onClick={() =>
-                        handleModerate('CAMPAIGN', camp.id, 'APPROVED')
-                      }
-                      className="rounded-lg bg-brand-emerald px-3 py-1 text-[11px] font-semibold text-white"
+                      onClick={() => handleModerate('CAMPAIGN', camp.id, 'APPROVED')}
+                      className="rounded-lg bg-brand-emerald px-2.5 py-1 text-[11px] font-semibold text-white"
                     >
-                      Aprovar ✓
+                      Aprovar
                     </button>
                     <button
                       type="button"
-                      onClick={() =>
-                        handleModerate('CAMPAIGN', camp.id, 'REJECTED')
-                      }
-                      className="rounded-lg border border-red-300 bg-white px-3 py-1 text-[11px] font-semibold text-red-700"
+                      onClick={() => handleModerate('CAMPAIGN', camp.id, 'REJECTED')}
+                      className="rounded-lg border border-red-300 bg-white px-2.5 py-1 text-[11px] font-semibold text-red-700"
                     >
-                      Rejeitar ✕
+                      Rejeitar
                     </button>
                   </div>
                 </div>
@@ -377,45 +286,30 @@ export default function AdminDashboardPage() {
               {rewards.slice(0, 3).map((rew) => (
                 <div
                   key={rew.id}
-                  className="rounded-xl border border-brand-border bg-white p-3.5 text-xs"
+                  className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-brand-border bg-white p-3 text-xs"
                 >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="font-semibold text-brand-ink">
-                      [OFERTA LOJISTA] {rew.storeName}
-                    </span>
-                    <span
-                      className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
-                        rew.approvalStatus === 'APPROVED'
-                          ? 'bg-brand-emerald/15 text-brand-emerald'
-                          : rew.approvalStatus === 'REJECTED'
-                          ? 'bg-red-100 text-red-800'
-                          : 'bg-amber-100 text-amber-800'
-                      }`}
-                    >
-                      {rew.approvalStatus}
+                  <div>
+                    <p className="font-serif text-sm font-bold text-brand-ink">
+                      {rew.title} ({rew.pointsCost} pts)
+                    </p>
+                    <span className="text-[11px] text-brand-muted">
+                      {rew.storeName} • {rew.approvalStatus}
                     </span>
                   </div>
-                  <p className="mt-1 font-serif text-sm font-bold text-brand-ink">
-                    {rew.title} ({rew.pointsCost} pts)
-                  </p>
-                  <div className="mt-2 flex gap-2">
+                  <div className="flex gap-1.5">
                     <button
                       type="button"
-                      onClick={() =>
-                        handleModerate('REWARD', rew.id, 'APPROVED')
-                      }
-                      className="rounded-lg bg-brand-emerald px-3 py-1 text-[11px] font-semibold text-white"
+                      onClick={() => handleModerate('REWARD', rew.id, 'APPROVED')}
+                      className="rounded-lg bg-brand-emerald px-2.5 py-1 text-[11px] font-semibold text-white"
                     >
-                      Aprovar Oferta ✓
+                      Aprovar
                     </button>
                     <button
                       type="button"
-                      onClick={() =>
-                        handleModerate('REWARD', rew.id, 'REJECTED')
-                      }
-                      className="rounded-lg border border-red-300 bg-white px-3 py-1 text-[11px] font-semibold text-red-700"
+                      onClick={() => handleModerate('REWARD', rew.id, 'REJECTED')}
+                      className="rounded-lg border border-red-300 bg-white px-2.5 py-1 text-[11px] font-semibold text-red-700"
                     >
-                      Rejeitar ✕
+                      Rejeitar
                     </button>
                   </div>
                 </div>
@@ -424,14 +318,14 @@ export default function AdminDashboardPage() {
           </EditorialCard>
 
           <EditorialCard>
-            <h2 className="font-serif text-2xl font-bold text-brand-ink">
-              3. Configuração de Geolocalização (Haversine)
+            <h2 className="font-serif text-xl font-bold text-brand-ink">
+              Raio de Check-in (GPS)
             </h2>
-            <form onSubmit={handleSaveGeofence} className="mt-4 space-y-3 text-xs">
+            <form onSubmit={handleSaveGeofence} className="mt-3 space-y-3 text-xs">
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block font-semibold uppercase text-brand-muted">
-                    Latitude Central
+                  <label className="block text-[11px] font-semibold uppercase text-brand-muted">
+                    Latitude
                   </label>
                   <input
                     type="number"
@@ -442,8 +336,8 @@ export default function AdminDashboardPage() {
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold uppercase text-brand-muted">
-                    Longitude Central
+                  <label className="block text-[11px] font-semibold uppercase text-brand-muted">
+                    Longitude
                   </label>
                   <input
                     type="number"
@@ -454,8 +348,8 @@ export default function AdminDashboardPage() {
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold uppercase text-brand-muted">
-                    Raio Geofence (m)
+                  <label className="block text-[11px] font-semibold uppercase text-brand-muted">
+                    Raio (m)
                   </label>
                   <input
                     type="number"
@@ -471,7 +365,7 @@ export default function AdminDashboardPage() {
                 type="submit"
                 className="w-full rounded-xl bg-brand-ink py-2.5 font-semibold text-white hover:bg-brand-goldDark"
               >
-                Salvar Parâmetros de Geofence
+                Salvar Raio GPS
               </button>
             </form>
           </EditorialCard>

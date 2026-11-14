@@ -1,5 +1,5 @@
 # PRD — Product Requirements Document
-## Passaporte Digital Gamificado — Capim Dourado Shopping (Palmas - TO)
+## Passaporte Digital Gamificado — Passe Dourado Shopping (Palmas - TO)
 
 **Versão:** 1.0.0 (Fundação Inicial)  
 **Status:** Em Validação / Base para Implementação  
@@ -10,15 +10,15 @@
 ## 3.1 Visão do Produto
 
 ### Problema que o software resolve
-Os visitantes do Capim Dourado Shopping circulam por dezenas de lojas, quiosques, eventos e operações gastronômicas sem um mecanismo digital unificado e contínuo que recompense a presença física recorrente, estimule a descoberta de novas lojas parceiras e converta o tráfego de corredor em vendas rastreáveis para os lojistas. Programas tradicionais baseados em notas fiscais físicas geram alta fricção operacional, filas em balcões de trocas e baixo engajamento diário.
+Os visitantes do Passe Dourado Shopping circulam por dezenas de lojas, quiosques, eventos e operações gastronômicas sem um mecanismo digital unificado e contínuo que recompense a presença física recorrente, estimule a descoberta de novas lojas parceiras e converta o tráfego de corredor em vendas rastreáveis para os lojistas. Programas tradicionais baseados em notas fiscais físicas geram alta fricção operacional, filas em balcões de trocas e baixo engajamento diário.
 
 ### Objetivo principal
-Desenvolver uma plataforma web responsiva (PWA) gamificada de fidelização e engajamento para o Capim Dourado Shopping, permitindo que visitantes descubram lojas e promoções, realizem check-ins presenciais auditados por QR Code e geolocalização (Geofence + Haversine), acumulem pontos e carimbos digitais, cumpram missões e resgatem recompensas em tempo real nos estabelecimentos parceiros.
+Desenvolver uma plataforma web responsiva (PWA) gamificada de fidelização e engajamento para o Passe Dourado Shopping, permitindo que visitantes descubram lojas e promoções, realizem check-ins presenciais auditados por QR Code e geolocalização (Geofence + Haversine), acumulem pontos e carimbos digitais, cumpram missões e resgatem recompensas em tempo real nos estabelecimentos parceiros.
 
 ### Público-alvo
-1. **Visitantes do Shopping (Consumidores B2C):** Clientes frequentes, famílias, jovens e turistas em Palmas - TO que buscam benefícios exclusivos, cupons, experiências e recompensas durante sua visita ao Capim Dourado Shopping.
+1. **Visitantes do Shopping (Consumidores B2C):** Clientes frequentes, famílias, jovens e turistas em Palmas - TO que buscam benefícios exclusivos, cupons, experiências e recompensas durante sua visita ao Passe Dourado Shopping.
 2. **Lojistas e Operadores de Caixa (Parceiros B2B):** Proprietários, gerentes e atendentes das lojas do shopping que desejam atrair fluxo qualificado, divulgar ofertas e validar vouchers de forma rápida no balcão.
-3. **Administração do Shopping (Governança Interna):** Equipe de marketing e operações do Capim Dourado Shopping responsável por aprovar campanhas, gerenciar lojas e QR Codes oficiais, acompanhar indicadores executivos e auditar o programa.
+3. **Administração do Shopping (Governança Interna):** Equipe de marketing e operações do Passe Dourado Shopping responsável por aprovar campanhas, gerenciar lojas e QR Codes oficiais, acompanhar indicadores executivos e auditar o programa.
 
 ### Proposta de valor
 - **Para o Visitante:** Experiência sofisticada e sem fricção (Warm Editorial Mall) direto no navegador do celular (PWA), transformando cada visita ao shopping em uma jornada de conquista de selos, níveis e recompensas reais.
@@ -58,14 +58,14 @@ flowchart LR
 
 ### Módulo 03 — Passaporte e Perfil do Visitante (`visitor`)
 - **RF-03.1:** Exibir o Cartão de Membro Digital personalizado com identificação do visitante, QR Code de membro, nível atual de fidelidade e saldo consolidado de pontos.
-- **RF-03.2:** Apresentar resumo visual de evolução de nível (ex.: Bronze, Prata, Ouro, Diamante Capim Dourado) e barra de progresso.
+- **RF-03.2:** Apresentar resumo visual de evolução de nível (ex.: Bronze, Prata, Ouro, Diamante Passe Dourado) e barra de progresso.
 - **RF-03.3:** Disponibilizar acesso rápido à carteira de vouchers ativos/utilizados/expirados e ao histórico resumido de atividades.
 - **RF-03.4:** Permitir visualização e atualização dos dados cadastrais do perfil e gerenciamento de preferências de privacidade (LGPD).
 
 ### Módulo 04 — Check-in e Validação por QR Code (`checkin`)
 - **RF-04.1:** Realizar leitura de QR Codes oficiais de lojas e eventos através da câmera do dispositivo (`html5-qrcode`).
 - **RF-04.2:** Capturar coordenadas geográficas do visitante via HTML5 Geolocation API no ato do check-in.
-- **RF-04.3:** Calcular a distância entre o visitante e as coordenadas oficiais do Capim Dourado Shopping utilizando a fórmula de Haversine, validando contra o raio de geofence configurado (padrão de 250 metros).
+- **RF-04.3:** Calcular a distância entre o visitante e as coordenadas oficiais do Passe Dourado Shopping utilizando a fórmula de Haversine, validando contra o raio de geofence configurado (padrão de 250 metros).
 - **RF-04.4:** Impedir mais de um check-in válido pelo mesmo visitante no mesmo estabelecimento/evento dentro do mesmo dia civil (fuso horário `America/Araguaia`), protegendo contra pontuação duplicada.
 - **RF-04.5:** Registrar todas as tentativas de check-in (aprovadas ou recusadas por distância, duplicidade ou QR inválido) para fins de auditoria antifraude.
 
@@ -128,7 +128,7 @@ flowchart LR
 ### Desenvolvedor 01 — Experiência do Visitante
 
 #### HU-01 (Funcionalidade 01 — Vitrine Pública e Lojas Parceiras)
-> **Como** visitante do Capim Dourado Shopping, **quero** explorar as lojas parceiras, campanhas em destaque e recompensas disponíveis sem precisar fazer login imediatamente, **para** conhecer os benefícios do programa antes de criar minha conta.
+> **Como** visitante do Passe Dourado Shopping, **quero** explorar as lojas parceiras, campanhas em destaque e recompensas disponíveis sem precisar fazer login imediatamente, **para** conhecer os benefícios do programa antes de criar minha conta.
 
 **Critérios de Aceitação:**
 1. A página inicial (`/`) deve carregar banners ativos, categorias, lojas parceiras e prévia de recompensas para usuários anônimos.
@@ -158,7 +158,7 @@ flowchart LR
 ### Desenvolvedor 02 — Gamificação e Pontuação
 
 #### HU-04 (Funcionalidade 04 — Check-in e Validação por QR Code)
-> **Como** visitante presente no Capim Dourado Shopping, **quero** escanear o QR Code oficial de uma loja parceira com meu celular, **para** registrar minha presença e ganhar pontos e carimbos instantaneamente.
+> **Como** visitante presente no Passe Dourado Shopping, **quero** escanear o QR Code oficial de uma loja parceira com meu celular, **para** registrar minha presença e ganhar pontos e carimbos instantaneamente.
 
 **Critérios de Aceitação:**
 1. A tela `/checkin` deve solicitar permissão de câmera e geolocalização (GPS) de forma clara ao visitante.
@@ -206,7 +206,7 @@ flowchart LR
 4. O lojista deve visualizar os indicadores operacionais da sua loja e gerenciar o estoque/ofertas cadastradas.
 
 #### HU-09 (Funcionalidade 09 — Painel Administrativo)
-> **Como** administrador do Capim Dourado Shopping, **quero** gerenciar lojas, aprovar campanhas, emitir QR Codes oficiais, configurar o raio de geofence e visualizar relatórios executivos, **para** manter a governança e a segurança do programa.
+> **Como** administrador do Passe Dourado Shopping, **quero** gerenciar lojas, aprovar campanhas, emitir QR Codes oficiais, configurar o raio de geofence e visualizar relatórios executivos, **para** manter a governança e a segurança do programa.
 
 **Critérios de Aceitação:**
 1. O painel (`/admin`) deve ser restrito exclusivamente a usuários com papel `ADMIN`.
@@ -236,7 +236,7 @@ flowchart LR
 ### 3. Funcionalidades Futuras (Pós-MVP / Backlog de Evolução)
 - Integração com leitura automática de Nota Fiscal (NFC-e SEFAZ-TO) para pontuação proporcional ao valor de compra.
 - Gamificação multiplayer (desafios em grupo ou família no shopping).
-- Mapa indoor 3D interativo de navegação entre pisos do Capim Dourado Shopping.
+- Mapa indoor 3D interativo de navegação entre pisos do Passe Dourado Shopping.
 - Recomendações personalizadas de ofertas por inteligência artificial.
 
 ### 4. Funcionalidades que Dependem de Integrações Externas (Acopladas via Adaptadores/Mocks até Definição)

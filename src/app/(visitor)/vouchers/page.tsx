@@ -2,8 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { RewardsCatalogService } from '@/modules/rewards';
-import { VisitorNavigation } from '@/components/layout/VisitorNavigation';
-import { EditorialCard, ModuleHeader } from '@/components/ui/EditorialCard';
+import { EditorialCard } from '@/components/ui/EditorialCard';
 
 export default function VisitorVouchersPage() {
   const [vouchers, setVouchers] = useState(() =>
@@ -21,7 +20,7 @@ export default function VisitorVouchersPage() {
         const payload = JSON.parse(ev.data);
         if (payload.type === 'VOUCHER_USED') {
           setSseNotice(
-            `Atualização em Tempo Real (SSE): O voucher ${payload.code} acabou de ser validado no balcão da loja ${payload.storeName}!`
+            `Voucher ${payload.code} validado na loja ${payload.storeName}!`
           );
           setVouchers((prev) =>
             prev.map((item) =>
@@ -32,7 +31,7 @@ export default function VisitorVouchersPage() {
           );
         }
       } catch {
-        // Ignora mensagens de keep-alive
+        // Ignora keep-alive
       }
     };
 
@@ -42,22 +41,18 @@ export default function VisitorVouchersPage() {
   }, [vouchers]);
 
   return (
-    <div>
-      <VisitorNavigation currentPath="/vouchers" />
-
-      <ModuleHeader
-        categoryBadge="Carteira Digital • Capim Dourado Shopping"
-        title="Meus Vouchers & Cupons Resgatados"
-        subtitle="Apresente o QR Code ou código do voucher no balcão da loja parceira. O status atualiza automaticamente após a validação."
-      />
+    <div className="space-y-6">
+      <h1 className="font-serif text-2xl font-bold text-brand-ink">
+        Meus Vouchers
+      </h1>
 
       {sseNotice && (
-        <div className="mb-6 rounded-2xl border border-brand-emerald bg-brand-emerald/15 p-4 text-xs font-bold text-brand-emerald">
+        <div className="rounded-2xl border border-brand-emerald bg-brand-emerald/15 p-4 text-xs font-bold text-brand-emerald">
           {sseNotice}
         </div>
       )}
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-5 md:grid-cols-2">
         {vouchers.map((voucher) => (
           <EditorialCard key={voucher.id}>
             <div className="flex items-center justify-between">
@@ -71,20 +66,19 @@ export default function VisitorVouchersPage() {
                     : 'bg-gray-200 text-gray-700'
                 }`}
               >
-                {voucher.status === 'ACTIVE' ? 'ATIVO • APRESENTAR NO BALCÃO' : 'UTILIZADO ✓'}
+                {voucher.status === 'ACTIVE' ? 'ATIVO' : 'UTILIZADO ✓'}
               </span>
             </div>
 
-            <h3 className="mt-3 font-serif text-xl font-bold text-brand-ink">
+            <h3 className="mt-3 font-serif text-lg font-bold text-brand-ink">
               {voucher.rewardTitle}
             </h3>
-            <p className="text-xs font-medium text-brand-muted">
+            <p className="text-xs text-brand-muted">
               {voucher.storeName} ({voucher.storeFloor})
             </p>
 
-            {/* Representação visual do QR Code do Voucher */}
-            <div className="mt-4 flex flex-col items-center justify-center rounded-2xl border border-dashed border-brand-goldLight bg-brand-ivory p-5">
-              <div className="grid h-28 w-28 grid-cols-5 gap-1 rounded-xl border-2 border-brand-goldDark bg-white p-2">
+            <div className="mt-4 flex flex-col items-center justify-center rounded-2xl border border-dashed border-brand-goldLight bg-brand-ivory p-4">
+              <div className="grid h-24 w-24 grid-cols-5 gap-1 rounded-xl border-2 border-brand-goldDark bg-white p-2">
                 {Array.from({ length: 25 }).map((_, idx) => (
                   <div
                     key={idx}
@@ -96,15 +90,12 @@ export default function VisitorVouchersPage() {
                   />
                 ))}
               </div>
-              <p className="mt-2 font-mono text-[11px] text-brand-muted">
-                {voucher.qrPayload}
-              </p>
             </div>
 
-            <div className="mt-4 flex justify-between border-t border-brand-border pt-3 text-[11px] text-brand-muted">
-              <span>Pontos investidos: {voucher.pointsSpent} pts</span>
+            <div className="mt-3 flex justify-between border-t border-brand-border pt-3 text-[11px] text-brand-muted">
+              <span>{voucher.pointsSpent} pts</span>
               <span>
-                Expira em: {new Date(voucher.expiresAt).toLocaleString('pt-BR')}
+                Válido até {new Date(voucher.expiresAt).toLocaleDateString('pt-BR')}
               </span>
             </div>
           </EditorialCard>

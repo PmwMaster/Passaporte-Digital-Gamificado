@@ -35,7 +35,7 @@ export class CheckInService {
         httpStatus: 404,
         code: 'INVALID_QR_TOKEN',
         message:
-          'QR Code não reconhecido ou loja inativa no Passaporte Capim Dourado.',
+          'QR Code não reconhecido ou loja inativa no Passe Dourado.',
       };
     }
 
@@ -52,7 +52,7 @@ export class CheckInService {
         ok: false as const,
         httpStatus: 422,
         code: 'GEOFENCE_OUT_OF_RANGE',
-        message: `Você está a ${geofence.distanceMeters}m do Capim Dourado Shopping. O raio máximo permitido para check-in presencial é de ${geofence.maxRadiusMeters}m.`,
+        message: `Você está a ${geofence.distanceMeters}m do Passe Dourado Shopping. O raio máximo permitido para check-in presencial é de ${geofence.maxRadiusMeters}m.`,
         details: geofence,
       };
     }

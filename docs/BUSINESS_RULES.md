@@ -8,10 +8,10 @@ Este documento consolida todas as regras de domínio implementadas na camada `Do
 
 ### RN-01: Validação Geográfica por Fórmula de Haversine
 - Todo check-in exige as coordenadas `latitude` e `longitude` capturadas via HTML5 Geolocation API no momento da leitura do QR Code.
-- A distância $d$ (em metros) entre o visitante $(\phi_1, \lambda_1)$ e o centro geográfico do Capim Dourado Shopping $(\phi_2, \lambda_2)$ é calculada no servidor utilizando a Fórmula de Haversine ($R = 6.371.000\text{ m}$):
+- A distância $d$ (em metros) entre o visitante $(\phi_1, \lambda_1)$ e o centro geográfico do Passe Dourado Shopping $(\phi_2, \lambda_2)$ é calculada no servidor utilizando a Fórmula de Haversine ($R = 6.371.000\text{ m}$):
   $$a = \sin^2\left(\frac{\Delta\phi}{2}\right) + \cos(\phi_1)\cdot\cos(\phi_2)\cdot\sin^2\left(\frac{\Delta\lambda}{2}\right)$$
   $$c = 2 \cdot \text{atan2}\left(\sqrt{a}, \sqrt{1-a}\right), \quad d = R \cdot c$$
-- **Coordenada Oficial Padrão (Capim Dourado Shopping — Palmas/TO):**
+- **Coordenada Oficial Padrão (Passe Dourado Shopping — Palmas/TO):**
   - Latitude: `-10.1845`
   - Longitude: `-48.3337`
   - Raio Padrão do Geofence: `250 metros` (configurável pelo Administrador no Módulo 09).
@@ -41,8 +41,8 @@ Este documento consolida todas as regras de domínio implementadas na camada `Do
 O nível do visitante é determinado pelos **pontos acumulados em sua trajetória (`lifetimePoints`)**, evitando que o visitante perca seu nível ao resgatar recompensas:
 - **BRONZE:** `0` a `499` pontos acumulados.
 - **SILVER (Prata):** `500` a `1.199` pontos acumulados.
-- **GOLD (Ouro Capim Dourado):** `1.200` a `2.999` pontos acumulados.
-- **DIAMOND (Embaixador Capim Dourado):** `3.000+` pontos acumulados.
+- **GOLD (Ouro Passe Dourado):** `1.200` a `2.999` pontos acumulados.
+- **DIAMOND (Embaixador Passe Dourado):** `3.000+` pontos acumulados.
 
 ---
 

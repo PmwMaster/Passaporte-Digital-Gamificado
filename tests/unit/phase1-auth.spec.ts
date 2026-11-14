@@ -11,12 +11,12 @@ import { WELCOME_BONUS_POINTS } from '@/modules/authentication';
 
 export function runPhase1AuthChecks() {
   const weakPassword = passwordStrengthSchema.safeParse('12345678');
-  const strongPassword = passwordStrengthSchema.safeParse('Capim@2026');
+  const strongPassword = passwordStrengthSchema.safeParse('Passe@2026');
 
   const token = encodeSessionToken({
     userId: 'usr_test_01',
     name: 'Teste Fase 1',
-    email: 'teste@capimdourado.com.br',
+    email: 'teste@passedourado.com.br',
     role: 'VISITOR',
     issuedAt: Date.now(),
   });

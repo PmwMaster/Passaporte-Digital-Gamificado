@@ -99,7 +99,7 @@ model LogAuditoria {
 
 | Item | Especificação |
 |---|---|
-| Manifest | `app/manifest.ts` — nome "Passaporte Capim Dourado", `display: standalone`, `theme_color #7a580f`, `background_color #fcf9f8`, ícones 192/512 e *maskable* |
+| Manifest | `app/manifest.ts` — nome "Passe Dourado", `display: standalone`, `theme_color #7a580f`, `background_color #fcf9f8`, ícones 192/512 e *maskable* |
 | Service worker | Cache do *app shell* e assets estáticos; rotas de API e SSE **sempre em rede** (nunca em cache) |
 | Instalação | Captura `beforeinstallprompt` → botão "Instalar"; no iOS, instrução *Compartilhar → Adicionar à Tela de Início*; dispensa válida por 7 dias |
 | Offline | Página "Sem conexão" com botão Tentar novamente |

@@ -3,8 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { RewardsCatalogService } from '@/modules/rewards';
-import { VisitorNavigation } from '@/components/layout/VisitorNavigation';
-import { EditorialCard, ModuleHeader } from '@/components/ui/EditorialCard';
+import { EditorialCard } from '@/components/ui/EditorialCard';
 
 export default function RewardsCatalogPage() {
   const initial = RewardsCatalogService.listCatalog();
@@ -27,7 +26,7 @@ export default function RewardsCatalogPage() {
         )
       );
       setRedeemFeedback(
-        `Voucher ${json.data.voucher.code} gerado com sucesso! Acesse "Meus Vouchers" para apresentar o QR Code no balcão.`
+        `Voucher ${json.data.voucher.code} gerado! Veja em "Vouchers".`
       );
     } else {
       setRedeemFeedback(json.error?.message ?? 'Não foi possível resgatar.');
@@ -35,63 +34,49 @@ export default function RewardsCatalogPage() {
   }
 
   return (
-    <div>
-      <VisitorNavigation currentPath="/recompensas" />
-
-      <ModuleHeader
-        featureNumber="FUNCIONALIDADE 07"
-        title="Catálogo de Recompensas & Emissão de Vouchers"
-        subtitle="Troque seus pontos por benefícios exclusivos com controle transacional de estoque e geração de QR Code único."
-        developerOwner="DESENVOLVEDOR 03"
-        moduleName="rewards"
-      />
-
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-gradient-to-r from-brand-goldDark to-brand-goldLight p-5 text-white shadow-md">
+    <div className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-gradient-to-r from-brand-goldDark to-brand-goldLight p-5 text-white shadow-md">
         <div>
           <span className="text-xs uppercase tracking-wider text-white/80">
-            Seu Saldo Atual para Resgate
+            Saldo Disponível
           </span>
-          <p className="font-serif text-3xl font-bold">{visitorPoints} pontos</p>
+          <p className="font-serif text-2xl font-bold">{visitorPoints} pontos</p>
         </div>
         <Link
           href="/vouchers"
-          className="rounded-xl bg-white px-4 py-2.5 text-xs font-semibold text-brand-goldDark"
+          className="rounded-xl bg-white px-4 py-2 text-xs font-semibold text-brand-goldDark"
         >
-          Abrir Carteira de Vouchers →
+          Meus Vouchers →
         </Link>
       </div>
 
       {redeemFeedback && (
-        <div className="mb-6 rounded-2xl border border-brand-emerald/40 bg-brand-emerald/10 p-4 text-xs font-semibold text-brand-emerald">
+        <div className="rounded-2xl border border-brand-emerald/40 bg-brand-emerald/10 p-4 text-xs font-semibold text-brand-emerald">
           {redeemFeedback}
         </div>
       )}
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-5 md:grid-cols-2">
         {rewards.map((reward) => (
           <EditorialCard key={reward.id} className="flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-brand-goldDark">
-                  {reward.storeName} • {reward.storeFloor}
+                  {reward.storeName}
                 </span>
                 <span className="rounded-full bg-brand-goldDark px-3 py-1 text-xs font-bold text-white">
                   {reward.pointsCost} pts
                 </span>
               </div>
-              <h3 className="mt-3 font-serif text-xl font-bold text-brand-ink">
+              <h3 className="mt-2 font-serif text-lg font-bold text-brand-ink">
                 {reward.title}
               </h3>
-              <p className="mt-1.5 text-sm text-brand-muted">{reward.description}</p>
-              <p className="mt-3 rounded-lg bg-brand-ivory p-2.5 text-xs text-brand-muted">
-                <strong>Regras:</strong> {reward.rules}
-              </p>
+              <p className="mt-1 text-xs text-brand-muted">{reward.description}</p>
             </div>
 
-            <div className="mt-5 flex items-center justify-between border-t border-brand-border pt-4">
+            <div className="mt-4 flex items-center justify-between border-t border-brand-border pt-3">
               <span className="text-xs text-brand-muted">
-                Estoque: <strong>{reward.availableStock}</strong> un. • Validade:{' '}
-                <strong>{reward.voucherValidityHours}h</strong>
+                Disponíveis: <strong>{reward.availableStock}</strong>
               </span>
               <button
                 type="button"
@@ -99,9 +84,9 @@ export default function RewardsCatalogPage() {
                 disabled={
                   reward.availableStock <= 0 || visitorPoints < reward.pointsCost
                 }
-                className="rounded-xl bg-brand-emerald px-4 py-2.5 text-xs font-semibold text-white transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-40"
+                className="rounded-xl bg-brand-emerald px-4 py-2 text-xs font-semibold text-white transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-40"
               >
-                Resgatar Agora
+                Resgatar
               </button>
             </div>
           </EditorialCard>

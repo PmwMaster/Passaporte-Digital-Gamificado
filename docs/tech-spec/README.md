@@ -1,4 +1,4 @@
-# 📐 Tech Spec — Passaporte do Shopping (Capim Dourado)
+# 📐 Tech Spec — Passaporte do Shopping (Passe Dourado)
 
 A entrega foi dividida em **3 partes incrementais**. Cada parte gera uma versão demonstrável do sistema e serve de base para a próxima.
 

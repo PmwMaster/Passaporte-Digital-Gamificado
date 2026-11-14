@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
       headers: {
         'Content-Type': 'text/csv; charset=utf-8',
         'Content-Disposition':
-          'attachment; filename="auditoria-passaporte-capim-dourado.csv"',
+          'attachment; filename="auditoria-passe-dourado.csv"',
       },
     });
   }

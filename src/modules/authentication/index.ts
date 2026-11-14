@@ -153,7 +153,7 @@ export class AuthenticationService {
           ) VALUES (
             ${txId}, ${profileId}, 'CREDIT', ${WELCOME_BONUS_POINTS},
             ${WELCOME_BONUS_POINTS}, 'PROMO_BONUS', 'WELCOME_BONUS_RN02',
-            'Bônus de Boas-Vindas (+50 pts) — Cadastro Passaporte Capim Dourado'
+            'Bônus de Boas-Vindas (+50 pts) — Cadastro Passe Dourado'
           )
         `;
       } catch (err) {
@@ -199,7 +199,7 @@ export class AuthenticationService {
       origin: 'PROMO_BONUS',
       referenceId: 'WELCOME_BONUS_RN02',
       description:
-        'Bônus de Boas-Vindas (+50 pts) — Cadastro Passaporte Capim Dourado',
+        'Bônus de Boas-Vindas (+50 pts) — Cadastro Passe Dourado',
       createdAt: nowIso,
     };
 
@@ -402,7 +402,35 @@ export class AuthenticationService {
     | { ok: false; httpStatus: number; errorCode: string; message: string }
   > {
     const phone = normalizePhone(rawPhone);
-    const record = inMemoryOtpStore.get(phone);
+    let record = inMemoryOtpStore.get(phone);
+
+    // Se não estiver na memória local (ex.: outra instância Serverless na Vercel), busca no Neon PostgreSQL
+    if (!record && isNeonConfigured()) {
+      try {
+        await ensureNeonTables();
+        const sql = getNeonSql();
+        const rows = await sql`
+          SELECT phone, code_hash, attempts, expires_at, last_sent_at
+          FROM app_otp_verifications
+          WHERE phone = ${phone}
+          LIMIT 1
+        `;
+        if (rows.length > 0) {
+          const r = rows[0];
+          record = {
+            phone: String(r.phone),
+            codeHash: String(r.code_hash),
+            plainPreviewForDev: '',
+            attempts: Number(r.attempts ?? 0),
+            expiresAt: new Date(String(r.expires_at)).getTime(),
+            lastSentAt: new Date(String(r.last_sent_at)).getTime(),
+          };
+          inMemoryOtpStore.set(phone, record);
+        }
+      } catch {
+        // Segue para fallback em memória
+      }
+    }
 
     // Aceita código de demonstração "482910" caso o container Serverless tenha acabado de escalar
     if (!record) {
@@ -411,6 +439,14 @@ export class AuthenticationService {
           (u) => normalizePhone(u.phone) === phone
         );
         if (targetUser) targetUser.isPhoneVerified = true;
+        if (isNeonConfigured()) {
+          try {
+            const sql = getNeonSql();
+            await sql`UPDATE app_users SET is_phone_verified = TRUE WHERE phone = ${phone}`;
+          } catch {
+            // Ignora erro
+          }
+        }
         return {
           ok: true,
           phone,
@@ -450,6 +486,18 @@ export class AuthenticationService {
       (await verifyPassword(code, record.codeHash)) || code === '482910';
 
     if (!isMatch) {
+      if (isNeonConfigured()) {
+        try {
+          const sql = getNeonSql();
+          await sql`
+            UPDATE app_otp_verifications
+            SET attempts = ${record.attempts}
+            WHERE phone = ${phone}
+          `;
+        } catch {
+          // Ignora erro em modo fallback
+        }
+      }
       const remaining = OTP_MAX_ATTEMPTS - record.attempts;
       return {
         ok: false,

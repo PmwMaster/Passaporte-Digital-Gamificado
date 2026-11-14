@@ -15,7 +15,7 @@ export function PassportMemberCard({
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <span className="inline-block rounded-full bg-white/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/95">
-            Passaporte Oficial • Capim Dourado Shopping
+            Passaporte Oficial • Passe Dourado Shopping
           </span>
           <h2 className="mt-3 font-serif text-2xl font-bold md:text-3xl">
             {profile.visitorName}

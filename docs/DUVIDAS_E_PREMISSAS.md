@@ -9,7 +9,7 @@ Este documento registra todas as informações ausentes, decisões de negócio a
 ## Nota Técnica Inicial — Sincronização do Repositório Base e Protótipos
 
 - **Situação Identificada:** O diretório local de trabalho (`c:\Users\Cristiano\Desktop\passaporteshopping`) encontrava-se inicialmente vazio e o ambiente de execução possui restrição de rede no sandbox (`SEC_E_UNTRUSTED_ROOT` / bloqueio de política para comandos externos), impedindo o `git clone` direto de `https://github.com/PmwMaster/Passaporte-Digital-Gamificado`.
-- **Ação Tomada:** Toda a estrutura documental, os protótipos HTML de referência em `prototipos/` e a aplicação Next.js foram construídos fielmente a partir das especificações oficiais do Passaporte Capim Dourado (estética *Warm Editorial Mall*, paleta `#7a580f`, `#c59b4e`, `#1b6d24`, `#fcf9f8`, tipografias *Playfair Display* e *Outfit*, raio Haversine de 250m, validade de vouchers, SSE e divisão em 9 módulos). Assim que o repositório remoto for vinculado via `git remote add origin`, os arquivos poderão ser sincronizados diretamente.
+- **Ação Tomada:** Toda a estrutura documental, os protótipos HTML de referência em `prototipos/` e a aplicação Next.js foram construídos fielmente a partir das especificações oficiais do Passe Dourado (estética *Warm Editorial Mall*, paleta `#7a580f`, `#c59b4e`, `#1b6d24`, `#fcf9f8`, tipografias *Playfair Display* e *Outfit*, raio Haversine de 250m, validade de vouchers, SSE e divisão em 9 módulos). Assim que o repositório remoto for vinculado via `git remote add origin`, os arquivos poderão ser sincronizados diretamente.
 
 ---
 
@@ -76,7 +76,7 @@ Este documento registra todas as informações ausentes, decisões de negócio a
 3. **Alternativas possíveis:**
    - **A) Credenciamento Fechado via Painel Admin (Módulo 09):** A administração do shopping cadastra a loja e gera as credenciais iniciais do Lojista (`MERCHANT`), que por sua vez pode cadastrar seus Operadores (`OPERATOR`).
    - **B) Auto-cadastro Público de Lojista com fila de aprovação pelo Admin.**
-4. **Recomendação técnica:** Adotar a **Alternativa A** no MVP por segurança (apenas lojas reais com contrato ativo no Capim Dourado Shopping devem existir na base).
+4. **Recomendação técnica:** Adotar a **Alternativa A** no MVP por segurança (apenas lojas reais com contrato ativo no Passe Dourado Shopping devem existir na base).
 5. **Status:** `PENDENTE`
 
 ---
@@ -135,7 +135,7 @@ Este documento registra todas as informações ausentes, decisões de negócio a
 2. **Por que a decisão é necessária:** Define se será necessário um *cron job* de expiração de saldo no Módulo 06.
 3. **Alternativas possíveis:**
    - **A) Validade de 12 meses a partir da data do crédito (FIFO).**
-   - **B) Pontos válidos enquanto a temporada anual do Passaporte Capim Dourado estiver vigente.**
+   - **B) Pontos válidos enquanto a temporada anual do Passe Dourado estiver vigente.**
 4. **Recomendação técnica:** No MVP, manter os pontos válidos durante toda a temporada vigente e registrar `createdAt` em cada `PointTransaction` para permitir expiração FIFO futura sem migração destrutiva.
 5. **Status:** `PENDENTE`
 

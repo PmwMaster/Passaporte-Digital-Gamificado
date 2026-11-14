@@ -3,20 +3,19 @@
 import React, { useState } from 'react';
 import { mockStores } from '@/infrastructure/database/mock-data';
 import { SHOPPING_CONFIG } from '@/shared/constants';
-import { VisitorNavigation } from '@/components/layout/VisitorNavigation';
-import { EditorialCard, ModuleHeader } from '@/components/ui/EditorialCard';
+import { EditorialCard } from '@/components/ui/EditorialCard';
 
 export default function CheckInPage() {
   const [selectedToken, setSelectedToken] = useState(mockStores[0].qrCodeToken);
-  const [latitude, setLatitude] = useState(SHOPPING_CONFIG.defaultCoordinates.latitude);
-  const [longitude, setLongitude] = useState(SHOPPING_CONFIG.defaultCoordinates.longitude);
+  const [latitude, setLatitude] = useState<number>(SHOPPING_CONFIG.defaultCoordinates.latitude);
+  const [longitude, setLongitude] = useState<number>(SHOPPING_CONFIG.defaultCoordinates.longitude);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [isError, setIsError] = useState(false);
 
   function handleCaptureBrowserGps() {
     if (!navigator.geolocation) {
       setIsError(true);
-      setStatusMessage('HTML5 Geolocation API não suportada neste navegador.');
+      setStatusMessage('Geolocalização não suportada neste navegador.');
       return;
     }
 
@@ -25,13 +24,11 @@ export default function CheckInPage() {
         setLatitude(Number(pos.coords.latitude.toFixed(6)));
         setLongitude(Number(pos.coords.longitude.toFixed(6)));
         setIsError(false);
-        setStatusMessage('Coordenadas GPS reais capturadas pelo navegador!');
+        setStatusMessage('Localização capturada.');
       },
       () => {
         setIsError(true);
-        setStatusMessage(
-          'Permissão de GPS negada ou indisponível. Use os botões de simulação de coordenada abaixo para testar o motor Haversine.'
-        );
+        setStatusMessage('Permissão de GPS negada. Use os botões rápidos abaixo.');
       }
     );
   }
@@ -52,150 +49,119 @@ export default function CheckInPage() {
     if (json.success) {
       setIsError(false);
       setStatusMessage(
-        `Check-in APROVADO em ${json.data.checkIn.storeName}! Distância Haversine: ${json.data.checkIn.distanceMeters}m (<= 250m). +${json.data.checkIn.pointsAwarded} pts creditados no Ledger (Novo saldo: ${json.data.newBalance} pts).`
+        `Check-in confirmado em ${json.data.checkIn.storeName}! +${json.data.checkIn.pointsAwarded} pts creditados (Saldo: ${json.data.newBalance} pts).`
       );
     } else {
       setIsError(true);
-      setStatusMessage(`${json.error?.code}: ${json.error?.message}`);
+      setStatusMessage(json.error?.message ?? 'Erro ao realizar check-in.');
     }
   }
 
   return (
-    <div>
-      <VisitorNavigation currentPath="/checkin" />
+    <div className="mx-auto max-w-xl">
+      <EditorialCard>
+        <h1 className="font-serif text-2xl font-bold text-brand-ink">
+          Check-in na Loja
+        </h1>
+        <p className="mt-1 text-xs text-brand-muted">
+          Selecione a loja parceira e confirme sua localização para pontuar.
+        </p>
 
-      <ModuleHeader
-        categoryBadge="Check-in Presencial • Capim Dourado Shopping"
-        title="Registrar Visita & Ganhar Pontos"
-        subtitle="Selecione a loja parceira e confirme sua localização no shopping para receber seus pontos e carimbo digital."
-      />
+        <form onSubmit={handleCheckInSubmit} className="mt-5 space-y-4">
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-brand-muted">
+              Loja Parceira
+            </label>
+            <select
+              value={selectedToken}
+              onChange={(e) => setSelectedToken(e.target.value)}
+              className="mt-1 w-full rounded-xl border border-brand-border bg-brand-ivory px-4 py-2.5 text-sm"
+            >
+              {mockStores.map((store) => (
+                <option key={store.id} value={store.qrCodeToken}>
+                  {store.name} (+{store.checkInPoints} pts)
+                </option>
+              ))}
+            </select>
+          </div>
 
-      <div className="grid gap-8 lg:grid-cols-2">
-        <EditorialCard>
-          <h2 className="font-serif text-xl font-bold text-brand-ink">
-            Leitor de QR Code & Validação GPS
-          </h2>
-          <p className="mt-1 text-xs text-brand-muted">
-            Coordenada central do Capim Dourado Shopping: {SHOPPING_CONFIG.defaultCoordinates.latitude},{' '}
-            {SHOPPING_CONFIG.defaultCoordinates.longitude} (Raio máximo: {SHOPPING_CONFIG.defaultGeofenceRadiusMeters}m)
-          </p>
-
-          <form onSubmit={handleCheckInSubmit} className="mt-6 space-y-4">
+          <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-brand-muted">
-                QR Code Oficial da Loja Escaneada (html5-qrcode)
+                Latitude
               </label>
-              <select
-                value={selectedToken}
-                onChange={(e) => setSelectedToken(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-brand-border bg-brand-ivory px-4 py-2.5 text-sm"
-              >
-                {mockStores.map((store) => (
-                  <option key={store.id} value={store.qrCodeToken}>
-                    {store.name} ({store.qrCodeToken} • +{store.checkInPoints} pts)
-                  </option>
-                ))}
-              </select>
+              <input
+                type="number"
+                step="0.00001"
+                value={latitude}
+                onChange={(e) => setLatitude(Number(e.target.value))}
+                className="mt-1 w-full rounded-xl border border-brand-border bg-brand-ivory px-3 py-2 text-sm"
+              />
             </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-brand-muted">
-                  Latitude Atual
-                </label>
-                <input
-                  type="number"
-                  step="0.00001"
-                  value={latitude}
-                  onChange={(e) => setLatitude(Number(e.target.value))}
-                  className="mt-1 w-full rounded-xl border border-brand-border bg-brand-ivory px-3 py-2 text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-brand-muted">
-                  Longitude Atual
-                </label>
-                <input
-                  type="number"
-                  step="0.00001"
-                  value={longitude}
-                  onChange={(e) => setLongitude(Number(e.target.value))}
-                  className="mt-1 w-full rounded-xl border border-brand-border bg-brand-ivory px-3 py-2 text-sm"
-                />
-              </div>
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-brand-muted">
+                Longitude
+              </label>
+              <input
+                type="number"
+                step="0.00001"
+                value={longitude}
+                onChange={(e) => setLongitude(Number(e.target.value))}
+                className="mt-1 w-full rounded-xl border border-brand-border bg-brand-ivory px-3 py-2 text-sm"
+              />
             </div>
+          </div>
 
-            <div className="flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={handleCaptureBrowserGps}
-                className="rounded-lg border border-brand-border bg-brand-ivory px-3 py-1.5 text-xs font-semibold text-brand-ink hover:border-brand-goldDark"
-              >
-                Usar GPS Real do Navegador
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setLatitude(-10.18442);
-                  setLongitude(-48.33365);
-                }}
-                className="rounded-lg border border-brand-emerald/30 bg-brand-emerald/10 px-3 py-1.5 text-xs font-semibold text-brand-emerald"
-              >
-                Simular Dentro do Shopping (~12m)
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setLatitude(-10.2125);
-                  setLongitude(-48.355);
-                }}
-                className="rounded-lg border border-red-300 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700"
-              >
-                Simular Fora do Geofence (&gt; 250m)
-              </button>
-            </div>
-
-            {statusMessage && (
-              <div
-                className={`rounded-xl p-4 text-xs font-semibold ${
-                  isError
-                    ? 'border border-red-300 bg-red-50 text-red-800'
-                    : 'border border-brand-emerald/30 bg-brand-emerald/10 text-brand-emerald'
-                }`}
-              >
-                {statusMessage}
-              </div>
-            )}
-
+          <div className="flex flex-wrap gap-2">
             <button
-              type="submit"
-              className="w-full rounded-xl bg-brand-emerald py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-95"
+              type="button"
+              onClick={handleCaptureBrowserGps}
+              className="rounded-lg border border-brand-border bg-brand-ivory px-3 py-1.5 text-xs font-semibold text-brand-ink hover:border-brand-goldDark"
             >
-              Confirmar Check-in & Receber Pontos
+              Usar Meu GPS
             </button>
-          </form>
-        </EditorialCard>
+            <button
+              type="button"
+              onClick={() => {
+                setLatitude(-10.18442);
+                setLongitude(-48.33365);
+              }}
+              className="rounded-lg border border-brand-emerald/30 bg-brand-emerald/10 px-3 py-1.5 text-xs font-semibold text-brand-emerald"
+            >
+              No Shopping
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setLatitude(-10.2125);
+                setLongitude(-48.355);
+              }}
+              className="rounded-lg border border-red-300 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700"
+            >
+              Fora do Shopping
+            </button>
+          </div>
 
-        <EditorialCard className="space-y-4">
-          <h3 className="font-serif text-xl font-bold text-brand-ink">
-            Como funciona o Check-in Presencial
-          </h3>
-          <ul className="space-y-2.5 text-xs text-brand-muted">
-            <li>
-              <strong className="text-brand-ink">1. Visita Presencial:</strong> Basta estar dentro do Capim Dourado Shopping (raio de até 250 metros) com a localização ativa.
-            </li>
-            <li>
-              <strong className="text-brand-ink">2. Leitura do QR Code da Loja:</strong> Escaneie o QR Code oficial disponível no balcão de cada loja parceira.
-            </li>
-            <li>
-              <strong className="text-brand-ink">3. Um Carimbo por Loja ao Dia:</strong> Você pode pontuar uma vez por dia em cada loja parceira visitada.
-            </li>
-            <li>
-              <strong className="text-brand-ink">4. Crédito Instantâneo:</strong> Seus pontos, carimbos e progresso nas missões são creditados na mesma hora.
-            </li>
-          </ul>
-        </EditorialCard>
-      </div>
+          {statusMessage && (
+            <div
+              className={`rounded-xl p-3.5 text-xs font-semibold ${
+                isError
+                  ? 'border border-red-300 bg-red-50 text-red-800'
+                  : 'border border-brand-emerald/30 bg-brand-emerald/10 text-brand-emerald'
+              }`}
+            >
+              {statusMessage}
+            </div>
+          )}
+
+          <button
+            type="submit"
+            className="w-full rounded-xl bg-brand-emerald py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-95"
+          >
+            Confirmar Check-in
+          </button>
+        </form>
+      </EditorialCard>
     </div>
   );
 }

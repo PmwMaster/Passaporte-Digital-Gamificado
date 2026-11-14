@@ -54,7 +54,7 @@ Representa o passaporte digital e o estado consolidado de gamificação do visit
 - **Campos-chave:** `id`, `userId` (único), `memberCode` (ex.: `CD-2026-0001`), `level` (`BRONZE`, `SILVER`, `GOLD`, `DIAMOND`), `currentPoints` (cache sincronizado via transação com o ledger), `lifetimePoints`, `totalCheckIns`, `totalStamps`.
 
 ### 3.3 `Store` (Loja ou Operação Parceira)
-Representa uma loja, quiosque ou operação do Capim Dourado Shopping.
+Representa uma loja, quiosque ou operação do Passe Dourado Shopping.
 - **Campos-chave:** `id`, `slug` (único), `name`, `category`, `floor`, `unitNumber`, `description`, `logoUrl`, `coverUrl`, `qrCodeToken` (token oficial para check-in), `checkInPoints` (padrão de pontos por visita), `latitude`, `longitude`, `isActive`.
 
 ### 3.4 `Campaign` (Campanha Promocional)
@@ -96,7 +96,7 @@ Credencial operacional vinculada a uma loja para leitura e baixa rápida de vouc
 - **Campos-chave:** `id`, `userId` (único), `storeId`, `BadgeNumber`, `canManageOffers`, `isActive`, `createdAt`.
 
 ### 3.13 `Administrator` (Administrador do Shopping)
-Credencial de governança da administração do Capim Dourado Shopping.
+Credencial de governança da administração do Passe Dourado Shopping.
 - **Campos-chave:** `id`, `userId` (único), `department`, `permissionLevel` (`SUPER_ADMIN`, `MARKETING`, `AUDITOR`), `createdAt`.
 
 ---

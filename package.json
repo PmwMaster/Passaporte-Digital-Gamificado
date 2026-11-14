@@ -1,8 +1,8 @@
 {
-  "name": "passaporte-digital-capim-dourado",
+  "name": "passe-dourado-shopping",
   "version": "0.1.0",
   "private": true,
-  "description": "Plataforma web gamificada (PWA) de fidelização e engajamento do Capim Dourado Shopping (Palmas - TO)",
+  "description": "Plataforma web gamificada (PWA) de fidelização e engajamento do Passe Dourado Shopping (Palmas - TO)",
   "scripts": {
     "vercel-build": "next build",
     "vercel:deploy": "powershell -ExecutionPolicy Bypass -File ./deploy-vercel.ps1",

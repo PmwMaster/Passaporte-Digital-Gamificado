@@ -1,7 +1,7 @@
 {
-  "name": "Passaporte Digital — Capim Dourado Shopping",
-  "short_name": "Passaporte CD",
-  "description": "Plataforma gamificada de fidelização, check-ins e recompensas do Capim Dourado Shopping em Palmas - TO.",
+  "name": "Passe Dourado — Shopping (Palmas - TO)",
+  "short_name": "Passe Dourado",
+  "description": "Plataforma gamificada de fidelização, check-ins e recompensas do Passe Dourado Shopping em Palmas - TO.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#fcf9f8",

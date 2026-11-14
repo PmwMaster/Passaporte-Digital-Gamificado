@@ -28,7 +28,7 @@ Em caso de erro (`4xx` ou `5xx`):
   "success": false,
   "error": {
     "code": "GEOFENCE_OUT_OF_RANGE",
-    "message": "Você está a 412m do Capim Dourado Shopping. O limite permitido para check-in é de 250m.",
+    "message": "Você está a 412m do Passe Dourado Shopping. O limite permitido para check-in é de 250m.",
     "details": {
       "distanceMeters": 412,
       "maxRadiusMeters": 250
@@ -185,7 +185,7 @@ Os contratos TypeScript oficiais estão implementados em `src/shared/types/domai
   - `422 GEOFENCE_OUT_OF_RANGE` (Distância Haversine > 250m)
 - **Regras de Negócio:**
   1. Valida se `qrCodeToken` pertence a uma loja ativa.
-  2. Calcula distância Haversine até o ponto central do Capim Dourado Shopping (configurado em `SystemConfig`, padrão `-10.1845, -48.3337`, raio `250m`).
+  2. Calcula distância Haversine até o ponto central do Passe Dourado Shopping (configurado em `SystemConfig`, padrão `-10.1845, -48.3337`, raio `250m`).
   3. Verifica se já existe `CheckIn` com `status = VALID` para o mesmo `visitorId`, `storeId` e `checkInDate`.
   4. Em transação única: grava o `CheckIn`, gera o `Stamp`, avalia `MissionProgress` e credita os pontos via `PointTransaction`.
 

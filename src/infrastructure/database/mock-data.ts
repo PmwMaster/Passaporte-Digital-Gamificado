@@ -1,5 +1,5 @@
 // ==============================================================================
-// DADOS DEMONSTRATIVOS OFICIAIS (MOCK STORE) — CAPIM DOURADO SHOPPING
+// DADOS DEMONSTRATIVOS OFICIAIS (MOCK STORE) — PASSE DOURADO SHOPPING
 // ==============================================================================
 // Utilizados para navegação funcional imediata das 9 funcionalidades sem exigir
 // credenciais externas ou migração prévia obrigatória.
@@ -45,8 +45,8 @@ export const mockUsers: User[] = [
   },
   {
     id: 'usr_admin_01',
-    name: 'Diretoria Marketing Capim Dourado',
-    email: 'admin@capimdouradoshopping.com.br',
+    name: 'Diretoria Marketing Passe Dourado',
+    email: 'admin@passedourado.com.br',
     phone: '+556332150000',
     role: 'ADMIN',
     isPhoneVerified: true,
@@ -94,7 +94,7 @@ export const mockStores: Store[] = [
     floor: 'Piso 1 • Ala Norte',
     unitNumber: 'L-118',
     description:
-      'Joias autorais em capim dourado legítimo, bolsas artesanais e acessórios exclusivos de alta curadoria.',
+      'Joias autorais em ouro artesanal legítimo, bolsas artesanais e acessórios exclusivos de alta curadoria.',
     qrCodeToken: 'QR-CD-STORE-02-VERIFIED',
     checkInPoints: 60,
     latitude: -10.18452,
@@ -136,8 +136,8 @@ export const mockStores: Store[] = [
   },
   {
     id: 'store_05',
-    slug: 'cine-capim-dourado-vip',
-    name: 'Cine Capim Dourado Premier',
+    slug: 'cine-passe-dourado-vip',
+    name: 'Cine Passe Dourado Premier',
     category: 'LAZER',
     floor: 'Piso 2 • Ala Leste',
     unitNumber: 'L-250',
@@ -184,8 +184,8 @@ export const mockCampaigns: Campaign[] = [
     id: 'cmp_02',
     storeId: 'store_02',
     storeName: 'Atelier Ouro do Cerrado',
-    title: 'Coleção Festas Capim Dourado',
-    slug: 'colecao-festas-capim-dourado',
+    title: 'Coleção Festas Passe Dourado',
+    slug: 'colecao-festas-passe-dourado',
     description:
       'Visite o Atelier no Piso 1, conquiste o carimbo exclusivo de Moda Autoral e ganhe +60 pontos imediatos.',
     bonusMultiplier: 1.5,
@@ -224,7 +224,7 @@ export const mockStamps: Stamp[] = [
     storeId: 'store_02',
     storeName: 'Atelier Ouro do Cerrado',
     checkInId: 'chk_02',
-    badgeTitle: 'Guardião do Capim Dourado',
+    badgeTitle: 'Guardião do Passe Dourado',
     category: 'MODA',
     earnedAt: '2026-11-10T19:40:00.000Z',
   },
@@ -232,7 +232,7 @@ export const mockStamps: Stamp[] = [
     id: 'stp_03',
     visitorId: 'vis_01',
     storeId: 'store_05',
-    storeName: 'Cine Capim Dourado Premier',
+    storeName: 'Cine Passe Dourado Premier',
     checkInId: 'chk_03',
     badgeTitle: 'Cinéfilo VIP Palmas',
     category: 'LAZER',
@@ -271,7 +271,7 @@ export const mockMissions: Mission[] = [
   {
     id: 'mis_03',
     code: 'MONTHLY_EXPLORER_05',
-    title: 'Embaixador Capim Dourado',
+    title: 'Embaixador Passe Dourado',
     description: 'Colecione 5 carimbos de lojas diferentes no mês de novembro.',
     frequency: 'MONTHLY',
     targetType: 'CHECKIN_COUNT',
@@ -336,7 +336,7 @@ export const mockPointTransactions: PointTransaction[] = [
     balanceAfter: 690,
     origin: 'PROMO_BONUS',
     referenceId: 'WELCOME_2026',
-    description: 'Bônus de Boas-Vindas ao Passaporte Capim Dourado',
+    description: 'Bônus de Boas-Vindas ao Passe Dourado',
     createdAt: '2026-10-01T14:20:00.000Z',
   },
 ];
@@ -381,7 +381,7 @@ export const mockRewards: Reward[] = [
     storeId: 'store_02',
     storeName: 'Atelier Ouro do Cerrado',
     storeFloor: 'Piso 1 • L-118',
-    title: 'Porta-Cartões Artesanal em Capim Dourado + R$ 40 OFF',
+    title: 'Porta-Cartões Artesanal em Passe Dourado + R$ 40 OFF',
     description:
       'Mimo exclusivo confeccionado por artesãos do Jalapão em compras acima de R$ 180.',
     rules: 'Limitado a 1 resgate por CPF/Passaporte durante a temporada.',
@@ -396,11 +396,11 @@ export const mockRewards: Reward[] = [
   {
     id: 'rew_04',
     storeId: 'store_05',
-    storeName: 'Cine Capim Dourado Premier',
+    storeName: 'Cine Passe Dourado Premier',
     storeFloor: 'Piso 2 • L-250',
     title: 'Combo Pipoca Manteiga + Refrigerante 500ml Cortesia',
     description:
-      'Resgate seu combo cortesia para acompanhar sua sessão no Cine Capim Dourado Premier.',
+      'Resgate seu combo cortesia para acompanhar sua sessão no Cine Passe Dourado Premier.',
     rules: 'Válido todos os dias na bomboniere mediante apresentação do voucher ativo.',
     pointsCost: 280,
     initialStock: 40,

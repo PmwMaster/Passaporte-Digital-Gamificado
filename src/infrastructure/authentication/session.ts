@@ -11,7 +11,7 @@ export const SESSION_COOKIE_NAME = 'passaporte_cd_session';
 
 const JWT_SECRET =
   process.env.JWT_SECRET ??
-  'chave-secreta-desenvolvimento-local-capim-dourado-shopping-2026';
+  'chave-secreta-desenvolvimento-local-passe-dourado-shopping-2026';
 
 export interface SessionPayload {
   userId: string;

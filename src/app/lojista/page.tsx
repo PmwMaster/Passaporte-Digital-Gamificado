@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { MerchantPortalService } from '@/modules/merchant';
 import { Reward, Voucher } from '@/shared/types/domain';
-import { EditorialCard, ModuleHeader } from '@/components/ui/EditorialCard';
+import { EditorialCard } from '@/components/ui/EditorialCard';
 
 export default function MerchantPortalPage() {
   const initialDashboard = MerchantPortalService.getStoreDashboard();
@@ -16,12 +16,8 @@ export default function MerchantPortalPage() {
   const [statusMsg, setStatusMsg] = useState<string | null>(null);
   const [isError, setIsError] = useState(false);
 
-  // Estado para formulário de Nova Oferta/Recompensa (Fase 4 - F08)
   const [newTitle, setNewTitle] = useState('');
   const [newDesc, setNewDesc] = useState('');
-  const [newRules, setNewRules] = useState(
-    'Apresente o voucher ativo no balcão em até 2h após o resgate.'
-  );
   const [newPointsCost, setNewPointsCost] = useState(150);
   const [newInitialStock, setNewInitialStock] = useState(30);
   const [offerFeedback, setOfferFeedback] = useState<string | null>(null);
@@ -38,12 +34,12 @@ export default function MerchantPortalPage() {
       setIsError(false);
       setValidatedVoucher(json.data.voucher);
       setStatusMsg(
-        `Voucher ${json.data.voucher.code} VÁLIDO! Titular: ${json.data.voucher.visitorName}. Clique em "Confirmar Baixa" para concluir o atendimento.`
+        `Voucher ${json.data.voucher.code} válido (${json.data.voucher.visitorName}).`
       );
     } else {
       setIsError(true);
       setValidatedVoucher(null);
-      setStatusMsg(`${json.error?.code}: ${json.error?.message}`);
+      setStatusMsg(json.error?.message ?? 'Voucher inválido.');
     }
   }
 
@@ -61,12 +57,10 @@ export default function MerchantPortalPage() {
       setRecentVouchers((prev) =>
         prev.map((v) => (v.code === updatedVoucher.code ? updatedVoucher : v))
       );
-      setStatusMsg(
-        `Baixa confirmada para o voucher ${updatedVoucher.code}! Evento Server-Sent Events (SSE) disparado para o celular do visitante.`
-      );
+      setStatusMsg(`Baixa confirmada para ${updatedVoucher.code}!`);
     } else {
       setIsError(true);
-      setStatusMsg(`${json.error?.code}: ${json.error?.message}`);
+      setStatusMsg(json.error?.message ?? 'Erro ao dar baixa.');
     }
   }
 
@@ -79,7 +73,7 @@ export default function MerchantPortalPage() {
         storeId: initialDashboard.store.id,
         title: newTitle,
         description: newDesc,
-        rules: newRules,
+        rules: 'Apresente o voucher ativo no balcão.',
         pointsCost: Number(newPointsCost),
         initialStock: Number(newInitialStock),
         maxPerVisitor: 2,
@@ -91,9 +85,7 @@ export default function MerchantPortalPage() {
       setRewards((prev) => [json.data.reward, ...prev]);
       setNewTitle('');
       setNewDesc('');
-      setOfferFeedback(
-        `Oferta "${json.data.reward.title}" cadastrada com status PENDING! Aprove-a no Painel Admin (/admin) para publicá-la no Catálogo.`
-      );
+      setOfferFeedback(`Oferta "${json.data.reward.title}" enviada para aprovação.`);
     } else {
       setOfferFeedback(json.error?.message ?? 'Erro ao criar oferta.');
     }
@@ -114,93 +106,76 @@ export default function MerchantPortalPage() {
   }
 
   return (
-    <div>
-      <ModuleHeader
-        categoryBadge="Área do Lojista Parceiro • Capim Dourado Shopping"
-        title="Portal Operacional do Lojista"
-        subtitle={`Loja ativa: ${initialDashboard.store.name} (${initialDashboard.store.floor}) • Responsável: ${initialDashboard.operator.operatorName}`}
-      />
+    <div className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <h1 className="font-serif text-2xl font-bold text-brand-ink">
+            {initialDashboard.store.name}
+          </h1>
+          <p className="text-xs text-brand-muted">
+            {initialDashboard.store.floor} • Operador: {initialDashboard.operator.operatorName}
+          </p>
+        </div>
+      </div>
 
-      {/* Indicadores Operacionais da Loja */}
-      <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {/* Resumo Rápido */}
+      <div className="grid gap-4 sm:grid-cols-3">
         <EditorialCard>
-          <span className="text-xs uppercase text-brand-muted">
-            Check-ins na Loja
-          </span>
-          <p className="mt-1 font-serif text-3xl font-bold text-brand-ink">
+          <span className="text-xs uppercase text-brand-muted">Check-ins</span>
+          <p className="mt-1 font-serif text-2xl font-bold text-brand-ink">
             {initialDashboard.metrics.totalCheckIns}
           </p>
         </EditorialCard>
         <EditorialCard>
-          <span className="text-xs uppercase text-brand-muted">
-            Vouchers Aguardando Uso
-          </span>
-          <p className="mt-1 font-serif text-3xl font-bold text-brand-goldDark">
+          <span className="text-xs uppercase text-brand-muted">Vouchers Ativos</span>
+          <p className="mt-1 font-serif text-2xl font-bold text-brand-goldDark">
             {recentVouchers.filter((v) => v.status === 'ACTIVE').length}
           </p>
         </EditorialCard>
         <EditorialCard>
-          <span className="text-xs uppercase text-brand-muted">
-            Vouchers Baixados
-          </span>
-          <p className="mt-1 font-serif text-3xl font-bold text-brand-emerald">
-            {recentVouchers.filter((v) => v.status === 'USED').length + 24}
-          </p>
-        </EditorialCard>
-        <EditorialCard>
-          <span className="text-xs uppercase text-brand-muted">
-            Estoque Total de Ofertas
-          </span>
-          <p className="mt-1 font-serif text-3xl font-bold text-brand-ink">
+          <span className="text-xs uppercase text-brand-muted">Estoque Total</span>
+          <p className="mt-1 font-serif text-2xl font-bold text-brand-emerald">
             {rewards.reduce((acc, r) => acc + r.availableStock, 0)} un.
           </p>
         </EditorialCard>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2">
         {/* Validador de Vouchers */}
         <EditorialCard>
-          <h2 className="font-serif text-2xl font-bold text-brand-ink">
-            1. Validação & Baixa de Voucher no Balcão
+          <h2 className="font-serif text-xl font-bold text-brand-ink">
+            Validar Voucher
           </h2>
-          <p className="mt-1 text-xs text-brand-muted">
-            Digite o código único do voucher ou escaneie o QR Code do cliente para validar e disparar o evento SSE em tempo real.
-          </p>
 
-          <form onSubmit={handleValidate} className="mt-5 space-y-4">
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-brand-muted">
-                Código do Voucher (Ex.: VCH-CD-4821)
-              </label>
-              <input
-                type="text"
-                value={voucherCode}
-                onChange={(e) => setVoucherCode(e.target.value.toUpperCase())}
-                placeholder="Ex.: VCH-CD-4821"
-                className="mt-1 w-full rounded-xl border border-brand-border bg-brand-ivory px-4 py-2.5 font-mono text-sm font-bold uppercase"
-              />
-            </div>
+          <form onSubmit={handleValidate} className="mt-4 space-y-3">
+            <input
+              type="text"
+              value={voucherCode}
+              onChange={(e) => setVoucherCode(e.target.value.toUpperCase())}
+              placeholder="Código (Ex.: VCH-CD-4821)"
+              className="w-full rounded-xl border border-brand-border bg-brand-ivory px-4 py-2.5 font-mono text-sm font-bold uppercase"
+            />
 
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2">
               <button
                 type="submit"
-                className="rounded-xl bg-brand-goldDark px-5 py-2.5 text-xs font-semibold text-white transition hover:opacity-95"
+                className="rounded-xl bg-brand-goldDark px-4 py-2.5 text-xs font-semibold text-white"
               >
-                1. Consultar Validade do Voucher
+                Consultar
               </button>
               <button
                 type="button"
                 onClick={handleConfirmRedemption}
-                className="rounded-xl bg-brand-emerald px-5 py-2.5 text-xs font-semibold text-white transition hover:opacity-95"
+                className="rounded-xl bg-brand-emerald px-4 py-2.5 text-xs font-semibold text-white"
               >
-                2. Confirmar Utilização no Balcão
+                Confirmar Baixa
               </button>
             </div>
           </form>
 
           {statusMsg && (
             <div
-              className={`mt-4 rounded-xl p-4 text-xs font-semibold ${
+              className={`mt-4 rounded-xl p-3.5 text-xs font-semibold ${
                 isError
                   ? 'border border-red-300 bg-red-50 text-red-800'
                   : 'border border-brand-emerald/30 bg-brand-emerald/10 text-brand-emerald'
@@ -211,25 +186,21 @@ export default function MerchantPortalPage() {
           )}
 
           {validatedVoucher && (
-            <div className="mt-4 rounded-xl border border-brand-border bg-brand-ivory p-4 text-xs">
-              <p className="font-serif text-base font-bold text-brand-ink">
+            <div className="mt-3 rounded-xl border border-brand-border bg-brand-ivory p-3.5 text-xs">
+              <p className="font-serif text-sm font-bold text-brand-ink">
                 {validatedVoucher.rewardTitle}
               </p>
-              <p className="mt-1 text-brand-muted">
-                Visitante: <strong>{validatedVoucher.visitorName}</strong> • Status:{' '}
-                <strong>{validatedVoucher.status}</strong>
+              <p className="mt-0.5 text-brand-muted">
+                Cliente: <strong>{validatedVoucher.visitorName}</strong> ({validatedVoucher.status})
               </p>
             </div>
           )}
 
-          <h3 className="mt-8 font-serif text-lg font-bold text-brand-ink">
-            Histórico Recente de Vouchers
-          </h3>
-          <div className="mt-3 space-y-2">
+          <div className="mt-6 space-y-2">
             {recentVouchers.map((vch) => (
               <div
                 key={vch.id}
-                className="flex items-center justify-between rounded-xl border border-brand-border bg-brand-ivory px-3.5 py-2.5 text-xs"
+                className="flex items-center justify-between rounded-xl border border-brand-border bg-brand-ivory px-3.5 py-2 text-xs"
               >
                 <div>
                   <code className="font-bold text-brand-goldDark">{vch.code}</code>
@@ -249,48 +220,34 @@ export default function MerchantPortalPage() {
           </div>
         </EditorialCard>
 
-        {/* Cadastro de Ofertas e Gestão de Estoque da Loja */}
+        {/* Cadastro de Ofertas e Estoque */}
         <EditorialCard>
-          <h2 className="font-serif text-2xl font-bold text-brand-ink">
-            2. Cadastrar Nova Oferta & Gerenciar Estoque
+          <h2 className="font-serif text-xl font-bold text-brand-ink">
+            Ofertas & Estoque
           </h2>
-          <p className="mt-1 text-xs text-brand-muted">
-            Novas ofertas entram com status <code>PENDING</code> até aprovação pela Administração do Shopping (RN-09).
-          </p>
 
           <form onSubmit={handleCreateOffer} className="mt-4 space-y-3">
-            <div>
-              <label className="block text-xs font-semibold uppercase text-brand-muted">
-                Título da Recompensa / Cupom
-              </label>
-              <input
-                type="text"
-                value={newTitle}
-                onChange={(e) => setNewTitle(e.target.value)}
-                placeholder="Ex.: Cappuccino Italiano + Croissant Amanteigado"
-                className="mt-1 w-full rounded-xl border border-brand-border bg-brand-ivory px-3.5 py-2 text-xs"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold uppercase text-brand-muted">
-                Descrição para o Visitante
-              </label>
-              <input
-                type="text"
-                value={newDesc}
-                onChange={(e) => setNewDesc(e.target.value)}
-                placeholder="Ex.: Benefício exclusivo para membros do Passaporte Capim Dourado."
-                className="mt-1 w-full rounded-xl border border-brand-border bg-brand-ivory px-3.5 py-2 text-xs"
-                required
-              />
-            </div>
+            <input
+              type="text"
+              value={newTitle}
+              onChange={(e) => setNewTitle(e.target.value)}
+              placeholder="Título da recompensa"
+              className="w-full rounded-xl border border-brand-border bg-brand-ivory px-3.5 py-2 text-xs"
+              required
+            />
+            <input
+              type="text"
+              value={newDesc}
+              onChange={(e) => setNewDesc(e.target.value)}
+              placeholder="Descrição curta"
+              className="w-full rounded-xl border border-brand-border bg-brand-ivory px-3.5 py-2 text-xs"
+              required
+            />
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold uppercase text-brand-muted">
-                  Custo em Pontos
+                <label className="block text-[11px] font-semibold uppercase text-brand-muted">
+                  Pontos
                 </label>
                 <input
                   type="number"
@@ -302,8 +259,8 @@ export default function MerchantPortalPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold uppercase text-brand-muted">
-                  Estoque Inicial (Unidades)
+                <label className="block text-[11px] font-semibold uppercase text-brand-muted">
+                  Estoque
                 </label>
                 <input
                   type="number"
@@ -324,27 +281,24 @@ export default function MerchantPortalPage() {
 
             <button
               type="submit"
-              className="w-full rounded-xl bg-gradient-to-r from-brand-goldDark to-brand-goldLight py-2.5 text-xs font-semibold text-white"
+              className="w-full rounded-xl bg-brand-goldDark py-2.5 text-xs font-semibold text-white"
             >
-              Submeter Nova Oferta para Aprovação
+              Adicionar Oferta
             </button>
           </form>
 
-          <h3 className="mt-6 font-serif text-lg font-bold text-brand-ink">
-            Estoque Atual das Ofertas ({rewards.length})
-          </h3>
-          <div className="mt-3 space-y-3">
+          <div className="mt-5 space-y-2.5">
             {rewards.map((rew) => (
               <div
                 key={rew.id}
-                className="rounded-xl border border-brand-border bg-brand-ivory p-3.5"
+                className="rounded-xl border border-brand-border bg-brand-ivory p-3"
               >
                 <div className="flex items-center justify-between gap-2">
                   <h4 className="font-serif text-sm font-bold text-brand-ink">
                     {rew.title}
                   </h4>
                   <span
-                    className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
+                    className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
                       rew.approvalStatus === 'APPROVED'
                         ? 'bg-brand-emerald/15 text-brand-emerald'
                         : 'bg-amber-100 text-amber-800'
@@ -355,10 +309,7 @@ export default function MerchantPortalPage() {
                 </div>
                 <div className="mt-2 flex items-center justify-between text-xs">
                   <span className="text-brand-muted">
-                    <strong>{rew.pointsCost} pts</strong> • Estoque:{' '}
-                    <strong>
-                      {rew.availableStock} / {rew.initialStock}
-                    </strong>
+                    {rew.pointsCost} pts • Estoque: <strong>{rew.availableStock}</strong>
                   </span>
                   <div className="flex gap-1.5">
                     <button
@@ -366,7 +317,7 @@ export default function MerchantPortalPage() {
                       onClick={() => handleAdjustStock(rew.id, 5)}
                       className="rounded bg-brand-emerald px-2 py-1 text-[10px] font-bold text-white"
                     >
-                      +5 Estoque
+                      +5
                     </button>
                     <button
                       type="button"

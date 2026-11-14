@@ -36,7 +36,7 @@ Unificaremos todas as tabelas e sementes iniciais (`seed`) diretamente em `src/i
 ### 🔹 Bloco 2: Vitrine Pública (`/`, `/lojas/[slug]`) + Painel Admin (`/admin`) Conectados no Neon
 - **O que está ambíguo hoje:** A Home (`/`) lê lojas estáticas do `mock-data.ts`. Se o Admin cadastra uma loja nova em `/admin`, ela some ao dar F5.
 - **Como vai ficar:**
-  - `GET /api/stores` e `GET /api/stores/[slug]` passam a consultar a tabela `app_stores`, `app_campaigns` e `app_rewards` no Neon (com seed automático das lojas do Capim Dourado na primeira execução).
+  - `GET /api/stores` e `GET /api/stores/[slug]` passam a consultar a tabela `app_stores`, `app_campaigns` e `app_rewards` no Neon (com seed automático das lojas do Passe Dourado na primeira execução).
   - Visual da Vitrine (`/`) refinado com cards visuais ricos (fotos/ícones de categoria, piso, selo de pontos, busca instantânea e filtro de categorias).
   - Quando o Admin cria uma loja em `/admin` ou aprova uma oferta, ela grava em `app_stores` / `app_rewards` no Neon e aparece imediatamente na Vitrine Pública (`/`).
 
