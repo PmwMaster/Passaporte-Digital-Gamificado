@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
+
+:root {
+  --brand-gold-dark: #7a580f;
+  --brand-gold-light: #c59b4e;
+  --brand-emerald: #1b6d24;
+  --brand-ivory: #fcf9f8;
+  --brand-ink: #1f1a14;
+  --brand-muted: #6e6253;
+  --brand-border: #eadfce;
+}
+
+body {
+  background-color: var(--brand-ivory);
+  color: var(--brand-ink);
+  font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .font-editorial {
+  font-family: 'Playfair Display', Georgia, serif;
+}
