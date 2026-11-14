@@ -1,6 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getCurrentSession } from '@/infrastructure/authentication/session';
 import { CheckInService } from '@/modules/checkin';
 import { createCheckInSchema } from '@/shared/schemas/api.schemas';
+
+export async function GET() {
+  const session = await getCurrentSession();
+  const checkIns = CheckInService.listRecentCheckIns(session?.userId);
+
+  return NextResponse.json({
+    success: true,
+    data: { checkIns },
+    meta: {
+      timestamp: new Date().toISOString(),
+      total: checkIns.length,
+    },
+  });
+}
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
@@ -12,14 +27,19 @@ export async function POST(request: NextRequest) {
         success: false,
         error: {
           code: 'VALIDATION_ERROR',
-          message: parsed.error.issues[0]?.message ?? 'Dados de check-in inválidos.',
+          message:
+            parsed.error.issues[0]?.message ?? 'Dados de check-in inválidos.',
         },
       },
       { status: 400 }
     );
   }
 
-  const result = CheckInService.performCheckIn(parsed.data);
+  const session = await getCurrentSession();
+  const result = CheckInService.performCheckIn({
+    ...parsed.data,
+    visitorId: session?.userId,
+  });
 
   if (!result.ok) {
     return NextResponse.json(
