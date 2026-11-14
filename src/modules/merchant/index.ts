@@ -3,14 +3,28 @@
 // ==============================================================================
 
 import {
+  mockCampaigns,
   mockCheckIns,
   mockOperators,
   mockRewards,
   mockStores,
+  mockVisitorProfile,
   mockVouchers,
 } from '@/infrastructure/database/mock-data';
 import { voucherSseBroker } from '@/infrastructure/realtime/sse-broker';
-import { Reward } from '@/shared/types/domain';
+import { Reward, Voucher } from '@/shared/types/domain';
+
+function generatePromoCode(title: string): string {
+  const prefix = title
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^A-Za-z0-9]/g, '')
+    .toUpperCase()
+    .slice(0, 4)
+    .padEnd(4, 'X');
+  const suffix = Math.floor(100 + Math.random() * 900);
+  return `PROMO-${prefix}${suffix}`;
+}
 
 export class MerchantPortalService {
   static getStoreDashboard(storeId = 'store_01') {
@@ -38,15 +52,64 @@ export class MerchantPortalService {
   }
 
   static validateVoucherByCode(rawCode: string) {
-    const code = rawCode.trim().toUpperCase();
-    const voucher = mockVouchers.find((v) => v.code.toUpperCase() === code);
+    const code = rawCode
+      .replace('PASSE-DOURADO:PROMO:', '')
+      .replace('PASSE-DOURADO:VOUCHER:', '')
+      .replace('PASSAPORTE-CD:VOUCHER:', '')
+      .trim()
+      .toUpperCase();
+
+    let voucher = mockVouchers.find((v) => v.code.toUpperCase() === code);
+
+    // Se o código lido for o QR Code de uma promoção criada pelo lojista
+    if (!voucher) {
+      const promoReward = mockRewards.find(
+        (r) => r.promoCode?.toUpperCase() === code && r.isActive
+      );
+
+      if (promoReward) {
+        if (promoReward.availableStock <= 0) {
+          return {
+            ok: false as const,
+            httpStatus: 422,
+            code: 'PROMO_OUT_OF_STOCK',
+            message: `O estoque da promoção "${promoReward.title}" está esgotado.`,
+          };
+        }
+
+        const issuedAt = new Date();
+        const expiresAt = new Date(
+          issuedAt.getTime() + promoReward.voucherValidityHours * 60 * 60 * 1000
+        );
+
+        voucher = {
+          id: `vch_promo_${Date.now()}`,
+          code: promoReward.promoCode ?? code,
+          qrPayload:
+            promoReward.qrPayload ?? `PASSE-DOURADO:PROMO:${promoReward.promoCode ?? code}`,
+          visitorId: mockVisitorProfile.id,
+          visitorName: mockVisitorProfile.visitorName,
+          rewardId: promoReward.id,
+          rewardTitle: promoReward.title,
+          storeId: promoReward.storeId,
+          storeName: promoReward.storeName,
+          storeFloor: promoReward.storeFloor,
+          pointsSpent: promoReward.pointsCost,
+          status: 'ACTIVE',
+          issuedAt: issuedAt.toISOString(),
+          expiresAt: expiresAt.toISOString(),
+        };
+
+        mockVouchers.unshift(voucher);
+      }
+    }
 
     if (!voucher) {
       return {
         ok: false as const,
         httpStatus: 404,
         code: 'VOUCHER_NOT_FOUND',
-        message: `Nenhum voucher encontrado para o código ${code}.`,
+        message: `Nenhum voucher ou promoção encontrado para o código ${code}.`,
       };
     }
 
@@ -101,6 +164,14 @@ export class MerchantPortalService {
     voucher.usedAt = new Date().toISOString();
     voucher.validatedByOperatorId = mockOperators[0].id;
 
+    // Se for baixa de promoção direta, atualiza o estoque da oferta
+    if (voucher.code.startsWith('PROMO-')) {
+      const reward = mockRewards.find((r) => r.id === voucher.rewardId);
+      if (reward && reward.availableStock > 0) {
+        reward.availableStock -= 1;
+      }
+    }
+
     // Dispara notificação em tempo real via Server-Sent Events (SSE)
     voucherSseBroker.publish({
       type: 'VOUCHER_USED',
@@ -133,6 +204,9 @@ export class MerchantPortalService {
     const store =
       mockStores.find((s) => s.id === input.storeId) ?? mockStores[0];
 
+    const promoCode = generatePromoCode(input.title);
+    const qrPayload = `PASSE-DOURADO:PROMO:${promoCode}`;
+
     const newReward: Reward = {
       id: `rew_${Date.now()}`,
       storeId: store.id,
@@ -146,11 +220,28 @@ export class MerchantPortalService {
       availableStock: input.initialStock,
       maxPerVisitor: input.maxPerVisitor,
       voucherValidityHours: input.voucherValidityHours,
+      promoCode,
+      qrPayload,
       approvalStatus: 'PENDING', // RN-09: Entra pendente até aprovação pelo Admin
       isActive: true,
     };
 
     mockRewards.unshift(newReward);
+
+    // Registra também na fila de campanhas para visibilidade administrativa
+    mockCampaigns.unshift({
+      id: `cmp_${Date.now()}`,
+      storeId: store.id,
+      storeName: store.name,
+      title: newReward.title,
+      slug: `promo-${promoCode.toLowerCase()}`,
+      description: `${newReward.description} • Código QR: ${promoCode} • Estoque: ${newReward.initialStock} un.`,
+      bonusMultiplier: 1.5,
+      status: 'PENDING_APPROVAL',
+      startsAt: new Date().toISOString(),
+      endsAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+    });
+
     return newReward;
   }
 

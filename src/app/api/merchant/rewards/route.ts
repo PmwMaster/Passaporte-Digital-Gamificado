@@ -1,9 +1,52 @@
 import { NextRequest, NextResponse } from 'next/server';
+import QRCode from 'qrcode';
 import { MerchantPortalService } from '@/modules/merchant';
 import {
   merchantCreateRewardSchema,
   merchantUpdateStockSchema,
 } from '@/shared/schemas/api.schemas';
+import { Reward } from '@/shared/types/domain';
+
+async function attachQrCodeDataUrl(reward: Reward): Promise<Reward> {
+  const payload =
+    reward.qrPayload ??
+    `PASSE-DOURADO:PROMO:${reward.promoCode ?? reward.id.toUpperCase()}`;
+  const promoCode =
+    reward.promoCode ?? `PROMO-${reward.id.replace(/[^A-Za-z0-9]/g, '').toUpperCase()}`;
+
+  try {
+    const qrCodeDataUrl = await QRCode.toDataURL(payload, {
+      width: 320,
+      margin: 2,
+      color: {
+        dark: '#1F1A11',
+        light: '#FFFFFF',
+      },
+    });
+    reward.promoCode = promoCode;
+    reward.qrPayload = payload;
+    reward.qrCodeDataUrl = qrCodeDataUrl;
+  } catch {
+    reward.promoCode = promoCode;
+    reward.qrPayload = payload;
+  }
+
+  return reward;
+}
+
+export async function GET(request: NextRequest) {
+  const storeId = request.nextUrl.searchParams.get('storeId') ?? 'store_01';
+  const dashboard = MerchantPortalService.getStoreDashboard(storeId);
+  const rewardsWithQr = await Promise.all(
+    dashboard.rewards.map((r) => attachQrCodeDataUrl(r))
+  );
+
+  return NextResponse.json({
+    success: true,
+    data: { rewards: rewardsWithQr },
+    meta: { timestamp: new Date().toISOString() },
+  });
+}
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
@@ -25,6 +68,7 @@ export async function POST(request: NextRequest) {
   }
 
   const reward = MerchantPortalService.createStoreReward(parsed.data);
+  await attachQrCodeDataUrl(reward);
 
   return NextResponse.json(
     {

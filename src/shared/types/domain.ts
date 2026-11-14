@@ -150,6 +150,9 @@ export interface Reward {
   availableStock: number;
   maxPerVisitor: number;
   voucherValidityHours: number;
+  promoCode?: string;
+  qrPayload?: string;
+  qrCodeDataUrl?: string;
   approvalStatus: 'PENDING' | 'APPROVED' | 'REJECTED';
   isActive: boolean;
 }

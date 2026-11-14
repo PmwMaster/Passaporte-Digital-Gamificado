@@ -103,3 +103,41 @@ export async function getCurrentSession(): Promise<SessionPayload | null> {
   }
   return decodeSessionToken(token);
 }
+
+/**
+ * Guard RBAC para rotas exclusivas da Administração Geral (role === 'ADMIN').
+ */
+export async function requireAdminSession(): Promise<
+  | { authorized: true; session: SessionPayload }
+  | {
+      authorized: false;
+      status: 401 | 403;
+      code: 'UNAUTHORIZED' | 'FORBIDDEN_ADMIN_ONLY';
+      message: string;
+    }
+> {
+  const session = await getCurrentSession();
+  if (!session) {
+    return {
+      authorized: false,
+      status: 401,
+      code: 'UNAUTHORIZED',
+      message:
+        'Acesso restrito: autentique-se com uma conta de Administrador para executar esta operação.',
+    };
+  }
+
+  if (session.role !== 'ADMIN') {
+    return {
+      authorized: false,
+      status: 403,
+      code: 'FORBIDDEN_ADMIN_ONLY',
+      message: `Permissão negada: seu perfil atual (${session.role}) não possui privilégios de Administrador Geral (ADMIN).`,
+    };
+  }
+
+  return {
+    authorized: true,
+    session,
+  };
+}

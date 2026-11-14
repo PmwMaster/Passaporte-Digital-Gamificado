@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import QRCode from 'qrcode';
 import { MerchantPortalService } from '@/modules/merchant';
 import { Reward, Voucher } from '@/shared/types/domain';
 
@@ -73,6 +74,9 @@ export default function MerchantPortalPage() {
   const [newStock, setNewStock] = useState(20);
   const [isCreatingOffer, setIsCreatingOffer] = useState(false);
 
+  // Modal de QR Code da Promoção Gerada
+  const [selectedPromoQr, setSelectedPromoQr] = useState<Reward | null>(null);
+
   // Scanner QR Câmera no PDV
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const scannerRef = useRef<{
@@ -81,12 +85,57 @@ export default function MerchantPortalPage() {
   } | null>(null);
 
   useEffect(() => {
+    fetch('/api/merchant/rewards', { cache: 'no-store' })
+      .then((res) => res.json())
+      .then((json) => {
+        if (json?.success && Array.isArray(json.data?.rewards)) {
+          setStoreRewards(json.data.rewards);
+        }
+      })
+      .catch(() => undefined);
+
     return () => {
       if (scannerRef.current) {
         scannerRef.current.stop().catch(() => undefined);
       }
     };
   }, []);
+
+  async function ensureRewardQrCode(reward: Reward): Promise<Reward> {
+    if (reward.qrCodeDataUrl) return reward;
+    const promoCode =
+      reward.promoCode ??
+      `PROMO-${reward.id.replace(/[^A-Za-z0-9]/g, '').toUpperCase()}`;
+    const qrPayload =
+      reward.qrPayload ?? `PASSE-DOURADO:PROMO:${promoCode}`;
+    try {
+      const qrCodeDataUrl = await QRCode.toDataURL(qrPayload, {
+        width: 320,
+        margin: 2,
+        color: {
+          dark: '#1F1A11',
+          light: '#FFFFFF',
+        },
+      });
+      const enriched: Reward = {
+        ...reward,
+        promoCode,
+        qrPayload,
+        qrCodeDataUrl,
+      };
+      setStoreRewards((prev) =>
+        prev.map((item) => (item.id === reward.id ? enriched : item))
+      );
+      return enriched;
+    } catch {
+      return { ...reward, promoCode, qrPayload };
+    }
+  }
+
+  async function handleOpenPromoQr(reward: Reward) {
+    const enriched = await ensureRewardQrCode(reward);
+    setSelectedPromoQr(enriched);
+  }
 
   async function handleStartPosCamera() {
     setIsCameraOpen(true);
@@ -103,6 +152,7 @@ export default function MerchantPortalPage() {
         { fps: 10, qrbox: { width: 220, height: 220 } },
         (decodedText) => {
           const clean = decodedText
+            .replace('PASSE-DOURADO:PROMO:', '')
             .replace('PASSE-DOURADO:VOUCHER:', '')
             .replace('PASSAPORTE-CD:VOUCHER:', '')
             .trim();
@@ -244,13 +294,27 @@ export default function MerchantPortalPage() {
       });
       const json = await res.json();
       if (json.success && json.data?.reward) {
-        setStoreRewards((prev) => [json.data.reward, ...prev]);
+        const createdReward = await ensureRewardQrCode(
+          json.data.reward as Reward
+        );
+        setStoreRewards((prev) => [
+          createdReward,
+          ...prev.filter((r) => r.id !== createdReward.id),
+        ]);
         setShowNewOfferModal(false);
+        setSelectedPromoQr(createdReward);
         setNewTitle('');
         setNewDescription('');
         setStatusMsg({
           type: 'success',
-          text: `Oferta "${json.data.reward.title}" publicada com sucesso!`,
+          text: `Oferta "${createdReward.title}" publicada com QR Code (${createdReward.promoCode}) gerado com sucesso!`,
+        });
+      } else {
+        setStatusMsg({
+          type: 'error',
+          text:
+            json.error?.message ??
+            'Não foi possível publicar a promoção. Verifique os campos.',
         });
       }
     } finally {
@@ -828,46 +892,73 @@ export default function MerchantPortalPage() {
                 </div>
 
                 <div className="mt-4 space-y-3">
-                  {storeRewards.slice(0, 3).map((rew, idx) => (
+                  {storeRewards.map((rew, idx) => (
                     <div
                       key={rew.id}
-                      className="flex items-center justify-between rounded-2xl border border-[#E6DFCE] bg-[#F8F5EE] p-3.5"
+                      className="flex items-center justify-between gap-3 rounded-2xl border border-[#E6DFCE] bg-[#F8F5EE] p-3.5"
                     >
                       <div className="flex items-center gap-3.5">
-                        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#D6AF60] to-[#9E7422] text-white">
-                          <span className="material-symbols-outlined text-2xl text-white/80">
-                            image
-                          </span>
-                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleOpenPromoQr(rew)}
+                          title="Ver QR Code da promoção"
+                          className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-[#E2DAC6] bg-white p-1.5 text-[#74520B] shadow-sm transition hover:border-[#74520B]"
+                        >
+                          {rew.qrCodeDataUrl ? (
+                            <img
+                              src={rew.qrCodeDataUrl}
+                              alt={`QR Code ${rew.title}`}
+                              className="h-full w-full object-contain"
+                            />
+                          ) : (
+                            <span className="material-symbols-outlined text-2xl">
+                              qr_code_2
+                            </span>
+                          )}
+                        </button>
                         <div>
                           <h3 className="font-sans text-sm font-extrabold text-[#1F1A11]">
                             {rew.title}
                           </h3>
                           <p
                             className={`text-xs ${
-                              idx === 1
+                              rew.availableStock <= 5
                                 ? 'font-bold text-red-700'
                                 : 'text-[#5A5243]'
                             }`}
                           >
-                            {idx === 1
+                            {rew.availableStock <= 5
                               ? `Apenas ${rew.availableStock} unidades disponíveis`
-                              : `${rew.availableStock} unidades restantes`}
+                              : `${rew.availableStock} unidades restantes • ${rew.pointsCost} pts`}
                           </p>
-                          <span
-                            className={`mt-1 inline-block rounded-full px-2.5 py-0.5 text-[10px] font-extrabold ${
-                              idx === 1
-                                ? 'bg-red-100 text-red-800'
-                                : 'bg-[#E1F3E4] text-[#256B30]'
-                            }`}
-                          >
-                            {idx === 1 ? 'Esgotando' : 'No ar'}
-                          </span>
+                          <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                            <span
+                              className={`inline-block rounded-full px-2.5 py-0.5 text-[10px] font-extrabold ${
+                                rew.availableStock <= 5
+                                  ? 'bg-red-100 text-red-800'
+                                  : 'bg-[#E1F3E4] text-[#256B30]'
+                              }`}
+                            >
+                              {rew.availableStock <= 5 ? 'Esgotando' : 'No ar'}
+                            </span>
+                            {rew.promoCode && (
+                              <code className="rounded-md bg-[#EFE4C8] px-2 py-0.5 font-mono text-[10px] font-extrabold text-[#74520B]">
+                                {rew.promoCode}
+                              </code>
+                            )}
+                          </div>
                         </div>
                       </div>
-                      <span className="material-symbols-outlined text-[#5A5243]">
-                        more_vert
-                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleOpenPromoQr(rew)}
+                        className="inline-flex shrink-0 items-center gap-1 rounded-full border border-[#74520B] bg-white px-3 py-1.5 text-[11px] font-extrabold text-[#74520B] transition hover:bg-[#EFE4C8]"
+                      >
+                        <span className="material-symbols-outlined text-[15px]">
+                          qr_code_2
+                        </span>
+                        QR Code
+                      </button>
                     </div>
                   ))}
                 </div>
@@ -934,7 +1025,12 @@ export default function MerchantPortalPage() {
 
       {/* MODAL DE NOVA OFERTA EXPRESS */}
       {showNewOfferModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 p-4 backdrop-blur-sm">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 p-4 backdrop-blur-sm"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowNewOfferModal(false);
+          }}
+        >
           <div className="w-full max-w-md rounded-3xl border border-[#E6DFCE] bg-[#FAF6EE] p-6 shadow-2xl">
             <div className="flex items-center justify-between">
               <h3 className="font-serif text-xl font-bold text-[#1F1A11]">
@@ -969,10 +1065,11 @@ export default function MerchantPortalPage() {
 
               <div>
                 <label className="block text-xs font-bold text-[#1F1A11]">
-                  Descrição
+                  Descrição (mínimo 10 caracteres)
                 </label>
                 <input
                   type="text"
+                  minLength={10}
                   value={newDescription}
                   onChange={(e) => setNewDescription(e.target.value)}
                   placeholder="Ex.: Válido todos os dias até as 20h"
@@ -1010,13 +1107,28 @@ export default function MerchantPortalPage() {
                 </div>
               </div>
 
+              <div className="flex items-center gap-2.5 rounded-2xl border border-[#E2DAC6] bg-white p-3 text-xs text-[#5A5243]">
+                <span className="material-symbols-outlined text-[20px] text-[#74520B]">
+                  qr_code_2
+                </span>
+                <span>
+                  Ao publicar, o sistema gerará automaticamente o{' '}
+                  <strong className="text-[#1F1A11]">
+                    QR Code exclusivo da promoção
+                  </strong>{' '}
+                  para impressão ou leitura no balcão.
+                </span>
+              </div>
+
               <div className="mt-5 flex gap-2.5 pt-2">
                 <button
                   type="submit"
                   disabled={isCreatingOffer}
                   className="flex-1 rounded-full bg-[#74520B] py-3 text-xs font-extrabold text-white"
                 >
-                  {isCreatingOffer ? 'Salvando...' : 'Publicar Oferta'}
+                  {isCreatingOffer
+                    ? 'Gerando QR Code...'
+                    : 'Publicar & Gerar QR Code'}
                 </button>
                 <button
                   type="button"
@@ -1027,6 +1139,126 @@ export default function MerchantPortalPage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL DE QR CODE DA PROMOÇÃO GERADA */}
+      {selectedPromoQr && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 p-4 backdrop-blur-sm"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setSelectedPromoQr(null);
+          }}
+        >
+          <div className="w-full max-w-md rounded-3xl border border-[#E6DFCE] bg-[#FAF6EE] p-6 text-center shadow-2xl">
+            <div className="flex items-center justify-between">
+              <span className="rounded-full bg-[#EFE4C8] px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-[#74520B]">
+                QR Code Oficial da Promoção
+              </span>
+              <button
+                type="button"
+                onClick={() => setSelectedPromoQr(null)}
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-[#5A5243]"
+              >
+                ✕
+              </button>
+            </div>
+
+            <h3 className="mt-3 font-serif text-2xl font-bold text-[#1F1A11]">
+              {selectedPromoQr.title}
+            </h3>
+            <p className="mt-1 text-xs text-[#5A5243]">
+              {selectedPromoQr.storeName} ({selectedPromoQr.storeFloor})
+            </p>
+            <p className="mt-0.5 text-xs text-[#6E6556]">
+              {selectedPromoQr.description}
+            </p>
+
+            <div className="mx-auto my-5 flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-[#74520B]/50 bg-white p-5 shadow-sm">
+              {selectedPromoQr.qrCodeDataUrl ? (
+                <img
+                  src={selectedPromoQr.qrCodeDataUrl}
+                  alt={`QR Code da promoção ${selectedPromoQr.title}`}
+                  className="h-48 w-48 object-contain"
+                />
+              ) : (
+                <div className="flex h-48 w-48 items-center justify-center text-xs text-[#5A5243]">
+                  Gerando imagem QR...
+                </div>
+              )}
+
+              <span className="mt-3 text-[10px] font-extrabold uppercase tracking-widest text-[#6E6556]">
+                Código da Promoção
+              </span>
+              <code className="mt-1 rounded-xl bg-[#FAF6EE] px-4 py-1.5 font-mono text-lg font-black tracking-wider text-[#74520B]">
+                {selectedPromoQr.promoCode}
+              </code>
+              <span className="mt-1 font-mono text-[10px] text-[#6E6556]">
+                {selectedPromoQr.qrPayload}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2.5 rounded-2xl border border-[#E6DFCE] bg-white p-3 text-xs">
+              <div>
+                <span className="block text-[10px] font-bold uppercase text-[#6E6556]">
+                  CUSTO EM PONTOS
+                </span>
+                <strong className="text-sm font-extrabold text-[#74520B]">
+                  {selectedPromoQr.pointsCost} pts
+                </strong>
+              </div>
+              <div>
+                <span className="block text-[10px] font-bold uppercase text-[#6E6556]">
+                  ESTOQUE DISPONÍVEL
+                </span>
+                <strong className="text-sm font-extrabold text-[#256B30]">
+                  {selectedPromoQr.availableStock} unidades
+                </strong>
+              </div>
+            </div>
+
+            <div className="mt-5 grid grid-cols-2 gap-2.5">
+              {selectedPromoQr.qrCodeDataUrl && (
+                <a
+                  href={selectedPromoQr.qrCodeDataUrl}
+                  download={`qrcode-${(selectedPromoQr.promoCode ?? 'promocao').toLowerCase()}.png`}
+                  className="flex items-center justify-center gap-1.5 rounded-full bg-[#74520B] py-3 text-xs font-extrabold text-white shadow-sm transition hover:bg-[#5E4108]"
+                >
+                  <span className="material-symbols-outlined text-[16px]">
+                    download
+                  </span>
+                  Baixar PNG
+                </a>
+              )}
+              <button
+                type="button"
+                onClick={() => window.print()}
+                className="flex items-center justify-center gap-1.5 rounded-full border border-[#74520B] bg-white py-3 text-xs font-extrabold text-[#74520B] transition hover:bg-[#EFE4C8]"
+              >
+                <span className="material-symbols-outlined text-[16px]">
+                  print
+                </span>
+                Imprimir A4
+              </button>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                const code = selectedPromoQr.promoCode ?? '';
+                setSelectedPromoQr(null);
+                if (code) {
+                  handleValidate(undefined, code);
+                }
+              }}
+              className="mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-full bg-[#256B30] py-3 text-xs font-extrabold text-white shadow-sm transition hover:bg-[#1E5827]"
+            >
+              <span className="material-symbols-outlined text-[16px]">
+                point_of_sale
+              </span>
+              Simular Leitura deste QR Code no Caixa
+            </button>
           </div>
         </div>
       )}
