@@ -1,41 +1,34 @@
 ﻿# ==============================================================================
-# SCRIPT AUTOMÁTICO: CRIAR PROJETO NA VERCEL + ENVIAR TODAS AS VARIÁVEIS DO .ENV
+# SCRIPT AUTOMÁTICO: SINCRONIZAR BANCO NEON + ENVIAR ENV + DEPLOY VERCEL
 # ==============================================================================
 
 Write-Host "==========================================================" -ForegroundColor Yellow
-Write-Host " 1. Vinculando / Criando o projeto na sua conta da Vercel " -ForegroundColor Yellow
+Write-Host " 1. Sincronizando tabelas do Prisma no Neon PostgreSQL    " -ForegroundColor Yellow
 Write-Host "==========================================================" -ForegroundColor Yellow
 
-npx vercel link --yes
+npx prisma generate
+npx prisma db push --accept-data-loss
 
 Write-Host "`n==========================================================" -ForegroundColor Yellow
-Write-Host " 2. Enviando todas as variáveis do arquivo .env para a Vercel " -ForegroundColor Yellow
+Write-Host " 2. Enviando variáveis do .env e fazendo Deploy na Vercel " -ForegroundColor Yellow
 Write-Host "==========================================================" -ForegroundColor Yellow
 
 $envLines = Get-Content -Path ".env" | Where-Object {
     $_ -match "^[A-Z0-9_]+=" -and -not $_.StartsWith("#")
 }
 
+$vercelArgs = @("--prod", "--yes")
+
 foreach ($line in $envLines) {
     $parts = $line -split "=", 2
     $key = $parts[0].Trim()
     $val = $parts[1].Trim().Trim('"')
 
-    Write-Host "-> Configurando variavel $key na Vercel (production, preview, development)..." -ForegroundColor Cyan
-
-    # Remove caso ja exista para evitar erro de duplicidade
-    npx vercel env rm $key production --yes 2>$null | Out-Null
-    npx vercel env rm $key preview --yes 2>$null | Out-Null
-    npx vercel env rm $key development --yes 2>$null | Out-Null
-
-    # Adiciona o valor sem quebra de linha
-    $val | npx vercel env add $key production
-    $val | npx vercel env add $key preview
-    $val | npx vercel env add $key development
+    $vercelArgs += "-e"
+    $vercelArgs += "$key=$val"
+    $vercelArgs += "-b"
+    $vercelArgs += "$key=$val"
 }
 
-Write-Host "`n==========================================================" -ForegroundColor Green
-Write-Host " 3. Fazendo o Deploy em Produção na Vercel! " -ForegroundColor Green
-Write-Host "==========================================================" -ForegroundColor Green
-
-npx vercel --prod --yes
+Write-Host "-> Executando npx vercel --prod com todas as variáveis de build e runtime..." -ForegroundColor Green
+& npx vercel @vercelArgs

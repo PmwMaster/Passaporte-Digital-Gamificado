@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { EditorialCard, ModuleHeader } from '@/components/ui/EditorialCard';
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('redirectTo') ?? undefined;
@@ -214,5 +214,19 @@ export default function LoginPage() {
         </EditorialCard>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="p-8 text-center text-sm text-brand-muted">
+          Carregando tela de autenticação...
+        </div>
+      }
+    >
+      <LoginContent />
+    </Suspense>
   );
 }

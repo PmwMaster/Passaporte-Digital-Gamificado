@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { EditorialCard, ModuleHeader } from '@/components/ui/EditorialCard';
 
-export default function VerifyOtpPage() {
+function VerifyOtpContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialPhone = searchParams.get('phone') ?? '+5563992114455';
@@ -203,5 +203,19 @@ export default function VerifyOtpPage() {
         </div>
       </EditorialCard>
     </div>
+  );
+}
+
+export default function VerifyOtpPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="p-8 text-center text-sm text-brand-muted">
+          Carregando verificação OTP...
+        </div>
+      }
+    >
+      <VerifyOtpContent />
+    </Suspense>
   );
 }
