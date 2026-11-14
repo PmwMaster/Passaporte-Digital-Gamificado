@@ -104,6 +104,26 @@ export async function ensureNeonTables(): Promise<void> {
       );
     `;
 
+    await sql`
+      CREATE TABLE IF NOT EXISTS app_vouchers (
+        id TEXT PRIMARY KEY,
+        code TEXT UNIQUE NOT NULL,
+        qr_payload TEXT NOT NULL,
+        visitor_id TEXT NOT NULL REFERENCES app_visitor_profiles(id) ON DELETE CASCADE,
+        visitor_name TEXT NOT NULL,
+        reward_id TEXT NOT NULL,
+        reward_title TEXT NOT NULL,
+        store_id TEXT NOT NULL,
+        store_name TEXT NOT NULL,
+        store_floor TEXT NOT NULL,
+        points_spent INTEGER NOT NULL,
+        status TEXT NOT NULL DEFAULT 'ACTIVE',
+        issued_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        expires_at TIMESTAMPTZ NOT NULL,
+        used_at TIMESTAMPTZ
+      );
+    `;
+
     schemaInitialized = true;
   } catch (err) {
     console.warn('[Neon HTTP Driver] Aviso ao inicializar tabelas (usando fallback em memória):', err);

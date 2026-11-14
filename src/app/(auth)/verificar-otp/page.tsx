@@ -21,10 +21,13 @@ function VerifyOtpContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialPhone = searchParams.get('phone') ?? '';
-  const nextUrl = searchParams.get('next') ?? undefined;
+  const initialPreview = searchParams.get('preview') ?? null;
 
   const [phone, setPhone] = useState(initialPhone);
   const [digits, setDigits] = useState<string[]>(['', '', '', '', '', '']);
+  const [devPreviewCode, setDevPreviewCode] = useState<string | null>(
+    initialPreview
+  );
   const [cooldown, setCooldown] = useState<number>(60);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [isError, setIsError] = useState(false);
@@ -61,10 +64,6 @@ function VerifyOtpContent() {
   ) {
     if (e.key === 'Backspace' && !digits[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
-    } else if (e.key === 'ArrowLeft' && index > 0) {
-      inputRefs.current[index - 1]?.focus();
-    } else if (e.key === 'ArrowRight' && index < 5) {
-      inputRefs.current[index + 1]?.focus();
     }
   }
 
@@ -80,8 +79,6 @@ function VerifyOtpContent() {
       next[i] = pasted[i] ?? '';
     }
     setDigits(next);
-    const focusIdx = Math.min(5, pasted.length - 1);
-    inputRefs.current[focusIdx]?.focus();
   }
 
   async function handleVerify(e: React.FormEvent) {
@@ -89,15 +86,15 @@ function VerifyOtpContent() {
     const code = digits.join('');
     if (code.length !== 6) return;
 
-    if (!phone.trim()) {
+    if (!phone) {
       setIsError(true);
-      setFeedback('Informe seu número de WhatsApp.');
+      setFeedback('Informe o número do telefone.');
       return;
     }
 
     setIsSubmitting(true);
     setIsError(false);
-    setFeedback('Verificando código...');
+    setFeedback('Validando código...');
 
     try {
       const res = await fetch('/api/auth/otp/verify', {
@@ -109,16 +106,14 @@ function VerifyOtpContent() {
 
       if (json.success) {
         setIsError(false);
-        setFeedback('WhatsApp verificado com sucesso! Redirecionando...');
-        const destination =
-          nextUrl && nextUrl.startsWith('/')
-            ? nextUrl
-            : json.data.redirectUrl ?? '/passaporte';
-        router.push(destination);
-        router.refresh();
+        setFeedback('WhatsApp verificado! Redirecionando...');
+        setTimeout(() => {
+          router.push(json.data.redirectUrl ?? '/passaporte');
+          router.refresh();
+        }, 500);
       } else {
         setIsError(true);
-        setFeedback(json.error?.message ?? 'Código OTP inválido.');
+        setFeedback(json.error?.message ?? 'Código inválido.');
       }
     } finally {
       setIsSubmitting(false);
@@ -127,14 +122,14 @@ function VerifyOtpContent() {
 
   async function handleResendOtp() {
     if (cooldown > 0) return;
-    if (!phone.trim()) {
+    if (!phone) {
       setIsError(true);
-      setFeedback('Informe seu número de WhatsApp para receber o código.');
+      setFeedback('Informe o número do telefone antes de reenviar.');
       return;
     }
 
-    setFeedback('Enviando novo código via WhatsApp...');
     setIsError(false);
+    setFeedback('Reenviando código...');
 
     const res = await fetch('/api/auth/otp/send', {
       method: 'POST',
@@ -144,13 +139,13 @@ function VerifyOtpContent() {
     const json = await res.json();
     if (json.success) {
       setCooldown(json.data.resendCooldownSeconds ?? 60);
-      setDigits(['', '', '', '', '', '']);
-      setIsError(false);
-      setFeedback('Novo código enviado para o seu WhatsApp!');
-      inputRefs.current[0]?.focus();
+      if (json.data.devPreviewCode) {
+        setDevPreviewCode(json.data.devPreviewCode);
+      }
+      setFeedback('Novo código enviado para seu WhatsApp.');
     } else {
       setIsError(true);
-      setFeedback(json.error?.message ?? 'Erro ao reenviar código.');
+      setFeedback(json.error?.message ?? 'Aguarde antes de reenviar.');
     }
   }
 
@@ -158,37 +153,63 @@ function VerifyOtpContent() {
 
   return (
     <div className="mx-auto max-w-md py-8">
-      <div className="rounded-2xl bg-surface-container-lowest p-6 sm:p-8 shadow-editorial border border-surface-container-high text-center">
-        <div className="mx-auto mb-4 w-12 h-12 rounded-full bg-secondary-container/60 text-secondary flex items-center justify-center">
-          <span className="material-symbols-outlined text-2xl">sms</span>
-        </div>
-
-        <h1 className="font-headline-md text-2xl font-bold text-on-surface">
-          Confirmar Código WhatsApp
-        </h1>
-        <p className="mt-1 text-xs text-on-surface-variant">
-          Digite os 6 dígitos enviados para o seu WhatsApp:
-        </p>
-
-        <div className="mt-3">
-          {initialPhone ? (
-            <span className="inline-block px-3 py-1 rounded-full bg-surface-container-low text-xs font-bold text-on-surface">
+      <div className="rounded-2xl bg-surface-container-lowest p-6 sm:p-8 shadow-editorial border border-surface-container-high">
+        <div className="flex items-center justify-between mb-5">
+          <Link
+            href="/login"
+            className="text-xs font-semibold text-on-surface-variant hover:text-primary"
+          >
+            ← Voltar
+          </Link>
+          {phone && (
+            <span className="text-xs font-semibold text-secondary">
               {formatPhoneDisplay(phone)}
             </span>
-          ) : (
+          )}
+        </div>
+
+        <h1 className="font-headline-md text-2xl font-bold text-on-surface mb-1">
+          Confirmar WhatsApp
+        </h1>
+        <p className="text-xs text-on-surface-variant mb-5">
+          {phone
+            ? `Digite o código de 6 dígitos enviado para ${formatPhoneDisplay(phone)}.`
+            : 'Informe seu WhatsApp e digite o código de 6 dígitos.'}
+        </p>
+
+        {!phone && (
+          <div className="mb-4">
+            <label className="block text-xs font-semibold text-on-surface-variant mb-1">
+              WhatsApp com DDD
+            </label>
             <input
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              placeholder="+5563999999999"
-              className="w-full mt-1 px-3.5 py-2 rounded-lg bg-surface-container-low text-center text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary-container"
+              placeholder="(DDD) 99999-9999"
+              className="w-full px-3.5 py-2 rounded-lg bg-surface-container-low text-on-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             />
-          )}
-        </div>
+          </div>
+        )}
 
-        <form onSubmit={handleVerify} className="mt-6">
-          <div className="flex justify-center gap-2 mb-5">
-            {digits.map((digit, index) => (
+        {devPreviewCode && (
+          <div className="mb-5 rounded-xl bg-primary-fixed/40 p-3 flex items-center justify-between gap-2 text-xs">
+            <span>
+              Código enviado: <strong className="font-mono text-primary">{devPreviewCode}</strong>
+            </span>
+            <button
+              type="button"
+              onClick={() => setDigits(devPreviewCode.slice(0, 6).split(''))}
+              className="px-3 py-1 rounded-full bg-primary text-on-primary font-bold cursor-pointer"
+            >
+              Preencher
+            </button>
+          </div>
+        )}
+
+        <form onSubmit={handleVerify} className="space-y-5">
+          <div className="flex items-center justify-between gap-2">
+            {[0, 1, 2, 3, 4, 5].map((index) => (
               <input
                 key={index}
                 ref={(el) => {
@@ -197,23 +218,21 @@ function VerifyOtpContent() {
                 type="text"
                 inputMode="numeric"
                 maxLength={1}
-                value={digit}
+                value={digits[index]}
                 onChange={(e) => handleDigitChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
                 onPaste={handlePaste}
-                aria-label={`Dígito ${index + 1}`}
-                className="w-11 h-13 sm:w-12 sm:h-14 text-center font-serif text-xl font-bold bg-surface-container-low text-on-surface rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-container"
+                className="w-11 h-13 text-center font-headline-md text-xl font-bold bg-surface-container-low text-on-surface rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
               />
             ))}
           </div>
 
           {feedback && (
             <div
-              className={`mb-4 p-3 rounded-xl text-xs font-semibold ${
-                isError
-                  ? 'bg-error-container text-on-error-container'
-                  : 'bg-secondary-container/70 text-on-secondary-container'
-              }`}
+              className={`p-3 rounded-xl text-xs font-semibold ${isError
+                ? 'bg-error-container text-on-error-container'
+                : 'bg-secondary-container/70 text-on-secondary-container'
+                }`}
             >
               {feedback}
             </div>
@@ -222,25 +241,23 @@ function VerifyOtpContent() {
           <button
             type="submit"
             disabled={filledCount !== 6 || isSubmitting}
-            className="w-full py-3.5 px-6 bg-primary-container hover:bg-primary text-on-primary text-sm font-bold rounded-full shadow-md transition cursor-pointer disabled:opacity-45 disabled:cursor-not-allowed"
+            className="w-full py-3 px-6 bg-primary-container hover:bg-primary text-on-primary text-sm font-bold rounded-full shadow-md transition cursor-pointer disabled:opacity-45"
           >
-            {isSubmitting ? 'Verificando...' : 'Confirmar e Entrar'}
+            {isSubmitting ? 'Validando...' : 'Confirmar Código'}
           </button>
 
-          <div className="mt-4 flex items-center justify-between text-xs text-on-surface-variant">
-            <button
-              type="button"
-              onClick={handleResendOtp}
-              disabled={cooldown > 0}
-              className="text-primary font-semibold hover:underline disabled:opacity-50 disabled:no-underline cursor-pointer"
-            >
-              {cooldown > 0
-                ? `Reenviar em ${cooldown}s`
-                : 'Reenviar código via WhatsApp'}
-            </button>
-            <Link href="/login" className="hover:underline">
-              ← Voltar ao Login
-            </Link>
+          <div className="text-center text-xs text-on-surface-variant">
+            {cooldown > 0 ? (
+              <span>Reenviar em {cooldown}s</span>
+            ) : (
+              <button
+                type="button"
+                onClick={handleResendOtp}
+                className="text-primary font-semibold hover:underline cursor-pointer"
+              >
+                Reenviar código
+              </button>
+            )}
           </div>
 
           <div className="mt-6 pt-5 border-t border-surface-container-high">
@@ -269,7 +286,7 @@ export default function VerifyOtpPage() {
   return (
     <Suspense
       fallback={
-        <div className="p-8 text-center text-xs text-on-surface-variant">
+        <div className="py-12 text-center text-xs text-on-surface-variant">
           Carregando...
         </div>
       }

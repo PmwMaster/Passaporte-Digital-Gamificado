@@ -10,7 +10,7 @@ export default async function PointsStatementPage() {
     redirect('/login?redirectTo=/extrato');
   }
 
-  const statement = PointsLedgerService.getStatement();
+  const statement = await PointsLedgerService.getStatement(session.userId);
 
   return (
     <div className="space-y-6">

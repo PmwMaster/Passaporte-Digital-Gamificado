@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getCurrentSession } from '@/infrastructure/authentication/session';
 import { RewardsCatalogService } from '@/modules/rewards';
 
 export async function GET(request: NextRequest) {
+  const session = await getCurrentSession();
   const { searchParams } = new URL(request.url);
   const statusParam = searchParams.get('status');
   const statusFilter =
@@ -9,7 +11,10 @@ export async function GET(request: NextRequest) {
       ? statusParam
       : undefined;
 
-  const vouchers = RewardsCatalogService.listVisitorVouchers(statusFilter);
+  const vouchers = await RewardsCatalogService.listVisitorVouchers(
+    statusFilter,
+    session?.userId
+  );
 
   return NextResponse.json({
     success: true,

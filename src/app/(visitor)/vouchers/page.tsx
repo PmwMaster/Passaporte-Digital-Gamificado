@@ -6,10 +6,24 @@ import { RewardsCatalogService } from '@/modules/rewards';
 import { EditorialCard } from '@/components/ui/EditorialCard';
 
 export default function VisitorVouchersPage() {
-  const [vouchers, setVouchers] = useState(() =>
-    RewardsCatalogService.listVisitorVouchers()
-  );
+  const [vouchers, setVouchers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [sseNotice, setSseNotice] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadVouchers() {
+      try {
+        const res = await fetch('/api/visitor/vouchers');
+        const json = await res.json();
+        if (json.success && json.data?.vouchers) {
+          setVouchers(json.data.vouchers);
+        }
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadVouchers();
+  }, []);
 
   useEffect(() => {
     const active = vouchers.find((v) => v.status === 'ACTIVE');
@@ -53,7 +67,11 @@ export default function VisitorVouchersPage() {
         </div>
       )}
 
-      {vouchers.length === 0 ? (
+      {loading ? (
+        <EditorialCard className="text-center py-8">
+          <p className="text-xs text-brand-muted">Carregando seus vouchers...</p>
+        </EditorialCard>
+      ) : vouchers.length === 0 ? (
         <EditorialCard className="text-center">
           <p className="text-sm text-brand-muted">
             Você ainda não possui vouchers resgatados.

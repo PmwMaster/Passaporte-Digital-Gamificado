@@ -6,8 +6,9 @@ import { RewardsCatalogService } from '@/modules/rewards';
 import { EditorialCard } from '@/components/ui/EditorialCard';
 
 export default function RewardsCatalogPage() {
-  const initial = RewardsCatalogService.listCatalog();
-  const [rewards, setRewards] = useState(initial.rewards);
+  const [rewards, setRewards] = useState(() =>
+    RewardsCatalogService.getRewardsCatalog()
+  );
   const [visitorPoints, setVisitorPoints] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [redeemFeedback, setRedeemFeedback] = useState<string | null>(null);

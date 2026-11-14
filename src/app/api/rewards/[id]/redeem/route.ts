@@ -21,7 +21,7 @@ export async function POST(
   }
 
   const { id } = await params;
-  const result = RewardsCatalogService.redeemReward(id, session.userId);
+  const result = await RewardsCatalogService.redeemReward(id, session.userId);
 
   if (!result.ok) {
     return NextResponse.json(

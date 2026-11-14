@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const result = CheckInService.performCheckIn({
+  const result = await CheckInService.performCheckIn({
     ...parsed.data,
     visitorId: session.userId,
   });
