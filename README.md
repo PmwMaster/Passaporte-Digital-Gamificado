@@ -1,6 +1,6 @@
-# Passaporte Digital Gamificado — Capim Dourado Shopping (Palmas - TO)
+# Passaporte Digital Gamificado —  Shopping (Palmas - TO)
 
-Plataforma web responsiva (**PWA**) de fidelização, gamificação, check-ins presenciais por QR Code + Geolocalização (**Haversine 250m**) e resgate de recompensas em tempo real (**Server-Sent Events**) para o **Capim Dourado Shopping**.
+Plataforma web responsiva (**PWA**) de fidelização, gamificação, check-ins presenciais por QR Code + Geolocalização (**Haversine 250m**) e resgate de recompensas em tempo real (**Server-Sent Events**) para o **Shopping**.
 
 ---
 
