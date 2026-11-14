@@ -128,11 +128,3 @@ npm run start
 ```
 
 ---
-
-## 5️⃣ Credenciais de Teste / Demonstração
-
-Para facilitar a avaliação da banca, você pode criar uma conta nova em 10 segundos ou utilizar as contas demonstrativas já preparadas:
-
-* **Visitante:** `mariana.alves@exemplo.com.br` | Senha: `Password@2026`
-* **Lojista (Café Jalapão):** `gerencia@cafejalapao.com.br` | Senha: `Password@2026`
-* **Administração do Shopping:** `admin@passedourado.com.br` | Senha: `Password@2026`
