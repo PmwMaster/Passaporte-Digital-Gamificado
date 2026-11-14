@@ -6,6 +6,8 @@ export const SHOPPING_CONFIG = {
   name: 'Passe Dourado Shopping',
   city: 'Palmas - TO',
   timezone: 'America/Araguaia',
+  officialWhatsApp: '5563991142038',
+  officialWhatsAppDisplay: '(63) 99114-2038',
   defaultCoordinates: {
     latitude: -10.1845,
     longitude: -48.3337,

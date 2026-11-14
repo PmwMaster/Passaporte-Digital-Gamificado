@@ -3,6 +3,8 @@
 import React, { Suspense, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { SHOPPING_CONFIG } from '@/shared/constants';
+import { WhatsAppIcon } from '@/components/shared/WhatsAppVerificationCard';
 
 function formatPhoneDisplay(raw: string): string {
   const digits = raw.replace(/\D/g, '').replace(/^55/, '').slice(0, 11);
@@ -239,6 +241,23 @@ function VerifyOtpContent() {
             <Link href="/login" className="hover:underline">
               ← Voltar ao Login
             </Link>
+          </div>
+
+          <div className="mt-6 pt-5 border-t border-surface-container-high">
+            <p className="text-xs text-on-surface-variant mb-2.5">
+              Prefere confirmar direto pelo WhatsApp sem digitar código?
+            </p>
+            <a
+              href={`https://wa.me/${SHOPPING_CONFIG.officialWhatsApp}?text=${encodeURIComponent(
+                `Olá! Estou confirmando meu acesso no Passaporte Digital Passe Dourado pelo telefone ${phone || 'cadastrado'}.`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold rounded-xl shadow-sm transition"
+            >
+              <WhatsAppIcon className="w-4 h-4" />
+              <span>Abrir WhatsApp do Shopping ({SHOPPING_CONFIG.officialWhatsAppDisplay})</span>
+            </a>
           </div>
         </form>
       </div>

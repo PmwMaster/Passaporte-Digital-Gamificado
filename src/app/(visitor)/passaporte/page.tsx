@@ -4,6 +4,7 @@ import { getCurrentSession } from '@/infrastructure/authentication/session';
 import { VisitorPassportService } from '@/modules/visitor';
 import { PassportMemberCard } from '@/components/shared/PassportMemberCard';
 import { EditorialCard } from '@/components/ui/EditorialCard';
+import { WhatsAppVerificationCard } from '@/components/shared/WhatsAppVerificationCard';
 
 export default async function VisitorPassportPage() {
   const session = await getCurrentSession();
@@ -19,6 +20,13 @@ export default async function VisitorPassportPage() {
       <PassportMemberCard
         profile={passport.profile}
         progressPercent={passport.progressPercent}
+      />
+
+      <WhatsAppVerificationCard
+        userName={passport.user.name}
+        memberCode={passport.profile.memberCode}
+        userPhone={passport.user.phone}
+        isVerified={passport.user.isPhoneVerified}
       />
 
       <div className="grid gap-6 lg:grid-cols-3">
