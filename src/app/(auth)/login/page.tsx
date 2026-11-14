@@ -62,18 +62,16 @@ function LoginContent() {
   return (
     <div>
       <ModuleHeader
-        featureNumber="FASE 1 • FUNCIONALIDADE 02 (TELA 2A)"
-        title="Entrar no Passaporte Digital (Sessão JWT & RBAC)"
-        subtitle="Autenticação por e-mail ou telefone, redirecionamento inteligente pós-login (redirectTo) e integração Neon Auth / JWKS."
-        developerOwner="DESENVOLVEDOR 01"
-        moduleName="authentication"
+        categoryBadge="Acesso ao Passaporte • Capim Dourado Shopping"
+        title="Entrar no Passaporte Digital"
+        subtitle="Acesse sua conta com e-mail ou WhatsApp para visualizar seus carimbos, pontos e vouchers ativos."
       />
 
       {activeUser && (
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-brand-emerald/40 bg-brand-emerald/10 p-4 text-xs">
           <div>
-            <span className="font-bold text-brand-emerald">SESSÃO JWT ATIVA:</span>{' '}
-            <strong className="text-brand-ink">{activeUser.name}</strong> ({activeUser.email} • Papel:{' '}
+            <span className="font-bold text-brand-emerald">CONTA CONECTADA:</span>{' '}
+            <strong className="text-brand-ink">{activeUser.name}</strong> ({activeUser.email} • Perfil:{' '}
             <code>{activeUser.role}</code>)
           </div>
           <button
@@ -81,7 +79,7 @@ function LoginContent() {
             onClick={handleLogout}
             className="rounded-lg bg-brand-ink px-3.5 py-1.5 font-semibold text-white hover:bg-red-800"
           >
-            Encerrar Sessão (Logout)
+            Sair da Conta
           </button>
         </div>
       )}
@@ -162,10 +160,10 @@ function LoginContent() {
 
         <EditorialCard className="space-y-4">
           <h3 className="font-serif text-xl font-bold text-brand-ink">
-            Alternar Rápido entre Perfis (RBAC)
+            Acesso Rápido por Perfil
           </h3>
           <p className="text-xs text-brand-muted">
-            Clique em um perfil abaixo para preencher as credenciais (senha padrão: <code>Password@2026</code>):
+            Selecione um perfil abaixo para preencher automaticamente os dados de acesso:
           </p>
 
           <div className="space-y-3">
@@ -178,7 +176,7 @@ function LoginContent() {
               className="w-full rounded-xl border border-brand-border bg-brand-ivory p-3.5 text-left text-xs transition hover:border-brand-goldDark"
             >
               <strong className="block text-brand-ink">
-                1. Visitante (ROLE: VISITOR) → /passaporte
+                1. Cliente / Visitante do Shopping
               </strong>
               <span className="text-brand-muted">mariana.alves@exemplo.com.br</span>
             </button>
@@ -192,7 +190,7 @@ function LoginContent() {
               className="w-full rounded-xl border border-brand-border bg-brand-ivory p-3.5 text-left text-xs transition hover:border-brand-goldDark"
             >
               <strong className="block text-brand-ink">
-                2. Lojista / Caixa (ROLE: MERCHANT) → /lojista
+                2. Lojista Parceiro / Atendimento no Balcão
               </strong>
               <span className="text-brand-muted">gerencia@cafejalapao.com.br</span>
             </button>
@@ -206,7 +204,7 @@ function LoginContent() {
               className="w-full rounded-xl border border-brand-border bg-brand-ivory p-3.5 text-left text-xs transition hover:border-brand-goldDark"
             >
               <strong className="block text-brand-ink">
-                3. Administração do Shopping (ROLE: ADMIN) → /admin
+                3. Administração do Capim Dourado Shopping
               </strong>
               <span className="text-brand-muted">admin@capimdouradoshopping.com.br</span>
             </button>

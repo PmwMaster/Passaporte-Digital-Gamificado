@@ -114,11 +114,9 @@ export default function AdminDashboardPage() {
   return (
     <div>
       <ModuleHeader
-        featureNumber="FASE 2 & FASE 4 • FUNCIONALIDADE 09"
-        title="Painel Administrativo & Governança do Shopping"
-        subtitle="Dashboard executivo, cadastro de lojas e QR Codes oficiais, moderação de campanhas/ofertas, parametrização de geofence (250m) e exportação de auditoria."
-        developerOwner="DESENVOLVEDOR 03"
-        moduleName="administration"
+        categoryBadge="Gestão Executiva • Capim Dourado Shopping"
+        title="Painel Administrativo do Shopping"
+        subtitle="Acompanhamento de indicadores, cadastro de lojas parceiras, aprovação de ofertas e configurações de check-in presencial."
       />
 
       {feedback && (

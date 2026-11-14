@@ -60,11 +60,9 @@ export default function RegisterPage() {
   return (
     <div>
       <ModuleHeader
-        featureNumber="FASE 1 • FUNCIONALIDADE 02 (TELA 2B)"
-        title="Criar Conta & Passaporte Digital (+50 pts)"
-        subtitle="RN-02 (+50 pts de boas-vindas no Ledger) • RN-10 (Força da senha + LGPD) • RN-11 (Disparo de OTP 6 dígitos)."
-        developerOwner="DESENVOLVEDOR 01"
-        moduleName="authentication"
+        categoryBadge="Novo Membro • Capim Dourado Shopping"
+        title="Criar Meu Passaporte Digital"
+        subtitle="Cadastre-se gratuitamente e receba 50 pontos de boas-vindas para trocar por experiências exclusivas no shopping."
       />
 
       <div className="mx-auto grid max-w-4xl gap-8 lg:grid-cols-5">
@@ -125,7 +123,7 @@ export default function RegisterPage() {
 
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-brand-muted">
-                Senha de Acesso (RN-10)
+                Crie sua Senha de Acesso
               </label>
               <input
                 type="password"
@@ -240,23 +238,23 @@ export default function RegisterPage() {
 
         <EditorialCard className="space-y-4 lg:col-span-2">
           <span className="rounded-full bg-brand-goldDark/10 px-3 py-1 text-[11px] font-semibold uppercase text-brand-goldDark">
-            Regras Ativas da Fase 1
+            Vantagens Exclusivas
           </span>
           <h3 className="font-serif text-xl font-bold text-brand-ink">
-            O que acontece ao criar sua conta:
+            Benefícios do seu Passaporte Digital:
           </h3>
           <ol className="space-y-3 text-xs text-brand-muted">
             <li>
-              <strong className="text-brand-ink">1. Bônus de Boas-Vindas (RN-02):</strong> Seu Passaporte já nasce no nível <strong>Bronze Cerrado</strong> com <strong>+50 pontos</strong> creditados e auditados no extrato.
+              <strong className="text-brand-ink">1. Bônus de Boas-Vindas (+50 pts):</strong> Seu Passaporte já começa no nível <strong>Bronze Cerrado</strong> com <strong>50 pontos</strong> creditados na hora.
             </li>
             <li>
-              <strong className="text-brand-ink">2. Segurança de Senha (RN-10):</strong> Sua senha é validada pelo Zod e criptografada com hash <code>bcryptjs</code> (custo 10).
+              <strong className="text-brand-ink">2. Carimbos nas Lojas Parceiras:</strong> A cada visita presencial com leitura do QR Code da loja, você ganha novos carimbos e acumula pontos.
             </li>
             <li>
-              <strong className="text-brand-ink">3. Sessão JWT HttpOnly:</strong> Um token JWT assinado (HMAC-SHA256) é salvo em cookie seguro <code>HttpOnly</code>.
+              <strong className="text-brand-ink">3. Vouchers Digitais Instantâneos:</strong> Troque seus pontos por cafés especiais, gelatos artesanais, ingressos e brindes diretamente pelo celular.
             </li>
             <li>
-              <strong className="text-brand-ink">4. Verificação WhatsApp OTP (RN-11):</strong> Você será redirecionado para confirmar o código de 6 dígitos (validade de 5 min).
+              <strong className="text-brand-ink">4. Confirmação Rápida via WhatsApp:</strong> Valide seu número com o código de 6 dígitos para proteger seus resgates.
             </li>
           </ol>
         </EditorialCard>

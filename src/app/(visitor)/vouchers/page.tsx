@@ -46,11 +46,9 @@ export default function VisitorVouchersPage() {
       <VisitorNavigation currentPath="/vouchers" />
 
       <ModuleHeader
-        featureNumber="FUNCIONALIDADE 07 — CARTEIRA DE VOUCHERS & SSE"
+        categoryBadge="Carteira Digital • Capim Dourado Shopping"
         title="Meus Vouchers & Cupons Resgatados"
-        subtitle="Apresente o QR Code ou código alfanumérico ao operador da loja. O status atualiza em tempo real via Server-Sent Events (SSE)."
-        developerOwner="DESENVOLVEDOR 03"
-        moduleName="rewards"
+        subtitle="Apresente o QR Code ou código do voucher no balcão da loja parceira. O status atualiza automaticamente após a validação."
       />
 
       {sseNotice && (

@@ -108,11 +108,9 @@ function VerifyOtpContent() {
   return (
     <div>
       <ModuleHeader
-        featureNumber="FASE 1 • FUNCIONALIDADE 02 (TELA 2C)"
-        title="Confirmação de Código WhatsApp (OTP)"
-        subtitle="RN-11: Código de 6 dígitos com auto-avanço, suporte a colar, backspace, validade de 5 minutos, máx. 5 tentativas e reenvio após 60s."
-        developerOwner="DESENVOLVEDOR 01"
-        moduleName="authentication"
+        categoryBadge="Verificação de Segurança • WhatsApp"
+        title="Confirmação do Código de 6 Dígitos"
+        subtitle="Digite o código enviado para o seu WhatsApp para ativar os resgates do seu Passaporte Digital."
       />
 
       <EditorialCard className="mx-auto max-w-xl text-center">

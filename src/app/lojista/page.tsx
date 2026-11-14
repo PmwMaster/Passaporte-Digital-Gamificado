@@ -116,11 +116,9 @@ export default function MerchantPortalPage() {
   return (
     <div>
       <ModuleHeader
-        featureNumber="FASE 4 • FUNCIONALIDADE 08"
-        title="Portal Operacional do Lojista & Balcão (SSE)"
-        subtitle={`Operação ativa: ${initialDashboard.store.name} (${initialDashboard.store.floor}) • Operador: ${initialDashboard.operator.operatorName}`}
-        developerOwner="DESENVOLVEDOR 03"
-        moduleName="merchant"
+        categoryBadge="Área do Lojista Parceiro • Capim Dourado Shopping"
+        title="Portal Operacional do Lojista"
+        subtitle={`Loja ativa: ${initialDashboard.store.name} (${initialDashboard.store.floor}) • Responsável: ${initialDashboard.operator.operatorName}`}
       />
 
       {/* Indicadores Operacionais da Loja */}
@@ -188,14 +186,14 @@ export default function MerchantPortalPage() {
                 type="submit"
                 className="rounded-xl bg-brand-goldDark px-5 py-2.5 text-xs font-semibold text-white transition hover:opacity-95"
               >
-                1. Consultar Validade (POST /validate)
+                1. Consultar Validade do Voucher
               </button>
               <button
                 type="button"
                 onClick={handleConfirmRedemption}
                 className="rounded-xl bg-brand-emerald px-5 py-2.5 text-xs font-semibold text-white transition hover:opacity-95"
               >
-                2. Confirmar Utilização + Disparar SSE (POST /confirm)
+                2. Confirmar Utilização no Balcão
               </button>
             </div>
           </form>

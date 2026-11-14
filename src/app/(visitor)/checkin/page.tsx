@@ -65,11 +65,9 @@ export default function CheckInPage() {
       <VisitorNavigation currentPath="/checkin" />
 
       <ModuleHeader
-        featureNumber="FUNCIONALIDADE 04"
-        title="Check-in Presencial por QR Code & Geofence Haversine (250m)"
-        subtitle="Leitura de QR Code oficial, validação trigonométrica Haversine e trava contra check-in duplicado no mesmo dia."
-        developerOwner="DESENVOLVEDOR 02"
-        moduleName="checkin"
+        categoryBadge="Check-in Presencial • Capim Dourado Shopping"
+        title="Registrar Visita & Ganhar Pontos"
+        subtitle="Selecione a loja parceira e confirme sua localização no shopping para receber seus pontos e carimbo digital."
       />
 
       <div className="grid gap-8 lg:grid-cols-2">
@@ -173,27 +171,27 @@ export default function CheckInPage() {
               type="submit"
               className="w-full rounded-xl bg-brand-emerald py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-95"
             >
-              Validar Presença Haversine & Pontuar
+              Confirmar Check-in & Receber Pontos
             </button>
           </form>
         </EditorialCard>
 
         <EditorialCard className="space-y-4">
           <h3 className="font-serif text-xl font-bold text-brand-ink">
-            Regras Antifraude Aplicadas no Servidor
+            Como funciona o Check-in Presencial
           </h3>
           <ul className="space-y-2.5 text-xs text-brand-muted">
             <li>
-              <strong className="text-brand-ink">1. Fórmula de Haversine:</strong> Calcula a distância esférica exata entre a coordenada enviada e o ponto central do Capim Dourado Shopping.
+              <strong className="text-brand-ink">1. Visita Presencial:</strong> Basta estar dentro do Capim Dourado Shopping (raio de até 250 metros) com a localização ativa.
             </li>
             <li>
-              <strong className="text-brand-ink">2. Geofence de 250 metros:</strong> Tentativas acima de 250m retornam HTTP <code>422 GEOFENCE_OUT_OF_RANGE</code>.
+              <strong className="text-brand-ink">2. Leitura do QR Code da Loja:</strong> Escaneie o QR Code oficial disponível no balcão de cada loja parceira.
             </li>
             <li>
-              <strong className="text-brand-ink">3. Limite Diário por Loja:</strong> Apenas 1 check-in válido por estabelecimento por dia civil (<code>409 DUPLICATE_DAILY_CHECKIN</code> se repetido).
+              <strong className="text-brand-ink">3. Um Carimbo por Loja ao Dia:</strong> Você pode pontuar uma vez por dia em cada loja parceira visitada.
             </li>
             <li>
-              <strong className="text-brand-ink">4. Transação Atômica com Módulos 05 e 06:</strong> Concede carimbo, atualiza missões e grava crédito no Ledger de Pontos.
+              <strong className="text-brand-ink">4. Crédito Instantâneo:</strong> Seus pontos, carimbos e progresso nas missões são creditados na mesma hora.
             </li>
           </ul>
         </EditorialCard>

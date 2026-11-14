@@ -10,11 +10,9 @@ export default function PointsStatementPage() {
       <VisitorNavigation currentPath="/extrato" />
 
       <ModuleHeader
-        featureNumber="FUNCIONALIDADE 06"
-        title="Sistema de Pontos & Extrato Auditável (Ledger)"
-        subtitle="Histórico imutável de créditos, débitos e bônus promocionais com rastreio de origem e saldo resultante após cada operação."
-        developerOwner="DESENVOLVEDOR 02"
-        moduleName="points"
+        categoryBadge="Extrato de Pontos • Passaporte Digital"
+        title="Meu Extrato de Pontos"
+        subtitle="Acompanhe todos os créditos de visitas, bônus de missões e resgates realizados no seu Passaporte."
       />
 
       <div className="mb-8 grid gap-4 md:grid-cols-3">
@@ -49,7 +47,7 @@ export default function PointsStatementPage() {
 
       <EditorialCard>
         <h2 className="font-serif text-2xl font-bold text-brand-ink">
-          Extrato de Movimentações (`PointTransaction`)
+          Histórico Completo de Movimentações
         </h2>
         <div className="mt-4 overflow-x-auto">
           <table className="w-full text-left text-xs">
