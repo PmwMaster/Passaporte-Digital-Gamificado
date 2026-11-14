@@ -30,22 +30,28 @@ export default async function VisitorPassportPage() {
             </Link>
           </div>
           <div className="mt-4 space-y-2.5">
-            {passport.stamps.map((stamp) => (
-              <div
-                key={stamp.id}
-                className="flex items-center justify-between rounded-xl border border-brand-border bg-brand-ivory p-3"
-              >
-                <div>
-                  <p className="font-serif text-sm font-bold text-brand-ink">
-                    {stamp.badgeTitle}
-                  </p>
-                  <p className="text-xs text-brand-muted">{stamp.storeName}</p>
+            {passport.stamps.length === 0 ? (
+              <p className="rounded-xl border border-dashed border-brand-border bg-brand-ivory p-4 text-center text-xs text-brand-muted">
+                Nenhum carimbo ainda. Faça um check-in para conquistar o primeiro.
+              </p>
+            ) : (
+              passport.stamps.map((stamp) => (
+                <div
+                  key={stamp.id}
+                  className="flex items-center justify-between rounded-xl border border-brand-border bg-brand-ivory p-3"
+                >
+                  <div>
+                    <p className="font-serif text-sm font-bold text-brand-ink">
+                      {stamp.badgeTitle}
+                    </p>
+                    <p className="text-xs text-brand-muted">{stamp.storeName}</p>
+                  </div>
+                  <span className="rounded-full bg-brand-emerald/15 px-2.5 py-0.5 text-[11px] font-semibold text-brand-emerald">
+                    OK
+                  </span>
                 </div>
-                <span className="rounded-full bg-brand-emerald/15 px-2.5 py-0.5 text-[11px] font-semibold text-brand-emerald">
-                  OK
-                </span>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </EditorialCard>
 
@@ -63,25 +69,31 @@ export default async function VisitorPassportPage() {
             </Link>
           </div>
           <div className="mt-4 space-y-2.5">
-            {passport.activeVouchers.map((voucher) => (
-              <div
-                key={voucher.id}
-                className="rounded-xl border border-brand-emerald/30 bg-brand-emerald/5 p-3.5"
-              >
-                <div className="flex items-center justify-between">
-                  <code className="rounded bg-white px-2 py-0.5 text-xs font-bold text-brand-emerald">
-                    {voucher.code}
-                  </code>
-                  <span className="text-[11px] font-semibold text-brand-emerald">
-                    ATIVO
-                  </span>
+            {passport.activeVouchers.length === 0 ? (
+              <p className="rounded-xl border border-dashed border-brand-border bg-brand-ivory p-4 text-center text-xs text-brand-muted">
+                Nenhum voucher ativo no momento.
+              </p>
+            ) : (
+              passport.activeVouchers.map((voucher) => (
+                <div
+                  key={voucher.id}
+                  className="rounded-xl border border-brand-emerald/30 bg-brand-emerald/5 p-3.5"
+                >
+                  <div className="flex items-center justify-between">
+                    <code className="rounded bg-white px-2 py-0.5 text-xs font-bold text-brand-emerald">
+                      {voucher.code}
+                    </code>
+                    <span className="text-[11px] font-semibold text-brand-emerald">
+                      ATIVO
+                    </span>
+                  </div>
+                  <p className="mt-1.5 font-serif text-sm font-bold text-brand-ink">
+                    {voucher.rewardTitle}
+                  </p>
+                  <p className="text-xs text-brand-muted">{voucher.storeName}</p>
                 </div>
-                <p className="mt-1.5 font-serif text-sm font-bold text-brand-ink">
-                  {voucher.rewardTitle}
-                </p>
-                <p className="text-xs text-brand-muted">{voucher.storeName}</p>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </EditorialCard>
 

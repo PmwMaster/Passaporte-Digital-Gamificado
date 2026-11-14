@@ -29,40 +29,46 @@ export default function PointsStatementPage() {
         <h1 className="font-serif text-xl font-bold text-brand-ink">
           Extrato de Pontos
         </h1>
-        <div className="mt-4 overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead>
-              <tr className="border-b border-brand-border text-brand-muted">
-                <th className="py-3 pr-4">Data</th>
-                <th className="py-3 pr-4">Descrição</th>
-                <th className="py-3 pr-4">Pontos</th>
-                <th className="py-3 text-right">Saldo</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-brand-border">
-              {statement.transactions.map((tx) => (
-                <tr key={tx.id}>
-                  <td className="py-3 pr-4 text-brand-muted">
-                    {new Date(tx.createdAt).toLocaleDateString('pt-BR')}
-                  </td>
-                  <td className="py-3 pr-4 font-medium text-brand-ink">
-                    {tx.description}
-                  </td>
-                  <td
-                    className={`py-3 pr-4 font-bold ${
-                      tx.type === 'CREDIT' ? 'text-brand-emerald' : 'text-red-700'
-                    }`}
-                  >
-                    {tx.type === 'CREDIT' ? `+${tx.amount}` : `-${tx.amount}`} pts
-                  </td>
-                  <td className="py-3 text-right font-semibold text-brand-ink">
-                    {tx.balanceAfter} pts
-                  </td>
+        {statement.transactions.length === 0 ? (
+          <p className="mt-4 rounded-xl border border-dashed border-brand-border bg-brand-ivory p-6 text-center text-xs text-brand-muted">
+            Nenhuma movimentação de pontos registrada.
+          </p>
+        ) : (
+          <div className="mt-4 overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead>
+                <tr className="border-b border-brand-border text-brand-muted">
+                  <th className="py-3 pr-4">Data</th>
+                  <th className="py-3 pr-4">Descrição</th>
+                  <th className="py-3 pr-4">Pontos</th>
+                  <th className="py-3 text-right">Saldo</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="divide-y divide-brand-border">
+                {statement.transactions.map((tx) => (
+                  <tr key={tx.id}>
+                    <td className="py-3 pr-4 text-brand-muted">
+                      {new Date(tx.createdAt).toLocaleDateString('pt-BR')}
+                    </td>
+                    <td className="py-3 pr-4 font-medium text-brand-ink">
+                      {tx.description}
+                    </td>
+                    <td
+                      className={`py-3 pr-4 font-bold ${
+                        tx.type === 'CREDIT' ? 'text-brand-emerald' : 'text-red-700'
+                      }`}
+                    >
+                      {tx.type === 'CREDIT' ? `+${tx.amount}` : `-${tx.amount}`} pts
+                    </td>
+                    <td className="py-3 text-right font-semibold text-brand-ink">
+                      {tx.balanceAfter} pts
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </EditorialCard>
     </div>
   );

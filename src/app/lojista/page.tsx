@@ -11,7 +11,7 @@ export default function MerchantPortalPage() {
   const [recentVouchers, setRecentVouchers] = useState<Voucher[]>(
     initialDashboard.recentVouchers
   );
-  const [voucherCode, setVoucherCode] = useState('VCH-CD-4821');
+  const [voucherCode, setVoucherCode] = useState('');
   const [validatedVoucher, setValidatedVoucher] = useState<Voucher | null>(null);
   const [statusMsg, setStatusMsg] = useState<string | null>(null);
   const [isError, setIsError] = useState(false);

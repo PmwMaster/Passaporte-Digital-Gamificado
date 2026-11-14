@@ -24,9 +24,9 @@ export class MerchantPortalService {
       allStores: mockStores,
       operator: mockOperators[0],
       metrics: {
-        totalCheckIns: storeCheckIns.length + 38,
+        totalCheckIns: storeCheckIns.length,
         activeVouchers: storeVouchers.filter((v) => v.status === 'ACTIVE').length,
-        usedVouchers: storeVouchers.filter((v) => v.status === 'USED').length + 24,
+        usedVouchers: storeVouchers.filter((v) => v.status === 'USED').length,
         availableStockTotal: storeRewards.reduce(
           (acc, r) => acc + r.availableStock,
           0

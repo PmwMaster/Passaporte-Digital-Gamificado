@@ -139,11 +139,11 @@ export class AdministrationService {
     return {
       shoppingConfig: runtimeGeofence,
       kpis: {
-        activeVisitors: mockUsers.filter((u) => u.role === 'VISITOR').length + 1240,
+        activeVisitors: mockUsers.filter((u) => u.role === 'VISITOR').length,
         partnerStores: mockStores.length,
-        totalCheckInsVerified: mockCheckIns.length + 3480,
-        totalPointsIssued: totalPointsIssued + 148500,
-        totalPointsRedeemed: totalPointsRedeemed + 64200,
+        totalCheckInsVerified: mockCheckIns.length,
+        totalPointsIssued,
+        totalPointsRedeemed,
         activeVouchersCount: mockVouchers.filter((v) => v.status === 'ACTIVE')
           .length,
         pendingCampaignApprovals: pendingCampaigns + pendingRewards,

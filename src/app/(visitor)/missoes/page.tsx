@@ -57,22 +57,28 @@ export default function MissionsAndStampsPage() {
         <h2 className="font-serif text-xl font-bold text-brand-ink">
           Carimbos Conquistados ({stamps.length})
         </h2>
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          {stamps.map((stamp) => (
-            <div
-              key={stamp.id}
-              className="rounded-2xl border border-dashed border-brand-goldLight bg-brand-ivory p-4"
-            >
-              <span className="inline-block rounded-full bg-brand-goldDark px-2.5 py-0.5 text-[10px] font-semibold uppercase text-white">
-                {stamp.category}
-              </span>
-              <h3 className="mt-2 font-serif text-base font-bold text-brand-ink">
-                {stamp.badgeTitle}
-              </h3>
-              <p className="text-xs text-brand-muted">{stamp.storeName}</p>
-            </div>
-          ))}
-        </div>
+        {stamps.length === 0 ? (
+          <p className="mt-4 rounded-xl border border-dashed border-brand-border bg-brand-ivory p-6 text-center text-xs text-brand-muted">
+            Você ainda não possui carimbos. Faça check-in nas lojas parceiras para colecionar.
+          </p>
+        ) : (
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            {stamps.map((stamp) => (
+              <div
+                key={stamp.id}
+                className="rounded-2xl border border-dashed border-brand-goldLight bg-brand-ivory p-4"
+              >
+                <span className="inline-block rounded-full bg-brand-goldDark px-2.5 py-0.5 text-[10px] font-semibold uppercase text-white">
+                  {stamp.category}
+                </span>
+                <h3 className="mt-2 font-serif text-base font-bold text-brand-ink">
+                  {stamp.badgeTitle}
+                </h3>
+                <p className="text-xs text-brand-muted">{stamp.storeName}</p>
+              </div>
+            ))}
+          </div>
+        )}
       </EditorialCard>
     </div>
   );

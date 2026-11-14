@@ -90,7 +90,7 @@ export function TopEnvironmentBar() {
         ]
       : visitorNavItems;
 
-  const pointsDisplay = profile?.currentPoints ?? 640;
+  const pointsDisplay = profile?.currentPoints ?? 0;
 
   return (
     <>

@@ -62,11 +62,11 @@ export const mockVisitorProfile: VisitorProfile = {
   userId: 'usr_visitor_01',
   visitorName: 'Mariana Alves Tocantins',
   memberCode: 'CD-2026-0148',
-  level: 'GOLD',
-  currentPoints: 640,
-  lifetimePoints: 1420,
-  totalCheckIns: 14,
-  totalStamps: 9,
+  level: 'BRONZE',
+  currentPoints: 0,
+  lifetimePoints: 0,
+  totalCheckIns: 0,
+  totalStamps: 0,
 };
 
 export const mockStores: Store[] = [
@@ -207,38 +207,7 @@ export const mockCampaigns: Campaign[] = [
   },
 ];
 
-export const mockStamps: Stamp[] = [
-  {
-    id: 'stp_01',
-    visitorId: 'vis_01',
-    storeId: 'store_01',
-    storeName: 'Café Jalapão Gourmet',
-    checkInId: 'chk_01',
-    badgeTitle: 'Conhecedor do Café do Cerrado',
-    category: 'GASTRONOMIA',
-    earnedAt: '2026-11-12T17:15:00.000Z',
-  },
-  {
-    id: 'stp_02',
-    visitorId: 'vis_01',
-    storeId: 'store_02',
-    storeName: 'Atelier Ouro do Cerrado',
-    checkInId: 'chk_02',
-    badgeTitle: 'Guardião do Passe Dourado',
-    category: 'MODA',
-    earnedAt: '2026-11-10T19:40:00.000Z',
-  },
-  {
-    id: 'stp_03',
-    visitorId: 'vis_01',
-    storeId: 'store_05',
-    storeName: 'Cine Passe Dourado Premier',
-    checkInId: 'chk_03',
-    badgeTitle: 'Cinéfilo VIP Palmas',
-    category: 'LAZER',
-    earnedAt: '2026-11-08T21:00:00.000Z',
-  },
-];
+export const mockStamps: Stamp[] = [];
 
 export const mockMissions: Mission[] = [
   {
@@ -249,10 +218,10 @@ export const mockMissions: Mission[] = [
     frequency: 'DAILY',
     targetType: 'CHECKIN_COUNT',
     targetCount: 1,
-    currentCount: 1,
+    currentCount: 0,
     rewardPoints: 30,
-    status: 'COMPLETED',
-    periodKey: '2026-11-13',
+    status: 'IN_PROGRESS',
+    periodKey: '2026-11-14',
   },
   {
     id: 'mis_02',
@@ -263,7 +232,7 @@ export const mockMissions: Mission[] = [
     targetType: 'CATEGORY_VARIETY',
     targetCategory: 'GASTRONOMIA',
     targetCount: 3,
-    currentCount: 2,
+    currentCount: 0,
     rewardPoints: 120,
     status: 'IN_PROGRESS',
     periodKey: '2026-W46',
@@ -276,70 +245,14 @@ export const mockMissions: Mission[] = [
     frequency: 'MONTHLY',
     targetType: 'CHECKIN_COUNT',
     targetCount: 5,
-    currentCount: 3,
+    currentCount: 0,
     rewardPoints: 250,
     status: 'IN_PROGRESS',
     periodKey: '2026-11',
   },
 ];
 
-export const mockPointTransactions: PointTransaction[] = [
-  {
-    id: 'ptx_05',
-    visitorId: 'vis_01',
-    type: 'CREDIT',
-    amount: 40,
-    balanceAfter: 640,
-    origin: 'CHECKIN',
-    referenceId: 'chk_01',
-    description: 'Check-in presencial validado (42m) • Café Jalapão Gourmet',
-    createdAt: '2026-11-12T17:15:00.000Z',
-  },
-  {
-    id: 'ptx_04',
-    visitorId: 'vis_01',
-    type: 'CREDIT',
-    amount: 30,
-    balanceAfter: 600,
-    origin: 'MISSION',
-    referenceId: 'mis_01',
-    description: 'Missão concluída: Presença Dourada do Dia',
-    createdAt: '2026-11-12T17:15:05.000Z',
-  },
-  {
-    id: 'ptx_03',
-    visitorId: 'vis_01',
-    type: 'DEBIT',
-    amount: 180,
-    balanceAfter: 570,
-    origin: 'REWARD_REDEMPTION',
-    referenceId: 'vch_02',
-    description: 'Resgate de recompensa: Gelato Duplo Artesanal',
-    createdAt: '2026-11-11T16:10:00.000Z',
-  },
-  {
-    id: 'ptx_02',
-    visitorId: 'vis_01',
-    type: 'CREDIT',
-    amount: 60,
-    balanceAfter: 750,
-    origin: 'CHECKIN',
-    referenceId: 'chk_02',
-    description: 'Check-in presencial validado (65m) • Atelier Ouro do Cerrado',
-    createdAt: '2026-11-10T19:40:00.000Z',
-  },
-  {
-    id: 'ptx_01',
-    visitorId: 'vis_01',
-    type: 'CREDIT',
-    amount: 100,
-    balanceAfter: 690,
-    origin: 'PROMO_BONUS',
-    referenceId: 'WELCOME_2026',
-    description: 'Bônus de Boas-Vindas ao Passe Dourado',
-    createdAt: '2026-10-01T14:20:00.000Z',
-  },
-];
+export const mockPointTransactions: PointTransaction[] = [];
 
 export const mockRewards: Reward[] = [
   {
@@ -412,73 +325,9 @@ export const mockRewards: Reward[] = [
   },
 ];
 
-export const mockVouchers: Voucher[] = [
-  {
-    id: 'vch_01',
-    code: 'VCH-CD-4821',
-    qrPayload: 'PASSAPORTE-CD:VOUCHER:VCH-CD-4821',
-    visitorId: 'vis_01',
-    visitorName: 'Mariana Alves Tocantins',
-    rewardId: 'rew_01',
-    rewardTitle: 'Espresso Duplo + Pão de Queijo Recheado',
-    storeId: 'store_01',
-    storeName: 'Café Jalapão Gourmet',
-    storeFloor: 'Piso 2 • L-204',
-    pointsSpent: 160,
-    status: 'ACTIVE',
-    issuedAt: '2026-11-13T19:45:00.000Z',
-    expiresAt: '2026-11-14T22:00:00.000Z',
-  },
-  {
-    id: 'vch_02',
-    code: 'VCH-CD-3190',
-    qrPayload: 'PASSAPORTE-CD:VOUCHER:VCH-CD-3190',
-    visitorId: 'vis_01',
-    visitorName: 'Mariana Alves Tocantins',
-    rewardId: 'rew_02',
-    rewardTitle: 'Upgrade para Gelato Coppa Grande (Sabores do Cerrado)',
-    storeId: 'store_03',
-    storeName: 'Gelateria Sol de Palmas',
-    storeFloor: 'Piso 2 • Q-219',
-    pointsSpent: 180,
-    status: 'USED',
-    issuedAt: '2026-11-11T16:10:00.000Z',
-    expiresAt: '2026-11-11T18:10:00.000Z',
-    usedAt: '2026-11-11T16:42:00.000Z',
-    validatedByOperatorId: 'op_01',
-  },
-];
+export const mockVouchers: Voucher[] = [];
 
-export const mockCheckIns: CheckIn[] = [
-  {
-    id: 'chk_01',
-    visitorId: 'vis_01',
-    storeId: 'store_01',
-    storeName: 'Café Jalapão Gourmet',
-    checkInDate: '2026-11-12',
-    latitude: -10.18441,
-    longitude: -48.33364,
-    distanceMeters: 42,
-    isWithinGeofence: true,
-    status: 'VALID',
-    pointsAwarded: 40,
-    createdAt: '2026-11-12T17:15:00.000Z',
-  },
-  {
-    id: 'chk_02',
-    visitorId: 'vis_01',
-    storeId: 'store_02',
-    storeName: 'Atelier Ouro do Cerrado',
-    checkInDate: '2026-11-10',
-    latitude: -10.18459,
-    longitude: -48.33381,
-    distanceMeters: 65,
-    isWithinGeofence: true,
-    status: 'VALID',
-    pointsAwarded: 60,
-    createdAt: '2026-11-10T19:40:00.000Z',
-  },
-];
+export const mockCheckIns: CheckIn[] = [];
 
 export const mockOperators: Operator[] = [
   {

@@ -40,6 +40,24 @@ export class GamificationService {
     mockVisitorProfile.totalStamps += 1;
     mockVisitorProfile.totalCheckIns += 1;
 
+    // Atualiza progresso das missões automaticamente no check-in
+    for (const mission of mockMissions) {
+      if (mission.status === 'COMPLETED') continue;
+      if (
+        mission.targetType === 'CHECKIN_COUNT' ||
+        (mission.targetType === 'CATEGORY_VARIETY' &&
+          mission.targetCategory === category)
+      ) {
+        mission.currentCount = Math.min(
+          mission.targetCount,
+          mission.currentCount + 1
+        );
+        if (mission.currentCount >= mission.targetCount) {
+          mission.status = 'COMPLETED';
+        }
+      }
+    }
+
     return newStamp;
   }
 
