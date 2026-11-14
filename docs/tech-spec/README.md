@@ -25,3 +25,6 @@ flowchart LR
 
 > [!NOTE]
 > Estes documentos descrevem **o que será construído**. Nenhuma estrutura funcional (código) foi criada no repositório até o momento; as estruturas de pastas citadas são **planejadas**.
+
+> [!IMPORTANT]
+> A divisão de trabalho oficial entre os desenvolvedores está em [`docs/TEAM_DIVISION.md`](../TEAM_DIVISION.md) e é diferente das 3 partes acima: **DEV 01** = Visitante (F01–F03), **DEV 02** = Gamificação e Pontuação (F04–F06), **DEV 03** = Comércio e Administração (F07–F09). O design detalhado do DEV 02 está em [`docs/dev-02/`](../dev-02/DESIGN_DEV02_GAMIFICACAO_PONTUACAO.md).
