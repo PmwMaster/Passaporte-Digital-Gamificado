@@ -9,27 +9,32 @@
 
 ---
 
-## 2. Configuração Rápida (Quick Start com Neon PostgreSQL)
+## 2. Configuração Rápida (Quick Start com Cliente Leve Neon HTTP — Zero Prisma Build)
 
-1. **Configure suas strings de conexão do Neon no arquivo `.env`:**
-   No painel do [Neon Console](https://console.neon.tech), copie as duas URLs da sua branch de banco de dados e preencha no `.env`:
-   - `DATABASE_URL`: String com **Pooled connection** (`...-pooler.../neondb?sslmode=require&pgbouncer=true&connect_timeout=15`)
-   - `DIRECT_URL`: String com **Direct connection** (`.../neondb?sslmode=require`)
+Para garantir máxima velocidade de entrega e builds instantâneos na Vercel (sem depender de binários nativos do Prisma), o projeto utiliza o **driver oficial HTTP da Neon (`@neondatabase/serverless`)** em `src/infrastructure/database/neon.ts`, com criação automática de tabelas (`CREATE TABLE IF NOT EXISTS`) na primeira requisição.
 
-2. **Instale as dependências do projeto:**
+1. **Configure sua string de conexão do Neon no arquivo `.env` (ou copie de `.env.example`):**
+   - `DATABASE_URL`: String de conexão do Neon PostgreSQL (`postgresql://...`)
+   - `NEON_DATA_API_URL`: Endpoint REST PostgREST da Neon
+
+2. **Instale as dependências do projeto (sem etapa de `prisma generate`):**
    ```bash
    npm install
    ```
 
-3. **Gere o Prisma Client e sincronize o schema PostgreSQL no Neon:**
-   ```bash
-   npx prisma generate
-   npx prisma db push
-   ```
-
-4. **Execute o servidor de desenvolvimento do WebApp:**
+3. **Execute o servidor de desenvolvimento do WebApp (ou acesse direto na Vercel):**
    ```bash
    npm run dev
+   ```
+   - **Ambiente Oficial de Produção (Vercel):** `https://passaporteshopping.vercel.app`
+
+4. **Como fazer consultas SQL no Neon em qualquer módulo (`src/infrastructure/database/neon.ts`):**
+   ```ts
+   import { ensureNeonTables, getNeonSql } from '@/infrastructure/database/neon';
+
+   await ensureNeonTables();
+   const sql = getNeonSql();
+   const rows = await sql`SELECT * FROM app_users WHERE email = ${email}`;
    ```
 
 5. **Acesse a aplicação no navegador:**
