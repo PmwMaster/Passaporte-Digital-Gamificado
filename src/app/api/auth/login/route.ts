@@ -25,7 +25,8 @@ export async function POST(request: NextRequest) {
 
   const authResult = await AuthenticationService.authenticateUser(
     parsed.data.identifier,
-    parsed.data.password
+    parsed.data.password,
+    parsed.data.redirectTo
   );
 
   if (!authResult) {
@@ -45,6 +46,7 @@ export async function POST(request: NextRequest) {
     userId: authResult.user.id,
     name: authResult.user.name,
     email: authResult.user.email,
+    phone: authResult.user.phone,
     role: authResult.user.role,
     issuedAt: Date.now(),
   });

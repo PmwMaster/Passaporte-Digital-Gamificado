@@ -1,5 +1,5 @@
 // ==============================================================================
-// MÓDULO 08 — PORTAL DO LOJISTA (RESPONSÁVEL: DEV 03)
+// MÓDULO 08 (FASE 4) — PORTAL DO LOJISTA E OPERAÇÃO DE BALCÃO (DEV 03)
 // ==============================================================================
 
 import {
@@ -10,6 +10,7 @@ import {
   mockVouchers,
 } from '@/infrastructure/database/mock-data';
 import { voucherSseBroker } from '@/infrastructure/realtime/sse-broker';
+import { Reward } from '@/shared/types/domain';
 
 export class MerchantPortalService {
   static getStoreDashboard(storeId = 'store_01') {
@@ -20,12 +21,16 @@ export class MerchantPortalService {
 
     return {
       store,
+      allStores: mockStores,
       operator: mockOperators[0],
       metrics: {
         totalCheckIns: storeCheckIns.length + 38,
         activeVouchers: storeVouchers.filter((v) => v.status === 'ACTIVE').length,
         usedVouchers: storeVouchers.filter((v) => v.status === 'USED').length + 24,
-        availableStockTotal: storeRewards.reduce((acc, r) => acc + r.availableStock, 0),
+        availableStockTotal: storeRewards.reduce(
+          (acc, r) => acc + r.availableStock,
+          0
+        ),
       },
       rewards: storeRewards,
       recentVouchers: mockVouchers,
@@ -50,9 +55,19 @@ export class MerchantPortalService {
         ok: false as const,
         httpStatus: 422,
         code: 'VOUCHER_ALREADY_USED',
-        message: `Este voucher já foi utilizado em ${voucher.usedAt}.`,
+        message: `Este voucher já foi utilizado em ${new Date(
+          voucher.usedAt!
+        ).toLocaleString('pt-BR')}.`,
         voucher,
       };
+    }
+
+    // Verifica expiração por horário (RN-07 / P1-04)
+    if (
+      voucher.status === 'ACTIVE' &&
+      new Date(voucher.expiresAt).getTime() < Date.now()
+    ) {
+      voucher.status = 'EXPIRED';
     }
 
     if (voucher.status !== 'ACTIVE') {
@@ -60,7 +75,7 @@ export class MerchantPortalService {
         ok: false as const,
         httpStatus: 422,
         code: 'VOUCHER_EXPIRED',
-        message: `Este voucher encontra-se com status ${voucher.status}.`,
+        message: `Este voucher encontra-se expirado (${voucher.status}).`,
         voucher,
       };
     }
@@ -103,5 +118,50 @@ export class MerchantPortalService {
         realtimeBroadcastSent: true,
       },
     };
+  }
+
+  static createStoreReward(input: {
+    storeId: string;
+    title: string;
+    description: string;
+    rules: string;
+    pointsCost: number;
+    initialStock: number;
+    maxPerVisitor: number;
+    voucherValidityHours: number;
+  }): Reward {
+    const store =
+      mockStores.find((s) => s.id === input.storeId) ?? mockStores[0];
+
+    const newReward: Reward = {
+      id: `rew_${Date.now()}`,
+      storeId: store.id,
+      storeName: store.name,
+      storeFloor: `${store.floor} • ${store.unitNumber}`,
+      title: input.title.trim(),
+      description: input.description.trim(),
+      rules: input.rules.trim(),
+      pointsCost: input.pointsCost,
+      initialStock: input.initialStock,
+      availableStock: input.initialStock,
+      maxPerVisitor: input.maxPerVisitor,
+      voucherValidityHours: input.voucherValidityHours,
+      approvalStatus: 'PENDING', // RN-09: Entra pendente até aprovação pelo Admin
+      isActive: true,
+    };
+
+    mockRewards.unshift(newReward);
+    return newReward;
+  }
+
+  static adjustRewardStock(rewardId: string, deltaStock: number): Reward | null {
+    const reward = mockRewards.find((r) => r.id === rewardId);
+    if (!reward) return null;
+
+    reward.availableStock = Math.max(0, reward.availableStock + deltaStock);
+    if (deltaStock > 0) {
+      reward.initialStock = Math.max(reward.initialStock, reward.availableStock);
+    }
+    return reward;
   }
 }

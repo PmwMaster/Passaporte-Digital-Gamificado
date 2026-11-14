@@ -10,12 +10,31 @@ import {
   mockVisitorProfile,
   mockVouchers,
 } from '@/infrastructure/database/mock-data';
+import { SessionPayload } from '@/infrastructure/authentication/session';
+import { AuthenticationService } from '@/modules/authentication';
 import { PASSPORT_LEVELS } from '@/shared/constants';
 
 export class VisitorPassportService {
-  static getPassportOverview() {
-    const user = mockUsers[0];
-    const profile = mockVisitorProfile;
+  static async getPassportOverview(session?: SessionPayload | null) {
+    const sessionProfile = session
+      ? await AuthenticationService.getProfileFromSession(session)
+      : null;
+
+    const user = sessionProfile?.user ?? mockUsers[0];
+    const profile = sessionProfile?.profile
+      ? {
+          id: sessionProfile.profile.id,
+          userId: user.id,
+          visitorName: user.name,
+          memberCode: sessionProfile.profile.memberCode,
+          level: sessionProfile.profile.level,
+          currentPoints: sessionProfile.profile.currentPoints,
+          lifetimePoints: sessionProfile.profile.lifetimePoints,
+          totalCheckIns: sessionProfile.profile.totalCheckIns,
+          totalStamps: sessionProfile.profile.totalStamps,
+        }
+      : mockVisitorProfile;
+
     const levelInfo = PASSPORT_LEVELS[profile.level];
     const progressPercent = Math.min(
       100,
