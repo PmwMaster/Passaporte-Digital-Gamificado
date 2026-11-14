@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   mockCheckIns,
   mockStores,
@@ -32,6 +32,59 @@ export default function CheckInPage() {
     null
   );
   const [recentHistory, setRecentHistory] = useState<CheckIn[]>(mockCheckIns);
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const scannerInstanceRef = useRef<{ stop: () => Promise<void>; clear: () => void } | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (scannerInstanceRef.current) {
+        scannerInstanceRef.current.stop().catch(() => undefined);
+      }
+    };
+  }, []);
+
+  async function handleStartCameraScanner() {
+    setIsCameraOpen(true);
+    setIsError(false);
+    setStatusMessage('Aponte a câmera para o QR Code oficial do balcão da loja...');
+
+    try {
+      const { Html5Qrcode } = await import('html5-qrcode');
+      const qr = new Html5Qrcode('capim-qr-reader');
+      scannerInstanceRef.current = qr;
+
+      await qr.start(
+        { facingMode: 'environment' },
+        { fps: 10, qrbox: { width: 220, height: 220 } },
+        (decodedText) => {
+          setSelectedToken(decodedText.trim());
+          setStatusMessage(`QR Code lido pela câmera: ${decodedText.trim()}`);
+          qr.stop()
+            .then(() => {
+              qr.clear();
+              setIsCameraOpen(false);
+            })
+            .catch(() => setIsCameraOpen(false));
+        },
+        () => undefined
+      );
+    } catch {
+      setIsCameraOpen(false);
+      setIsError(true);
+      setStatusMessage(
+        'Não foi possível acessar a câmera neste dispositivo. Utilize o seletor rápido de loja abaixo.'
+      );
+    }
+  }
+
+  async function handleStopCameraScanner() {
+    if (scannerInstanceRef.current) {
+      await scannerInstanceRef.current.stop().catch(() => undefined);
+      scannerInstanceRef.current.clear();
+      scannerInstanceRef.current = null;
+    }
+    setIsCameraOpen(false);
+  }
 
   function handleCaptureBrowserGps() {
     if (!navigator.geolocation) {
@@ -99,24 +152,50 @@ export default function CheckInPage() {
       <VisitorNavigation currentPath="/checkin" />
 
       <ModuleHeader
-        featureNumber="FUNCIONALIDADE 04"
-        title="Check-in Presencial por QR Code & Geofence Haversine (250m)"
-        subtitle="Leitura de QR Code oficial, validação trigonométrica Haversine, fuso de Palmas (America/Araguaina) e trava contra check-in duplicado no mesmo dia."
-        developerOwner="DESENVOLVEDOR 02"
-        moduleName="checkin"
+        categoryBadge="Check-in Presencial • Capim Dourado Shopping"
+        title="Registrar Visita & Ganhar Pontos"
+        subtitle="Escaneie o QR Code da loja parceira e confirme sua localização no shopping para receber seus pontos e carimbo digital."
       />
 
       <div className="grid gap-8 lg:grid-cols-2">
         <EditorialCard>
-          <h2 className="font-serif text-xl font-bold text-brand-ink">
-            Leitor de QR Code & Validação GPS
-          </h2>
-          <p className="mt-1 text-xs text-brand-muted">
-            Coordenada central do Capim Dourado Shopping:{' '}
-            {SHOPPING_CONFIG.defaultCoordinates.latitude},{' '}
-            {SHOPPING_CONFIG.defaultCoordinates.longitude} (Raio máximo:{' '}
-            {SHOPPING_CONFIG.defaultGeofenceRadiusMeters}m)
-          </p>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 className="font-serif text-xl font-bold text-brand-ink">
+                Leitor de QR Code & Validação GPS
+              </h2>
+              <p className="mt-1 text-xs text-brand-muted">
+                Coordenada central do Capim Dourado Shopping:{' '}
+                {SHOPPING_CONFIG.defaultCoordinates.latitude},{' '}
+                {SHOPPING_CONFIG.defaultCoordinates.longitude} (Raio máximo:{' '}
+                {SHOPPING_CONFIG.defaultGeofenceRadiusMeters}m)
+              </p>
+            </div>
+
+            {!isCameraOpen ? (
+              <button
+                type="button"
+                onClick={handleStartCameraScanner}
+                className="rounded-xl bg-brand-goldDark px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition hover:opacity-95"
+              >
+                📷 Abrir Câmera QR
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={handleStopCameraScanner}
+                className="rounded-xl border border-red-300 bg-red-50 px-3.5 py-2 text-xs font-semibold text-red-700"
+              >
+                ✕ Fechar Câmera
+              </button>
+            )}
+          </div>
+
+          {isCameraOpen && (
+            <div className="mt-4 overflow-hidden rounded-2xl border-2 border-dashed border-brand-goldLight bg-brand-ivory p-3">
+              <div id="capim-qr-reader" className="mx-auto max-w-xs" />
+            </div>
+          )}
 
           <form onSubmit={handleCheckInSubmit} className="mt-6 space-y-4">
             <div>

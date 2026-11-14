@@ -35,11 +35,9 @@ export default function MissionsAndStampsPage() {
       <VisitorNavigation currentPath="/missoes" />
 
       <ModuleHeader
-        featureNumber="FUNCIONALIDADE 05"
-        title="Gamificação, Carimbos Digitais & Missões"
-        subtitle="Coleção de selos por estabelecimento, missões diárias, semanais e mensais com conclusão automática e bônus de pontos."
-        developerOwner="DESENVOLVEDOR 02"
-        moduleName="gamification"
+        categoryBadge="Gamificação & Coleção • Passaporte Digital"
+        title="Meus Carimbos & Missões"
+        subtitle="Complete desafios nas lojas do shopping, colecione selos exclusivos e ganhe pontos bônus."
       />
 
       {/* Resumo de Nível e Caderneta */}
