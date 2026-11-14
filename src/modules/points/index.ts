@@ -2,11 +2,17 @@
 // MÓDULO 06 — SISTEMA DE PONTOS E EXTRATO AUDITÁVEL (RESPONSÁVEL: DEV 02)
 // ==============================================================================
 // Regra Crítica (RN-06): Proibido alterar saldo diretamente sem registrar PointTransaction.
+// Persistência Híbrida: Atualiza estado local imediatamente e sincroniza no Neon PostgreSQL.
 
 import {
   mockPointTransactions,
   mockVisitorProfile,
 } from '@/infrastructure/database/mock-data';
+import {
+  ensureNeonTables,
+  getNeonSql,
+  isNeonConfigured,
+} from '@/infrastructure/database/neon';
 import { GamificationService } from '@/modules/gamification';
 import { PASSPORT_LEVELS } from '@/shared/constants';
 import {
@@ -42,9 +48,65 @@ export interface StatementSummary {
   transactions: PointTransaction[];
 }
 
+async function persistTransactionToNeon(
+  tx: PointTransaction,
+  profileSnapshot: {
+    currentPoints: number;
+    lifetimePoints: number;
+    level: PassportLevel;
+  }
+): Promise<void> {
+  if (!isNeonConfigured()) return;
+
+  try {
+    await ensureNeonTables();
+    const sql = getNeonSql();
+
+    await sql`
+      UPDATE app_visitor_profiles
+      SET
+        current_points = ${profileSnapshot.currentPoints},
+        lifetime_points = ${profileSnapshot.lifetimePoints},
+        level = ${profileSnapshot.level}
+      WHERE id = ${tx.visitorId};
+    `;
+
+    await sql`
+      INSERT INTO app_point_transactions (
+        id,
+        visitor_id,
+        type,
+        amount,
+        balance_after,
+        origin,
+        reference_id,
+        description,
+        created_at
+      ) VALUES (
+        ${tx.id},
+        ${tx.visitorId},
+        ${tx.type},
+        ${tx.amount},
+        ${tx.balanceAfter},
+        ${tx.origin},
+        ${tx.referenceId ?? null},
+        ${tx.description},
+        ${tx.createdAt}
+      )
+      ON CONFLICT DO NOTHING;
+    `;
+  } catch (err) {
+    console.warn(
+      '[PointsLedgerService Neon Sync] Falha não bloqueante ao gravar no Neon:',
+      err
+    );
+  }
+}
+
 export class PointsLedgerService {
   /**
-   * Registra um crédito de pontos de forma atômica e idempotente por (visitorId, origin, referenceId).
+   * Registra um crédito de pontos de forma atômica e idempotente por (visitorId, origin, referenceId),
+   * sincronizando o lançamento em app_point_transactions e o saldo em app_visitor_profiles no Neon.
    */
   static recordCredit(params: LedgerOperationInput): PointTransaction {
     assertValidPointAmount(params.amount);
@@ -80,12 +142,19 @@ export class PointsLedgerService {
     };
 
     mockPointTransactions.unshift(tx);
+
+    void persistTransactionToNeon(tx, {
+      currentPoints: mockVisitorProfile.currentPoints,
+      lifetimePoints: mockVisitorProfile.lifetimePoints,
+      level: mockVisitorProfile.level,
+    });
+
     return tx;
   }
 
   /**
-   * Registra um débito de pontos garantindo que o saldo nunca fique negativo (RN-06)
-   * e preservando lifetimePoints e level do visitante (RN-05).
+   * Registra um débito de pontos garantindo que o saldo nunca fique negativo (RN-06),
+   * preservando lifetimePoints e level do visitante (RN-05) e sincronizando no Neon.
    */
   static recordDebit(params: LedgerOperationInput): PointTransaction {
     assertValidPointAmount(params.amount);
@@ -121,6 +190,13 @@ export class PointsLedgerService {
     };
 
     mockPointTransactions.unshift(tx);
+
+    void persistTransactionToNeon(tx, {
+      currentPoints: mockVisitorProfile.currentPoints,
+      lifetimePoints: mockVisitorProfile.lifetimePoints,
+      level: mockVisitorProfile.level,
+    });
+
     return tx;
   }
 

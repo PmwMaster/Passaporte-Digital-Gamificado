@@ -1,12 +1,20 @@
 // ==============================================================================
 // MÓDULO 04 — CHECK-IN E VALIDAÇÃO POR QR CODE + HAVERSINE (RESPONSÁVEL: DEV 02)
 // ==============================================================================
+// Persistência Híbrida: Grava todas as tentativas (VALID e REJECTED_*) em app_check_ins
+// no Neon PostgreSQL e consome o raio dinâmico de Geofence do módulo Administration.
 
 import {
   mockCheckIns,
   mockStores,
   mockVisitorProfile,
 } from '@/infrastructure/database/mock-data';
+import {
+  ensureNeonTables,
+  getNeonSql,
+  isNeonConfigured,
+} from '@/infrastructure/database/neon';
+import { AdministrationService } from '@/modules/administration';
 import { GamificationService } from '@/modules/gamification';
 import { PointsLedgerService } from '@/modules/points';
 import { SHOPPING_CONFIG } from '@/shared/constants';
@@ -27,6 +35,74 @@ export interface PerformCheckInInput {
   accuracyMeters?: number;
 }
 
+function resolveRuntimeGeofenceConfig(): {
+  defaultCoordinates: { latitude: number; longitude: number };
+  defaultGeofenceRadiusMeters: number;
+} {
+  const adminWithDynamicConfig = AdministrationService as unknown as {
+    getGeofenceConfig?: () => {
+      defaultCoordinates: { latitude: number; longitude: number };
+      defaultGeofenceRadiusMeters: number;
+    };
+  };
+
+  if (typeof adminWithDynamicConfig.getGeofenceConfig === 'function') {
+    return adminWithDynamicConfig.getGeofenceConfig();
+  }
+
+  return SHOPPING_CONFIG;
+}
+
+async function persistCheckInToNeon(
+  checkIn: CheckIn,
+  accuracyMeters?: number
+): Promise<void> {
+  if (!isNeonConfigured()) return;
+
+  try {
+    await ensureNeonTables();
+    const sql = getNeonSql();
+
+    await sql`
+      INSERT INTO app_check_ins (
+        id,
+        visitor_id,
+        store_id,
+        store_name,
+        check_in_date,
+        latitude,
+        longitude,
+        accuracy_meters,
+        distance_meters,
+        is_within_geofence,
+        status,
+        points_awarded,
+        created_at
+      ) VALUES (
+        ${checkIn.id},
+        ${checkIn.visitorId},
+        ${checkIn.storeId},
+        ${checkIn.storeName},
+        ${checkIn.checkInDate},
+        ${checkIn.latitude},
+        ${checkIn.longitude},
+        ${accuracyMeters ?? null},
+        ${checkIn.distanceMeters},
+        ${checkIn.isWithinGeofence},
+        ${checkIn.status},
+        ${checkIn.pointsAwarded},
+        ${checkIn.createdAt}
+      )
+      ON CONFLICT (id) DO NOTHING;
+    `;
+  } catch (err) {
+    console.warn(
+      '[CheckInService Neon Sync] Falha não bloqueante ao gravar check-in no Neon:',
+      err
+    );
+  }
+}
+
 export class CheckInService {
   /**
    * Lista as tentativas recentes de check-in (aprovadas e recusadas) para auditoria antifraude.
@@ -39,9 +115,9 @@ export class CheckInService {
    * Executa o pipeline completo de validação de check-in presencial:
    * 1. Valida precisão do sinal GPS (<= 150m).
    * 2. Valida QR Code contra lojas parceiras ativas.
-   * 3. Valida distância trigonométrica Haversine (<= 250m) e grava tentativa se recusado.
+   * 3. Valida distância trigonométrica Haversine com o raio dinâmico do Admin e grava tentativa se recusado.
    * 4. Valida limite de 1 check-in válido por loja/dia no fuso America/Araguaina (UTC-3).
-   * 5. Grava check-in VALID, credita pontos no Ledger, concede carimbo e avalia missões.
+   * 5. Grava check-in VALID no Neon, credita pontos no Ledger, concede carimbo e avalia missões.
    */
   static performCheckIn(input: PerformCheckInInput) {
     const visitorId = input.visitorId ?? mockVisitorProfile.id;
@@ -78,11 +154,12 @@ export class CheckInService {
       };
     }
 
-    // 3. Validação Haversine (Geofence padrão 250m — RN-01)
+    // 3. Validação Haversine usando o raio dinâmico do Painel Admin (padrão 250m — RN-01)
+    const runtimeGeofence = resolveRuntimeGeofenceConfig();
     const geofence = validateGeofence(
       { latitude: input.latitude, longitude: input.longitude },
-      SHOPPING_CONFIG.defaultCoordinates,
-      SHOPPING_CONFIG.defaultGeofenceRadiusMeters
+      runtimeGeofence.defaultCoordinates,
+      runtimeGeofence.defaultGeofenceRadiusMeters
     );
 
     if (!geofence.isWithinGeofence) {
@@ -101,6 +178,7 @@ export class CheckInService {
         createdAt: new Date().toISOString(),
       };
       mockCheckIns.unshift(rejectedDistanceCheckIn);
+      void persistCheckInToNeon(rejectedDistanceCheckIn, input.accuracyMeters);
 
       return {
         ok: false as const,
@@ -134,6 +212,7 @@ export class CheckInService {
         createdAt: new Date().toISOString(),
       };
       mockCheckIns.unshift(rejectedDuplicateCheckIn);
+      void persistCheckInToNeon(rejectedDuplicateCheckIn, input.accuracyMeters);
 
       return {
         ok: false as const,
@@ -160,6 +239,7 @@ export class CheckInService {
     };
 
     mockCheckIns.unshift(newCheckIn);
+    void persistCheckInToNeon(newCheckIn, input.accuracyMeters);
 
     const transaction = PointsLedgerService.recordCredit({
       visitorId,

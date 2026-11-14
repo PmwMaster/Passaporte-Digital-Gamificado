@@ -1,6 +1,8 @@
 // ==============================================================================
 // MÓDULO 05 — GAMIFICAÇÃO, CARIMBOS E MISSÕES (RESPONSÁVEL: DEV 02)
 // ==============================================================================
+// Persistência Híbrida: Atualiza estado local e sincroniza carimbos e progresso
+// de missões no Neon PostgreSQL (app_stamps e app_mission_progress).
 
 import {
   mockMissions,
@@ -8,6 +10,11 @@ import {
   mockStores,
   mockVisitorProfile,
 } from '@/infrastructure/database/mock-data';
+import {
+  ensureNeonTables,
+  getNeonSql,
+  isNeonConfigured,
+} from '@/infrastructure/database/neon';
 import { PointsLedgerService } from '@/modules/points';
 import {
   CheckIn,
@@ -35,6 +42,102 @@ export interface StampBookSlot {
   stamp?: Stamp;
 }
 
+async function persistStampToNeon(
+  stamp: Stamp,
+  totals: { totalStamps: number; totalCheckIns: number }
+): Promise<void> {
+  if (!isNeonConfigured()) return;
+
+  try {
+    await ensureNeonTables();
+    const sql = getNeonSql();
+
+    await sql`
+      INSERT INTO app_stamps (
+        id,
+        visitor_id,
+        store_id,
+        store_name,
+        check_in_id,
+        badge_title,
+        category,
+        earned_at
+      ) VALUES (
+        ${stamp.id},
+        ${stamp.visitorId},
+        ${stamp.storeId},
+        ${stamp.storeName},
+        ${stamp.checkInId},
+        ${stamp.badgeTitle},
+        ${stamp.category},
+        ${stamp.earnedAt}
+      )
+      ON CONFLICT (id) DO NOTHING;
+    `;
+
+    await sql`
+      UPDATE app_visitor_profiles
+      SET
+        total_stamps = ${totals.totalStamps},
+        total_check_ins = ${totals.totalCheckIns}
+      WHERE id = ${stamp.visitorId};
+    `;
+  } catch (err) {
+    console.warn(
+      '[GamificationService Neon Sync] Falha não bloqueante ao gravar carimbo:',
+      err
+    );
+  }
+}
+
+async function persistMissionProgressToNeon(
+  visitorId: string,
+  mission: Mission
+): Promise<void> {
+  if (!isNeonConfigured()) return;
+
+  try {
+    await ensureNeonTables();
+    const sql = getNeonSql();
+    const progressId = `mprog_${visitorId}_${mission.id}_${mission.periodKey}`;
+    const completedAt =
+      mission.status === 'COMPLETED' ? new Date().toISOString() : null;
+
+    await sql`
+      INSERT INTO app_mission_progress (
+        id,
+        visitor_id,
+        mission_id,
+        period_key,
+        current_count,
+        status,
+        completed_at,
+        updated_at
+      ) VALUES (
+        ${progressId},
+        ${visitorId},
+        ${mission.id},
+        ${mission.periodKey},
+        ${mission.currentCount},
+        ${mission.status},
+        ${completedAt},
+        NOW()
+      )
+      ON CONFLICT (visitor_id, mission_id, period_key)
+      DO UPDATE SET
+        current_count = EXCLUDED.current_count,
+        status = EXCLUDED.status,
+        completed_at = COALESCE(app_mission_progress.completed_at, EXCLUDED.completed_at),
+        updated_at = NOW();
+    `;
+  } catch (err) {
+    console.warn(
+      '[GamificationService Neon Sync] Falha não bloqueante ao gravar progresso de missão:',
+      err
+    );
+  }
+}
+
 export class GamificationService {
   static calculateLevelByLifetimePoints(lifetimePoints: number): PassportLevel {
     return calculateLevelByLifetimePoints(lifetimePoints);
@@ -47,7 +150,8 @@ export class GamificationService {
   }
 
   /**
-   * Concede um carimbo digital vinculado ao check-in válido recém-realizado (RN-03).
+   * Concede um carimbo digital vinculado ao check-in válido recém-realizado (RN-03)
+   * e sincroniza em app_stamps no Neon PostgreSQL.
    */
   static grantStampFromCheckIn(checkIn: CheckIn, category: StoreCategory): Stamp {
     const newStamp: Stamp = {
@@ -65,13 +169,18 @@ export class GamificationService {
     mockVisitorProfile.totalStamps += 1;
     mockVisitorProfile.totalCheckIns += 1;
 
+    void persistStampToNeon(newStamp, {
+      totalStamps: mockVisitorProfile.totalStamps,
+      totalCheckIns: mockVisitorProfile.totalCheckIns,
+    });
+
     return newStamp;
   }
 
   /**
    * Avalia automaticamente todas as missões em andamento após um check-in válido (RN-04).
-   * Quando currentCount atinge targetCount, marca a missão como COMPLETED e credita o bônus
-   * no Ledger de Pontos de forma idempotente por (mission.id + periodKey).
+   * Quando currentCount atinge targetCount, marca a missão como COMPLETED, grava no Neon
+   * e credita o bônus no Ledger de Pontos de forma idempotente por (mission.id + periodKey).
    */
   static evaluateMissionsAfterCheckIn(
     checkIn: CheckIn,
@@ -106,6 +215,8 @@ export class GamificationService {
           description: `Bônus de missão concluída: ${mission.title}`,
         });
       }
+
+      void persistMissionProgressToNeon(checkIn.visitorId, mission);
     }
 
     return {
