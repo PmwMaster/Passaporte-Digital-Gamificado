@@ -4,13 +4,18 @@ Este documento define a organização do trabalho paralelo entre os **três dese
 
 ---
 
-## 1. Mapa de Responsabilidades (9 Funcionalidades / 3 Desenvolvedores)
+## 1. Mapa de Responsabilidades (9 Funcionalidades / Alocação Real do Trio)
 
-| Desenvolvedor | Frente de Atuação | Funcionalidades sob Responsabilidade | Módulos (`src/modules/*`) | Rotas UI (`src/app/*`) | Rotas API (`src/app/api/*`) |
+> **Alocação Prática Definida pela Equipe:**
+> - **Cristiano (Dev 01 + Dev 03 — Backend, APIs & Integração das 6 Features):** Assume as Frentes 01 e 03 (`F01`, `F02`, `F03`, `F07`, `F08`, `F09`). Veja o roteiro completo em [`docs/PLANO_EXECUCAO_DEV1_DEV3.md`](./PLANO_EXECUCAO_DEV1_DEV3.md).
+> - **Amigo 01 (Dev 02 — Gamificação & Pontuação):** Assume a Frente 02 (`F04 Check-in QR/GPS`, `F05 Carimbos & Missões`, `F06 Sistema de Pontos & Extrato`).
+> - **Amigo 02 (Especialista UI/UX — Refinamento de Telas):** Assume o refinamento visual de todas as páginas (`src/app/**/page.tsx`), componentes compartilhados (`src/components/*`), estilos (`src/styles/*`) e fidelidade aos protótipos (`prototipos/*`).
+
+| Frente / Papel | Responsável | Funcionalidades sob Responsabilidade | Módulos (`src/modules/*`) | Rotas UI (`src/app/*`) | Rotas API (`src/app/api/*`) |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **DEV 01** | **Experiência do Visitante** | **F01:** Vitrine Pública e Lojas Parceiras<br>**F02:** Autenticação e Cadastro<br>**F03:** Passaporte e Perfil do Visitante | `storefront/`<br>`authentication/`<br>`visitor/` | `(public)/`<br>`(auth)/`<br>`(visitor)/passaporte/`<br>`(visitor)/perfil/` | `api/stores/*`<br>`api/auth/*`<br>`api/visitor/passport` |
-| **DEV 02** | **Gamificação e Pontuação** | **F04:** Check-in e Validação por QR Code<br>**F05:** Gamificação, Carimbos e Missões<br>**F06:** Sistema de Pontos e Extrato | `checkin/`<br>`gamification/`<br>`points/` | `(visitor)/checkin/`<br>`(visitor)/missoes/`<br>`(visitor)/extrato/` | `api/checkins/*`<br>`api/visitor/points`<br>`api/visitor/missions` |
-| **DEV 03** | **Comércio e Administração** | **F07:** Catálogo de Recompensas e Vouchers<br>**F08:** Portal do Lojista<br>**F09:** Painel Administrativo | `rewards/`<br>`merchant/`<br>`administration/` | `(visitor)/recompensas/`<br>`(visitor)/vouchers/`<br>`lojista/*`<br>`admin/*` | `api/rewards/*`<br>`api/visitor/vouchers`<br>`api/merchant/*`<br>`api/admin/*`<br>`api/realtime/*` |
+| **DEV 01**<br>*(Experiência do Visitante)* | **Cristiano** *(Back/API)* + **Amigo 02** *(UI/Telas)* | **F01:** Vitrine Pública e Lojas Parceiras<br>**F02:** Autenticação e Cadastro<br>**F03:** Passaporte e Perfil do Visitante | `storefront/`<br>`authentication/`<br>`visitor/` | `(public)/`<br>`(auth)/`<br>`(visitor)/passaporte/`<br>`(visitor)/perfil/` | `api/stores/*`<br>`api/auth/*`<br>`api/visitor/passport` |
+| **DEV 02**<br>*(Gamificação e Pontuação)* | **Amigo 01** *(Back/API)* + **Amigo 02** *(UI/Telas)* | **F04:** Check-in e Validação por QR Code<br>**F05:** Gamificação, Carimbos e Missões<br>**F06:** Sistema de Pontos e Extrato | `checkin/`<br>`gamification/`<br>`points/` | `(visitor)/checkin/`<br>`(visitor)/missoes/`<br>`(visitor)/extrato/` | `api/checkins/*`<br>`api/visitor/points`<br>`api/visitor/missions` |
+| **DEV 03**<br>*(Comércio e Administração)* | **Cristiano** *(Back/API)* + **Amigo 02** *(UI/Telas)* | **F07:** Catálogo de Recompensas e Vouchers<br>**F08:** Portal do Lojista<br>**F09:** Painel Administrativo | `rewards/`<br>`merchant/`<br>`administration/` | `(visitor)/recompensas/`<br>`(visitor)/vouchers/`<br>`lojista/*`<br>`admin/*` | `api/rewards/*`<br>`api/visitor/vouchers`<br>`api/merchant/*`<br>`api/admin/*`<br>`api/realtime/*` |
 
 ---
 
