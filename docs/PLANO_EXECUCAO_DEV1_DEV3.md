@@ -95,7 +95,22 @@ flowchart LR
 
 ---
 
-## 3. Como Trabalhar em Paralelo com seus 2 Amigos sem Conflito de Git
+## 4. Mapa Direto: Suas 6 Features × Protótipos Originais × Tech Spec
+
+Para você (**Dev 01 + Dev 03**) implementar a lógica/API e o **Amigo 02 (UI/UX)** refinar as telas lado a lado com precisão cirúrgica:
+
+| Sua Feature | Módulo & Rota no Next.js | Protótipos HTML Oficiais (`prototipos/`) | Referência Tech Spec (`docs/tech-spec/`) |
+| :--- | :--- | :--- | :--- |
+| **F01 — Vitrine Pública e Lojas Parceiras** | `src/modules/storefront`<br>`/` e `/lojas/[slug]` | `tela_01_vitrine_aberta/code.html`<br>`tela_01_vitrine_aberta_desktop/code.html`<br>`havanna_caf_ofertas_e_cupons/code.html`<br>`havanna_caf_detalhes_da_loja_desktop/code.html` | `parte-1-fundacao-e-visitante.md` (Telas 01 e 01.1) |
+| **F02 — Autenticação, Cadastro e OTP** | `src/modules/authentication`<br>`/login` e `/cadastro` | `tela_02_login_e_cadastro/code.html`<br>`tela_02_login_e_cadastro_desktop/code.html`<br>`tela_02_criar_conta_cadastro/code.html`<br>`confirma_o_de_c_digo_whatsapp/code.html`<br>`confirma_o_de_c_digo_whatsapp_desktop/code.html` | `parte-1-fundacao-e-visitante.md` (Telas 2A, 2B e 2C) |
+| **F03 — Passaporte e Perfil do Visitante** | `src/modules/visitor`<br>`/passaporte` | `tela_03_meu_passaporte_cupons/code.html`<br>`tela_03_meu_passaporte_cupons_desktop/code.html` | `parte-1-fundacao-e-visitante.md` (Tela 03) |
+| **F07 — Catálogo de Recompensas e Vouchers (SSE)** | `src/modules/rewards`<br>`/recompensas` e `/vouchers` | `tela_03_meu_passaporte_cupons/code.html` (Abas Trocar Pontos / Meus Cupons)<br>`havanna_caf_ofertas_e_cupons/code.html` | `parte-2-lojista-cupons-tempo-real.md` (Resgate + SSE) |
+| **F08 — Portal do Lojista** | `src/modules/merchant`<br>`/lojista` | `tela_de_login_do_lojista/code.html`<br>`login_do_lojista_desktop/code.html`<br>`tela_04_painel_do_lojista_valida_o_de_caixa/code.html`<br>`tela_04_painel_do_lojista_desktop/code.html` | `parte-2-lojista-cupons-tempo-real.md` (Telas 4A e 4B) |
+| **F09 — Painel Administrativo** | `src/modules/administration`<br>`/admin` | `tela_05_painel_administrativo_do_shopping/code.html`<br>`tela_05_painel_administrativo_do_shopping_desktop/code.html` | `parte-3-admin-pwa-entrega.md` (Tela 05 + PWA) |
+
+---
+
+## 5. Como Trabalhar em Paralelo com seus 2 Amigos sem Conflito de Git
 
 | Membro da Equipe | Onde MEXE (Arquivos Exclusivos) | Onde NÃO MEXE sem avisar |
 | :--- | :--- | :--- |

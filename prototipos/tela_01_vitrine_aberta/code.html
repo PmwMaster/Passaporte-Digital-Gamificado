@@ -1,0 +1,299 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><meta content="mobile_tab" name="shell-type"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&amp;family=Playfair+Display:wght@600;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "tertiary-fixed": "#ffe088", "on-tertiary-container": "#463600", "on-error": "#ffffff", "surface-variant": "#e5e2e1", "outline-variant": "#d2c5b3", "surface-bright": "#fcf9f8", "surface-tint": "#7a580f", "on-background": "#1c1b1b", "secondary-fixed": "#a3f69c", "on-primary-fixed-variant": "#5e4200", "tertiary": "#735c00", "on-secondary-fixed": "#002204", "secondary-fixed-dim": "#88d982", "on-secondary-fixed-variant": "#005312", "primary": "#7a580f", "on-primary-fixed": "#271900", "error": "#ba1a1a", "secondary-container": "#a0f399", "background": "#fcf9f8", "on-surface": "#1c1b1b", "surface-container-low": "#f6f3f2", "primary-fixed": "#ffdea8", "inverse-on-surface": "#f3f0ef", "on-primary-container": "#4c3400", "surface-container-high": "#eae7e7", "on-primary": "#ffffff", "on-tertiary-fixed-variant": "#574500", "inverse-primary": "#edc06f", "on-surface-variant": "#4e4638", "surface-container": "#f0eded", "inverse-surface": "#313030", "on-error-container": "#93000a", "tertiary-fixed-dim": "#e9c349", "secondary": "#1b6d24", "error-container": "#ffdad6", "on-secondary": "#ffffff", "surface": "#fcf9f8", "on-tertiary-fixed": "#241a00", "primary-container": "#c59b4e", "tertiary-container": "#c19e26", "on-tertiary": "#ffffff", "primary-fixed-dim": "#edc06f", "surface-container-lowest": "#ffffff", "surface-dim": "#dcd9d9", "surface-container-highest": "#e5e2e1", "on-secondary-container": "#217128", "outline": "#807666" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-md": "1rem", "space-lg": "1.5rem", "space-sm": "0.5rem", "space-xl": "2.25rem", "margin": "1.25rem", "space-xs": "0.25rem", "gutter": "1rem" }, "fontFamily": { "display-lg": ["Playfair Display"], "title-md": ["Outfit"], "headline-lg": ["Playfair Display"], "label-lg": ["Outfit"], "body-sm": ["Outfit"], "body-md": ["Outfit"], "label-sm": ["Outfit"], "label-md": ["Outfit"], "headline-md": ["Playfair Display"], "body-lg": ["Outfit"], "headline-sm": ["Outfit"] }, "fontSize": { "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "title-md": ["16px", { "lineHeight": "22px", "letterSpacing": "0.01em", "fontWeight": "600" }], "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "0em", "fontWeight": "600" }], "label-lg": ["14px", { "lineHeight": "18px", "letterSpacing": "0.04em", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "label-sm": ["10px", { "lineHeight": "14px", "letterSpacing": "0.08em", "fontWeight": "600" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }], "headline-md": ["22px", { "lineHeight": "28px", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }] } } } };</script><style>@layer base{html,body{width:100%;margin:0;padding:0;background-color:#fcf9f8;color:#1c1b1b;}body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface font-body-md text-body-md flex flex-col min-h-screen relative antialiased selection:bg-primary-fixed selection:text-on-primary-fixed"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(163,124,44,0.06)]"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center gap-space-sm"><div class="flex items-center justify-center"><span class="material-symbols-outlined text-primary text-[28px]">spa</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-surface leading-tight tracking-tight">Capim Dourado</span><span class="font-label-sm text-label-sm text-primary uppercase tracking-widest font-semibold">Início</span></div></div><div class="flex items-center gap-space-sm"><button class="min-h-[44px] px-space-sm py-1 rounded-full bg-primary-fixed/40 hover:bg-primary-fixed/70 text-on-primary-fixed flex items-center gap-1.5 transition-all shadow-[0_2px_8px_rgba(197,155,78,0.12)]" type="button"><span class="material-symbols-outlined text-primary text-[18px]">stars</span><span class="font-label-md text-label-md font-bold text-on-primary-fixed">150 pts</span></button><div class="flex items-center justify-center p-0.5 rounded-full bg-gradient-to-tr from-primary-container to-tertiary-fixed"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/ALJJyrDN7Ab6dk0r_DJrJa_8sRDdKNRrKiLy9wg3DxCAJP9gC9yriA2e0KdG9Su5Mg0rlJ4QsXhebJMzHcXXhyI_Y6H-TE1-TMLqO5waJnRmjdtLjfOGNYQGFdlaiIcY41Hwd7hJAxmt_akTzE5IQltaSrkUdk3BU5N9liXzayeFrlJgeDQkNLip78KtdIW58Hgr70CJ7mwYzwBFkMKNMQGraGVqaYc6gHX4lIQB7aj0NmaX_9iNu29_MWPg9VU"></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-24 bg-surface px-margin"><div class="flex flex-col w-full pb-6 space-y-6">
+<!-- Search Bar -->
+<section class="w-full">
+<div class="relative flex items-center w-full">
+<div class="absolute left-4 flex items-center pointer-events-none text-primary">
+<span class="material-symbols-outlined text-[22px]">search</span>
+</div>
+<input class="w-full h-12 pl-12 pr-11 bg-surface-container-lowest rounded-full shadow-[0_2px_12px_rgba(197,155,78,0.08)] text-on-surface placeholder:text-outline font-body-md text-body-md focus:outline-none focus:ring-0 focus:shadow-[0_4px_16px_rgba(197,155,78,0.2)] transition-shadow" placeholder="Buscar loja, cupom ou promoção..." type="search">
+<button aria-label="Filtro rápido" class="absolute right-3 w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+</button>
+</div>
+</section>
+<!-- Store Story Carousel -->
+<section class="w-full space-y-3">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface">Lojas Parceiras</span>
+<a class="font-label-md text-label-md text-primary font-semibold flex items-center gap-0.5" href="#">
+        Ver 140+ <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</a>
+</div>
+<!-- Stores Strip -->
+<div class="flex items-start gap-3.5 overflow-x-auto py-1.5 -mx-margin px-margin scrollbar-none snap-x snap-mandatory">
+<!-- Store: Todas (Highlighted) -->
+<button class="flex flex-col items-center gap-1.5 flex-shrink-0 snap-start group" type="button">
+<div class="w-[60px] h-[60px] rounded-full bg-gradient-to-tr from-primary to-primary-container p-0.5 shadow-[0_4px_14px_rgba(197,155,78,0.35)] flex items-center justify-center transform active:scale-95 transition-transform">
+<div class="w-full h-full rounded-full bg-primary-container flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[24px]">storefront</span>
+</div>
+</div>
+<span class="font-label-md text-label-md font-bold text-primary max-w-[64px] truncate text-center">Todas</span>
+</button>
+<!-- Store: Havanna -->
+<button class="flex flex-col items-center gap-1.5 flex-shrink-0 snap-start group" type="button">
+<div class="w-[60px] h-[60px] rounded-full bg-surface-container-lowest p-1 shadow-[0_3px_10px_rgba(0,0,0,0.04)] flex items-center justify-center active:scale-95 transition-transform">
+<div class="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center bg-[#49271D]/10">
+<span class="font-headline-sm text-[11px] font-bold text-[#49271D] tracking-tighter">HAVANNA</span>
+</div>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant max-w-[64px] truncate text-center">Havanna</span>
+</button>
+<!-- Store: Outback -->
+<button class="flex flex-col items-center gap-1.5 flex-shrink-0 snap-start group" type="button">
+<div class="w-[60px] h-[60px] rounded-full bg-surface-container-lowest p-1 shadow-[0_3px_10px_rgba(0,0,0,0.04)] flex items-center justify-center active:scale-95 transition-transform">
+<div class="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center bg-[#8B261D]/10">
+<span class="font-label-sm text-[10px] font-black text-[#8B261D] tracking-tight">OUTBACK</span>
+</div>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant max-w-[64px] truncate text-center">Outback</span>
+</button>
+<!-- Store: Vivara -->
+<button class="flex flex-col items-center gap-1.5 flex-shrink-0 snap-start group" type="button">
+<div class="w-[60px] h-[60px] rounded-full bg-surface-container-lowest p-1 shadow-[0_3px_10px_rgba(0,0,0,0.04)] flex items-center justify-center active:scale-95 transition-transform">
+<div class="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center bg-[#1B1B1B]/10">
+<span class="font-display-lg text-[11px] font-bold text-[#1B1B1B] tracking-widest">VIVARA</span>
+</div>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant max-w-[64px] truncate text-center">Vivara</span>
+</button>
+<!-- Store: Kopenhagen -->
+<button class="flex flex-col items-center gap-1.5 flex-shrink-0 snap-start group" type="button">
+<div class="w-[60px] h-[60px] rounded-full bg-surface-container-lowest p-1 shadow-[0_3px_10px_rgba(0,0,0,0.04)] flex items-center justify-center active:scale-95 transition-transform">
+<div class="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center bg-[#2B1B17]/10">
+<span class="font-headline-sm text-[10px] font-bold text-[#2B1B17] tracking-tight">KOPH</span>
+</div>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant max-w-[64px] truncate text-center">Kopenhagen</span>
+</button>
+<!-- Store: Renner -->
+<button class="flex flex-col items-center gap-1.5 flex-shrink-0 snap-start group" type="button">
+<div class="w-[60px] h-[60px] rounded-full bg-surface-container-lowest p-1 shadow-[0_3px_10px_rgba(0,0,0,0.04)] flex items-center justify-center active:scale-95 transition-transform">
+<div class="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center bg-[#C62828]/10">
+<span class="font-label-sm text-[11px] font-black text-[#C62828]">RENNER</span>
+</div>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant max-w-[64px] truncate text-center">Renner</span>
+</button>
+<!-- Store: Centauro -->
+<button class="flex flex-col items-center gap-1.5 flex-shrink-0 snap-start group" type="button">
+<div class="w-[60px] h-[60px] rounded-full bg-surface-container-lowest p-1 shadow-[0_3px_10px_rgba(0,0,0,0.04)] flex items-center justify-center active:scale-95 transition-transform">
+<div class="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center bg-[#E53935]/10">
+<span class="font-label-sm text-[10px] font-black text-[#E53935]">CENT.</span>
+</div>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant max-w-[64px] truncate text-center">Centauro</span>
+</button>
+<!-- Store: Arezzo -->
+<button class="flex flex-col items-center gap-1.5 flex-shrink-0 snap-start group" type="button">
+<div class="w-[60px] h-[60px] rounded-full bg-surface-container-lowest p-1 shadow-[0_3px_10px_rgba(0,0,0,0.04)] flex items-center justify-center active:scale-95 transition-transform">
+<div class="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center bg-[#111111]/10">
+<span class="font-label-sm text-[10px] font-bold text-[#111111]">AREZZO</span>
+</div>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant max-w-[64px] truncate text-center">Arezzo</span>
+</button>
+<!-- Store: Cacau Show -->
+<button class="flex flex-col items-center gap-1.5 flex-shrink-0 snap-start group" type="button">
+<div class="w-[60px] h-[60px] rounded-full bg-surface-container-lowest p-1 shadow-[0_3px_10px_rgba(0,0,0,0.04)] flex items-center justify-center active:scale-95 transition-transform">
+<div class="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center bg-[#3E2723]/10">
+<span class="font-label-sm text-[10px] font-bold text-[#3E2723]">CACAU</span>
+</div>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant max-w-[64px] truncate text-center">Cacau Show</span>
+</button>
+</div>
+<!-- Category Microchips -->
+<div class="flex items-center gap-2 overflow-x-auto py-1 -mx-margin px-margin scrollbar-none">
+<button class="px-3.5 py-1.5 rounded-full bg-primary text-on-primary font-label-md text-label-md font-medium shadow-sm flex-shrink-0" type="button">
+        Todos
+      </button>
+<button class="px-3.5 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md font-medium shadow-[0_2px_8px_rgba(0,0,0,0.04)] flex-shrink-0 hover:bg-surface-container transition-colors" type="button">
+        Alimentação
+      </button>
+<button class="px-3.5 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md font-medium shadow-[0_2px_8px_rgba(0,0,0,0.04)] flex-shrink-0 hover:bg-surface-container transition-colors" type="button">
+        Moda
+      </button>
+<button class="px-3.5 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md font-medium shadow-[0_2px_8px_rgba(0,0,0,0.04)] flex-shrink-0 hover:bg-surface-container transition-colors" type="button">
+        Lazer
+      </button>
+<button class="px-3.5 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md font-medium shadow-[0_2px_8px_rgba(0,0,0,0.04)] flex-shrink-0 hover:bg-surface-container transition-colors" type="button">
+        Serviços
+      </button>
+<button class="px-3.5 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md font-medium shadow-[0_2px_8px_rgba(0,0,0,0.04)] flex-shrink-0 hover:bg-surface-container transition-colors" type="button">
+        Eventos
+      </button>
+</div>
+</section>
+<!-- Box 1: Featured Daily Offers (Carousel) -->
+<section class="w-full space-y-3">
+<div class="flex items-baseline justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[20px]" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Destaques do Dia</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary uppercase font-bold tracking-wider">Tempo Limitado</span>
+</div>
+<!-- Banner Scroll Cards -->
+<div class="flex gap-4 overflow-x-auto snap-x snap-mandatory -mx-margin px-margin scrollbar-none py-1">
+<!-- Banner 1: Havanna -->
+<article class="w-[85vw] max-w-[340px] flex-shrink-0 snap-center rounded-2xl overflow-hidden bg-surface-container-lowest shadow-[0_6px_22px_rgba(163,124,44,0.12)] flex flex-col relative group">
+<div class="relative h-44 w-full overflow-hidden">
+<img class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" data-alt="Delicate artisanal cappuccino in glass cup with generous golden dulce de leche swirl alongside a powdered sugar Argentine alfajor on a warm marble cafe table, soft golden hour cafe sunlight, high-end culinary photography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7i9N66qx7KSBdZMlbjkf19Bmpuf4MiZ7_jT2ZXHfvATlfE0ggoyQT0KR7B7FNr4g4pI1WSyGqhFsYn8zr3GQkZP_WuZxvsCk-ENzuzeu4gSouMzkFFC9vlZhh1Smi9knD2OUfyOb4muFS1era4qa5izNnoc4NMNQ1CWcqjCBwMb9SLqIAto4N34nMvDeI3XnKkjZ2VRvvl_VydbEFBMzv4TxtT_5yYKNUt75JFFQ">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<!-- Top Badges -->
+<div class="absolute top-3 left-3 flex items-center gap-1.5">
+<span class="px-2.5 py-1 rounded-full bg-primary-container text-on-primary font-label-sm text-label-sm font-bold shadow-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">stars</span> 80 pts
+            </span>
+<span class="px-2 py-0.5 rounded-full bg-error text-on-error font-label-sm text-label-sm font-medium shadow-sm">
+              Restam 12 un.
+            </span>
+</div>
+<!-- Validity Tag -->
+<div class="absolute bottom-2.5 left-3 text-white/90 font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-tertiary-fixed">schedule</span>
+            Válido até 18h hoje
+          </div>
+</div>
+<div class="p-3.5 flex flex-col justify-between flex-1">
+<div class="flex items-start justify-between gap-2">
+<div>
+<span class="font-label-sm text-label-sm font-semibold text-primary uppercase tracking-wide">Havanna Café</span>
+<h3 class="font-title-md text-title-md text-on-surface line-clamp-1">Café Dulce de Leche + Alfajor Clássico</h3>
+</div>
+</div>
+<div class="mt-3 flex items-center justify-between pt-2 border-t border-surface-container">
+<div class="flex items-baseline gap-1.5">
+<span class="font-label-sm text-label-sm line-through text-outline">R$ 34,90</span>
+<span class="font-headline-sm text-headline-sm font-bold text-primary">R$ 22,90</span>
+</div>
+<button class="px-3.5 py-1.5 rounded-full bg-primary text-on-primary font-label-md text-label-md font-semibold shadow-sm active:scale-95 transition-transform" type="button">
+              Resgatar
+            </button>
+</div>
+</div>
+</article>
+<!-- Banner 2: Outback -->
+<article class="w-[85vw] max-w-[340px] flex-shrink-0 snap-center rounded-2xl overflow-hidden bg-surface-container-lowest shadow-[0_6px_22px_rgba(163,124,44,0.12)] flex flex-col relative group">
+<div class="relative h-44 w-full overflow-hidden">
+<img class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" data-alt="Signature golden crispy blooming onion appetizer freshly fried with special creamy dip sauce on rustic dark wooden restaurant platter, warm amber ambient lighting, gourmet casual dining aesthetics" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9HjpfEw_alHbe2JXDGXlb9hcUY2kROSXpJFKjM3ZaVaXZJSl6jgMOtFhqBeD3Pe20VdznmdYi7b9f3T0B6dW1OsR8R90QjzRhOUUqeRa7hmfs2ses7WEs4yA8G10jTuL1989yQO8GgrqiRNfuicuB3eWtqCaeNVoHC7keHFRP7aVM1l56tvjXM5farJvEdCj8ZVzQCxgbYxHWFa3EbdLJXrXB7Mgh9N0FhyzXZe4">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<!-- Top Badges -->
+<div class="absolute top-3 left-3 flex items-center gap-1.5">
+<span class="px-2.5 py-1 rounded-full bg-secondary text-on-secondary font-label-sm text-label-sm font-bold shadow-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">verified</span> Grátis hoje
+            </span>
+</div>
+<!-- Validity Tag -->
+<div class="absolute bottom-2.5 left-3 text-white/90 font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-tertiary-fixed">restaurant</span>
+            Almoço Executivo (12h às 15h)
+          </div>
+</div>
+<div class="p-3.5 flex flex-col justify-between flex-1">
+<div class="flex items-start justify-between gap-2">
+<div>
+<span class="font-label-sm text-label-sm font-semibold text-secondary uppercase tracking-wide">Outback Steakhouse</span>
+<h3 class="font-title-md text-title-md text-on-surface line-clamp-1">Bloomin' Onion cortesia no almoço</h3>
+</div>
+</div>
+<div class="mt-3 flex items-center justify-between pt-2 border-t border-surface-container">
+<div class="flex items-baseline gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Na compra de um prato principal</span>
+</div>
+<button class="px-3.5 py-1.5 rounded-full bg-secondary text-on-secondary font-label-md text-label-md font-semibold shadow-sm active:scale-95 transition-transform" type="button">
+              Pegar Cupom
+            </button>
+</div>
+</div>
+</article>
+</div>
+<!-- Dots Indicator -->
+<div class="flex items-center justify-center gap-1.5 pt-1">
+<span class="w-5 h-1.5 rounded-full bg-primary"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-outline-variant"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-outline-variant"></span>
+</div>
+</section>
+<!-- Box 2: Primary Stamp Call to Action Card -->
+<section class="w-full">
+<div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#7a580f] via-[#c59b4e] to-[#735c00] p-4 text-on-primary shadow-[0_12px_28px_rgba(197,155,78,0.28)]">
+<!-- Decorative Filigree Accent Motif -->
+<div class="absolute -right-6 -bottom-6 w-32 h-32 rounded-full bg-white/10 blur-xl pointer-events-none"></div>
+<div class="absolute top-2 right-3 opacity-20 pointer-events-none">
+<span class="material-symbols-outlined text-[72px]">loyalty</span>
+</div>
+<div class="relative z-10 flex flex-col space-y-3">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-bold tracking-wider uppercase">
+            Passaporte Digital
+          </span>
+<span class="font-label-sm text-label-sm text-white/80 flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[13px]">bolt</span> Instantâneo
+          </span>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-white font-bold leading-tight">
+            Escaneie o QR Code nas lojas e ganhe pontos!
+          </h2>
+<p class="font-body-sm text-body-sm text-white/90 mt-1">
+            Cada compra acima de R$ 30 pontua para desbloquear estacionamento grátis e mimos exclusivos.
+          </p>
+</div>
+<button class="w-full py-3 px-4 rounded-full bg-surface-container-lowest text-primary font-headline-sm text-headline-sm font-bold shadow-lg flex items-center justify-center gap-2 active:scale-[0.98] transition-transform" type="button">
+<span class="material-symbols-outlined text-[20px] text-primary" style="font-variation-settings: 'FILL' 1;">qr_code_scanner</span>
+          Escanear agora
+        </button>
+<!-- Active Mission Progress Strip -->
+<div class="pt-2 mt-1 rounded-xl bg-black/15 p-2.5 backdrop-blur-sm">
+<div class="flex items-center justify-between text-white text-xs mb-1.5">
+<span class="font-label-md text-label-md font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-tertiary-fixed">explore</span>
+              Missão Explorador da Semana
+            </span>
+<span class="font-label-sm text-label-sm font-bold text-tertiary-fixed">+50 pts</span>
+</div>
+<!-- Progress Track -->
+<div class="w-full h-2 rounded-full bg-white/20 overflow-hidden">
+<div class="h-full rounded-full bg-tertiary-fixed transition-all duration-700" style="width: 33.3%;"></div>
+</div>
+<div class="flex justify-between items-center mt-1.5 font-label-sm text-label-sm text-white/80">
+<span>1 de 3 lojas visitadas</span>
+<span class="text-tertiary-fixed">Falta pouco!</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Box 3: Menu & Deals Delivery-style 2-Column Grid -->
+
+<!-- PWA Install Footer Prompt (Dismissable) -->
+<aside class="w-full rounded-2xl bg-surface-container-high p-3.5 shadow-[0_4px_14px_rgba(0,0,0,0.05)] flex items-center justify-between gap-3 transition-opacity" id="pwa-toast">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-xl bg-primary-container text-on-primary flex-shrink-0 flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[22px]">add_to_home_screen</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md font-bold text-on-surface truncate">Passaporte Capim Dourado</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Adicione à tela inicial para acesso rápido</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5 flex-shrink-0">
+<button class="px-3 py-1.5 rounded-full bg-primary text-on-primary font-label-sm text-label-sm font-bold shadow-sm active:scale-95 transition-transform" onclick="alert('Aplicativo pronto para instalação no seu dispositivo!')" type="button">
+        Instalar
+      </button>
+<button aria-label="Dispensar sugestão" class="w-7 h-7 rounded-full flex items-center justify-center text-outline hover:text-on-surface transition-colors" onclick="document.getElementById('pwa-toast').style.display='none'" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</aside>
+</div></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-4px_20px_rgba(163,124,44,0.08)]" data-active-classes="text-primary font-bold"><div class="flex justify-around items-center h-20 px-gutter relative"><a class="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] gap-space-xs text-on-surface-variant hover:text-primary transition-colors" data-path="inicio" href="#"><span class="material-symbols-outlined text-[24px]">home</span><span class="font-label-sm text-label-sm">Início</span></a><a class="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] gap-space-xs text-on-surface-variant hover:text-primary transition-colors" data-path="cupons" href="#"><span class="material-symbols-outlined text-[24px]">confirmation_number</span><span class="font-label-sm text-label-sm">Cupons</span></a><div class="relative -top-5 flex flex-col items-center"><a class="flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-b from-primary-container to-primary text-on-primary shadow-[0_10px_22px_rgba(197,155,78,0.35)] active:scale-95 transition-transform" data-path="escanear-qr" href="#"><span class="material-symbols-outlined text-[28px]">qr_code_scanner</span></a><span class="font-label-sm text-label-sm text-on-surface-variant mt-1 font-medium">Escanear</span></div><a class="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] gap-space-xs text-on-surface-variant hover:text-primary transition-colors" data-path="meu-passaporte" href="#"><span class="material-symbols-outlined text-[24px]">hotel_class</span><span class="font-label-sm text-label-sm">Passaporte</span></a><a class="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] gap-space-xs text-on-surface-variant hover:text-primary transition-colors" data-path="perfil" href="#"><span class="material-symbols-outlined text-[24px]">person</span><span class="font-label-sm text-label-sm">Perfil</span></a></div></nav>
+
+</body></html>
