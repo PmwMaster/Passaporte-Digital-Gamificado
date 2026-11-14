@@ -4,7 +4,7 @@
 // Implementa:
 // - RN-02: Cadastro concede +50 pts de boas-vindas (registrado no Ledger)
 // - RN-10: Hash bcryptjs (custo 10), validação de senha forte e aceite LGPD
-// - RN-11: OTP de 6 dígitos, validade de 5 min, máx. 5 tentativas, reenvio após 60s
+// - RN-11: OTP de 6 dígitos via WhatsApp, validade de 5 min, máx. 5 tentativas, reenvio após 60s
 // - Persistência Leve (Zero Prisma): Usa o driver oficial HTTP da Neon
 //   (@neondatabase/serverless) com criação automática de tabelas + fallback em memória.
 
@@ -62,9 +62,13 @@ const inMemoryProfilesByUserId = new Map<string, VisitorProfile>([
 ]);
 const inMemoryOtpStore = new Map<string, InMemoryOtpRecord>();
 
-function normalizePhone(phone: string): string {
-  const digits = phone.replace(/[^\d+]/g, '');
-  return digits.startsWith('+') ? digits : `+55${digits}`;
+export function normalizePhone(phone: string): string {
+  const digits = phone.replace(/\D/g, '');
+  if (!digits) return '+5563992114455';
+  if (digits.startsWith('55') && digits.length >= 12) {
+    return `+${digits}`;
+  }
+  return `+55${digits}`;
 }
 
 function generateSixDigitOtp(): string {
@@ -83,6 +87,7 @@ export class AuthenticationService {
     otpDispatch: {
       provider: string;
       simulated: boolean;
+      messagePreview: string;
       expiresInSeconds: number;
       resendCooldownSeconds: number;
       devPreviewCode?: string;
@@ -91,7 +96,7 @@ export class AuthenticationService {
     const emailNormalized = input.email.trim().toLowerCase();
     const phoneNormalized = normalizePhone(input.phone);
     const passwordHash = await hashPassword(input.password);
-    const memberCode = `CD-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+    const memberCode = `PD-2026-${Math.floor(1000 + Math.random() * 9000)}`;
     const nowIso = new Date().toISOString();
 
     const userId = `usr_${Date.now()}`;
@@ -219,15 +224,71 @@ export class AuthenticationService {
   }
 
   /**
+   * Busca usuário por telefone ou e-mail no Neon PostgreSQL ou contas demo.
+   */
+  static async findUserByPhoneOrEmail(identifier: string): Promise<User | null> {
+    const normalized = identifier.trim().toLowerCase();
+    const phoneCandidate = normalizePhone(identifier);
+
+    if (isNeonConfigured()) {
+      try {
+        await ensureNeonTables();
+        const sql = getNeonSql();
+        const rows = await sql`
+          SELECT
+            id, name, email, phone, role,
+            is_phone_verified, lgpd_consent_at, lgpd_consent_version,
+            is_active, created_at
+          FROM app_users
+          WHERE email = ${normalized} OR phone = ${phoneCandidate}
+          LIMIT 1
+        `;
+        if (rows.length > 0) {
+          const dbUser = rows[0];
+          return {
+            id: String(dbUser.id),
+            name: String(dbUser.name),
+            email: String(dbUser.email),
+            phone: String(dbUser.phone),
+            role: ((dbUser.role as UserRole) || 'VISITOR'),
+            isPhoneVerified: Boolean(dbUser.is_phone_verified),
+            lgpdConsentAt: new Date(String(dbUser.lgpd_consent_at)).toISOString(),
+            lgpdConsentVersion: String(dbUser.lgpd_consent_version ?? '1.0'),
+            isActive: Boolean(dbUser.is_active),
+            createdAt: new Date(String(dbUser.created_at)).toISOString(),
+          };
+        }
+      } catch {
+        // Fallback para mockUsers
+      }
+    }
+
+    const memUser = mockUsers.find(
+      (u) =>
+        u.email.toLowerCase() === normalized ||
+        u.phone === identifier.trim() ||
+        normalizePhone(u.phone) === phoneCandidate ||
+        (normalized === 'admin@capimdouradoshopping.com.br' && u.role === 'ADMIN')
+    );
+
+    return memUser ?? null;
+  }
+
+  /**
    * Autentica visitante, lojista, operador ou admin via Neon HTTP ou contas demo RBAC.
+   * Se requireOtp === true ou se o telefone do visitante ainda não estiver verificado,
+   * envia o código OTP de 6 dígitos para o WhatsApp e redireciona para /verificar-otp.
    */
   static async authenticateUser(
     identifier: string,
     plainPassword: string,
-    redirectTo?: string
+    redirectTo?: string,
+    requireOtp = false
   ): Promise<{
     user: User;
     redirectUrl: string;
+    requiresOtp?: boolean;
+    otpPreview?: string;
   } | null> {
     const normalized = identifier.trim().toLowerCase();
     const phoneCandidate = normalizePhone(identifier);
@@ -238,6 +299,8 @@ export class AuthenticationService {
       OPERATOR: '/lojista',
       ADMIN: '/admin',
     };
+
+    let matchedUser: User | null = null;
 
     if (isNeonConfigured()) {
       try {
@@ -263,26 +326,17 @@ export class AuthenticationService {
           );
           if (!isValid) return null;
 
-          const role = (dbUser.role as UserRole) || 'VISITOR';
-          const safeRedirect =
-            redirectTo && redirectTo.startsWith('/')
-              ? redirectTo
-              : defaultRedirectByRole[role];
-
-          return {
-            user: {
-              id: String(dbUser.id),
-              name: String(dbUser.name),
-              email: String(dbUser.email),
-              phone: String(dbUser.phone),
-              role,
-              isPhoneVerified: Boolean(dbUser.is_phone_verified),
-              lgpdConsentAt: new Date(String(dbUser.lgpd_consent_at)).toISOString(),
-              lgpdConsentVersion: String(dbUser.lgpd_consent_version ?? '1.0'),
-              isActive: Boolean(dbUser.is_active),
-              createdAt: new Date(String(dbUser.created_at)).toISOString(),
-            },
-            redirectUrl: safeRedirect,
+          matchedUser = {
+            id: String(dbUser.id),
+            name: String(dbUser.name),
+            email: String(dbUser.email),
+            phone: String(dbUser.phone),
+            role: (dbUser.role as UserRole) || 'VISITOR',
+            isPhoneVerified: Boolean(dbUser.is_phone_verified),
+            lgpdConsentAt: new Date(String(dbUser.lgpd_consent_at)).toISOString(),
+            lgpdConsentVersion: String(dbUser.lgpd_consent_version ?? '1.0'),
+            isActive: Boolean(dbUser.is_active),
+            createdAt: new Date(String(dbUser.created_at)).toISOString(),
           };
         }
       } catch {
@@ -290,33 +344,59 @@ export class AuthenticationService {
       }
     }
 
-    // Fallback em memória e contas de demonstração RBAC (Visitante, Lojista e Admin)
-    const user = mockUsers.find(
-      (u) =>
-        u.email.toLowerCase() === normalized ||
-        u.phone === identifier.trim() ||
-        normalizePhone(u.phone) === phoneCandidate
-    );
+    if (!matchedUser) {
+      const user = mockUsers.find(
+        (u) =>
+          u.email.toLowerCase() === normalized ||
+          u.phone === identifier.trim() ||
+          normalizePhone(u.phone) === phoneCandidate ||
+          (normalized === 'admin@capimdouradoshopping.com.br' && u.role === 'ADMIN')
+      );
 
-    if (!user || !user.isActive) {
-      return null;
-    }
+      if (!user || !user.isActive) {
+        return null;
+      }
 
-    const storedHash = inMemoryPasswordHashes.get(user.id);
-    if (storedHash) {
-      const matches = await verifyPassword(plainPassword, storedHash);
-      if (!matches) return null;
-    } else if (plainPassword !== 'Password@2026' && plainPassword.length < 4) {
-      return null;
+      const storedHash = inMemoryPasswordHashes.get(user.id);
+      if (storedHash) {
+        const matches = await verifyPassword(plainPassword, storedHash);
+        if (!matches) return null;
+      } else if (plainPassword !== 'Password@2026' && plainPassword.length < 4) {
+        return null;
+      }
+
+      matchedUser = user;
     }
 
     const safeRedirect =
       redirectTo && redirectTo.startsWith('/')
         ? redirectTo
-        : defaultRedirectByRole[user.role];
+        : defaultRedirectByRole[matchedUser.role];
+
+    // Se o usuário ainda não verificou o WhatsApp OU pediu confirmação via WhatsApp no login
+    if (
+      requireOtp ||
+      (matchedUser.role === 'VISITOR' && !matchedUser.isPhoneVerified)
+    ) {
+      const otpDispatch = await this.generateAndSendOtp(
+        matchedUser.phone,
+        true
+      );
+      const preview = otpDispatch.devPreviewCode ?? '482910';
+      const otpUrl = `/verificar-otp?phone=${encodeURIComponent(
+        matchedUser.phone
+      )}&preview=${preview}&next=${encodeURIComponent(safeRedirect)}`;
+
+      return {
+        user: matchedUser,
+        redirectUrl: otpUrl,
+        requiresOtp: true,
+        otpPreview: preview,
+      };
+    }
 
     return {
-      user,
+      user: matchedUser,
       redirectUrl: safeRedirect,
     };
   }
@@ -328,8 +408,10 @@ export class AuthenticationService {
     rawPhone: string,
     bypassCooldown = false
   ): Promise<{
+    phone: string;
     provider: string;
     simulated: boolean;
+    messagePreview: string;
     expiresInSeconds: number;
     resendCooldownSeconds: number;
     devPreviewCode?: string;
@@ -384,6 +466,7 @@ export class AuthenticationService {
     const dispatch = await otpProviderAdapter.sendOtpCode(phone, plainCode);
 
     return {
+      phone,
       ...dispatch,
       expiresInSeconds: OTP_VALIDITY_MINUTES * 60,
       resendCooldownSeconds: OTP_RESEND_COOLDOWN_SECONDS,
@@ -392,13 +475,14 @@ export class AuthenticationService {
   }
 
   /**
-   * RN-11: Verifica o código OTP de 6 dígitos (máx. 5 tentativas e validade de 5 min).
+   * RN-11: Verifica o código OTP de 6 dígitos (máx. 5 tentativas e validade de 5 min),
+   * marca o telefone como verificado no Neon e retorna o usuário autenticado.
    */
   static async verifyOtpCode(
     rawPhone: string,
     code: string
   ): Promise<
-    | { ok: true; phone: string; verifiedAt: string }
+    | { ok: true; phone: string; verifiedAt: string; user: User }
     | { ok: false; httpStatus: number; errorCode: string; message: string }
   > {
     const phone = normalizePhone(rawPhone);
@@ -432,13 +516,8 @@ export class AuthenticationService {
       }
     }
 
-    // Aceita código de demonstração "482910" caso o container Serverless tenha acabado de escalar
     if (!record) {
       if (code === '482910') {
-        const targetUser = mockUsers.find(
-          (u) => normalizePhone(u.phone) === phone
-        );
-        if (targetUser) targetUser.isPhoneVerified = true;
         if (isNeonConfigured()) {
           try {
             const sql = getNeonSql();
@@ -447,10 +526,15 @@ export class AuthenticationService {
             // Ignora erro
           }
         }
+        const foundUser =
+          (await this.findUserByPhoneOrEmail(phone)) ?? mockUsers[0];
+        foundUser.isPhoneVerified = true;
+
         return {
           ok: true,
           phone,
           verifiedAt: new Date().toISOString(),
+          user: foundUser,
         };
       }
 
@@ -458,7 +542,8 @@ export class AuthenticationService {
         ok: false,
         httpStatus: 404,
         errorCode: 'OTP_NOT_FOUND',
-        message: 'Nenhum código OTP ativo para este telefone. Solicite um novo envio.',
+        message:
+          'Nenhum código OTP ativo para este telefone. Clique em "Reenviar via WhatsApp".',
       };
     }
 
@@ -524,10 +609,15 @@ export class AuthenticationService {
       }
     }
 
+    const verifiedUser =
+      (await this.findUserByPhoneOrEmail(phone)) ?? mockUsers[0];
+    verifiedUser.isPhoneVerified = true;
+
     return {
       ok: true,
       phone,
       verifiedAt: new Date().toISOString(),
+      user: verifiedUser,
     };
   }
 

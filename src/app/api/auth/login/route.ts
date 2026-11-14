@@ -23,10 +23,13 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  const requireOtp = Boolean(body.requireOtp);
+
   const authResult = await AuthenticationService.authenticateUser(
     parsed.data.identifier,
     parsed.data.password,
-    parsed.data.redirectTo
+    parsed.data.redirectTo,
+    requireOtp
   );
 
   if (!authResult) {
