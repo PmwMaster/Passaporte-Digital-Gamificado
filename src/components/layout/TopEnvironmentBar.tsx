@@ -60,7 +60,6 @@ export function TopEnvironmentBar() {
     { label: 'Recompensas', href: '/recompensas' },
     { label: 'Vouchers', href: '/vouchers' },
     { label: 'Missões', href: '/missoes' },
-    { label: 'Extrato', href: '/extrato' },
   ];
 
   const navItems =
@@ -130,10 +129,7 @@ export function TopEnvironmentBar() {
           {/* Lado Direito: Pontos + Menu de Conta */}
           <div className="flex items-center gap-2.5 shrink-0 relative">
             {user && user.role === 'VISITOR' && (
-              <Link
-                href="/extrato"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary-fixed/60 text-on-primary-container hover:bg-primary-fixed transition"
-              >
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary-fixed/60 text-on-primary-container">
                 <span className="material-symbols-outlined text-primary text-base font-bold">
                   stars
                 </span>
@@ -143,7 +139,7 @@ export function TopEnvironmentBar() {
                 <span className="font-label-sm text-label-sm text-primary font-semibold uppercase">
                   pts
                 </span>
-              </Link>
+              </div>
             )}
 
             <button
