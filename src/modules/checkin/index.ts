@@ -2,10 +2,14 @@
 // MÓDULO 04 — CHECK-IN E VALIDAÇÃO POR QR CODE + HAVERSINE (RESPONSÁVEL: DEV 02)
 // ==============================================================================
 
-import { mockCheckIns, mockStores, mockVisitorProfile } from '@/infrastructure/database/mock-data';
-import { SHOPPING_CONFIG } from '@/shared/constants';
+import {
+  mockCheckIns,
+  mockStores,
+  mockVisitorProfile,
+} from '@/infrastructure/database/mock-data';
 import { CheckIn } from '@/shared/types/domain';
 import { validateGeofence } from '@/shared/utils/haversine';
+import { AdministrationService } from '@/modules/administration';
 import { GamificationService } from '@/modules/gamification';
 import { PointsLedgerService } from '@/modules/points';
 
@@ -20,7 +24,9 @@ export class CheckInService {
   static performCheckIn(input: PerformCheckInInput) {
     const visitorId = input.visitorId ?? mockVisitorProfile.id;
     const store = mockStores.find(
-      (s) => s.qrCodeToken.toUpperCase() === input.qrCodeToken.trim().toUpperCase() && s.isActive
+      (s) =>
+        s.qrCodeToken.toUpperCase() === input.qrCodeToken.trim().toUpperCase() &&
+        s.isActive
     );
 
     if (!store) {
@@ -28,15 +34,17 @@ export class CheckInService {
         ok: false as const,
         httpStatus: 404,
         code: 'INVALID_QR_TOKEN',
-        message: 'QR Code não reconhecido ou loja inativa no Passaporte Capim Dourado.',
+        message:
+          'QR Code não reconhecido ou loja inativa no Passaporte Capim Dourado.',
       };
     }
 
-    // 1. Validação Haversine (Geofence padrão 250m)
+    // 1. Validação Haversine usando a configuração dinâmica do Admin (padrão 250m)
+    const geofenceConfig = AdministrationService.getGeofenceConfig();
     const geofence = validateGeofence(
       { latitude: input.latitude, longitude: input.longitude },
-      SHOPPING_CONFIG.defaultCoordinates,
-      SHOPPING_CONFIG.defaultGeofenceRadiusMeters
+      geofenceConfig.defaultCoordinates,
+      geofenceConfig.defaultGeofenceRadiusMeters
     );
 
     if (!geofence.isWithinGeofence) {
@@ -94,7 +102,10 @@ export class CheckInService {
       description: `Check-in presencial validado (${geofence.distanceMeters}m) • ${store.name}`,
     });
 
-    const stamp = GamificationService.grantStampFromCheckIn(newCheckIn, store.category);
+    const stamp = GamificationService.grantStampFromCheckIn(
+      newCheckIn,
+      store.category
+    );
 
     return {
       ok: true as const,

@@ -1,5 +1,5 @@
 // ==============================================================================
-// MÓDULO 07 — CATÁLOGO DE RECOMPENSAS E VOUCHERS (RESPONSÁVEL: DEV 03)
+// MÓDULO 07 (FASE 3) — CATÁLOGO DE RECOMPENSAS E VOUCHERS (RESPONSÁVEL: DEV 03)
 // ==============================================================================
 
 import {
@@ -16,12 +16,22 @@ export class RewardsCatalogService {
     visitorPoints: number;
   } {
     return {
-      rewards: mockRewards.filter((r) => r.isActive && r.approvalStatus === 'APPROVED'),
+      rewards: mockRewards.filter(
+        (r) => r.isActive && r.approvalStatus === 'APPROVED'
+      ),
       visitorPoints: mockVisitorProfile.currentPoints,
     };
   }
 
   static listVisitorVouchers(statusFilter?: 'ACTIVE' | 'USED' | 'EXPIRED'): Voucher[] {
+    // Atualiza automaticamente status EXPIRED caso o prazo tenha vencido
+    const now = Date.now();
+    for (const v of mockVouchers) {
+      if (v.status === 'ACTIVE' && new Date(v.expiresAt).getTime() < now) {
+        v.status = 'EXPIRED';
+      }
+    }
+
     if (!statusFilter) return mockVouchers;
     return mockVouchers.filter((v) => v.status === statusFilter);
   }
@@ -33,7 +43,7 @@ export class RewardsCatalogService {
         ok: false as const,
         httpStatus: 404,
         code: 'REWARD_NOT_FOUND',
-        message: 'Recompensa não encontrada ou indisponível.',
+        message: 'Recompensa não encontrada ou aguardando aprovação.',
       };
     }
 
@@ -43,6 +53,23 @@ export class RewardsCatalogService {
         httpStatus: 409,
         code: 'OUT_OF_STOCK',
         message: 'Estoque esgotado para esta recompensa.',
+      };
+    }
+
+    // Verifica limite de resgates por visitante (RN-07: maxPerVisitor)
+    const visitorRedemptionsCount = mockVouchers.filter(
+      (v) =>
+        v.visitorId === mockVisitorProfile.id &&
+        v.rewardId === reward.id &&
+        v.status !== 'CANCELLED'
+    ).length;
+
+    if (visitorRedemptionsCount >= reward.maxPerVisitor) {
+      return {
+        ok: false as const,
+        httpStatus: 409,
+        code: 'MAX_REDEMPTION_LIMIT_REACHED',
+        message: `Você já atingiu o limite máximo de ${reward.maxPerVisitor} resgate(s) para esta recompensa.`,
       };
     }
 

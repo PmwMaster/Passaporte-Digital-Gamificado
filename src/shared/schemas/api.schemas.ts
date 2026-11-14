@@ -54,6 +54,12 @@ export const otpVerifySchema = z.object({
     .regex(/^\d{6}$/, 'O código OTP deve conter exatamente 6 dígitos numéricos'),
 });
 
+// Funcionalidade 03 (Fase 3) — Atualização de Perfil do Visitante
+export const updateVisitorProfileSchema = z.object({
+  name: z.string().trim().min(3).optional(),
+  optInMarketing: z.boolean().optional(),
+});
+
 // Funcionalidade 04 — Check-in QR Code + GPS
 export const createCheckInSchema = z.object({
   qrCodeToken: z.string().min(5, 'QR Code inválido'),
@@ -62,16 +68,62 @@ export const createCheckInSchema = z.object({
   accuracyMeters: z.number().nonnegative().optional(),
 });
 
-// Funcionalidade 07 — Resgate de Recompensa
+// Funcionalidade 07 (Fase 3) — Resgate de Recompensa
 export const redeemRewardSchema = z.object({
   idempotencyKey: z.string().optional(),
 });
 
-// Funcionalidade 08 — Validação e Baixa de Voucher pelo Lojista
+// Funcionalidade 08 (Fase 4) — Portal do Lojista: Validação, Ofertas e Estoque
 export const merchantVoucherCodeSchema = z.object({
   code: z
     .string()
     .trim()
     .toUpperCase()
     .min(6, 'Informe o código do voucher (ex.: VCH-CD-4821)'),
+});
+
+export const merchantCreateRewardSchema = z.object({
+  storeId: z.string().default('store_01'),
+  title: z.string().trim().min(4, 'Informe o título da oferta/recompensa'),
+  description: z.string().trim().min(10, 'Descreva o benefício para o visitante'),
+  rules: z.string().trim().min(5, 'Informe as regras de utilização no balcão'),
+  pointsCost: z.number().int().min(10, 'O custo mínimo é de 10 pontos'),
+  initialStock: z.number().int().min(1, 'O estoque inicial deve ser de pelo menos 1 unidade'),
+  maxPerVisitor: z.number().int().min(1).default(2),
+  voucherValidityHours: z.number().int().min(1).max(168).default(2),
+});
+
+export const merchantUpdateStockSchema = z.object({
+  rewardId: z.string().min(1),
+  deltaStock: z.number().int(),
+});
+
+// Funcionalidade 09 (Fase 2 & Fase 4) — Painel Administrativo
+export const adminCreateStoreSchema = z.object({
+  name: z.string().trim().min(3, 'Informe o nome da loja parceira'),
+  category: z.enum([
+    'GASTRONOMIA',
+    'MODA',
+    'SERVICOS',
+    'LAZER',
+    'BELEZA',
+    'TECNOLOGIA',
+  ]),
+  floor: z.string().trim().min(2, 'Informe o piso/localização'),
+  unitNumber: z.string().trim().min(1, 'Informe o número da loja/quiosque'),
+  description: z.string().trim().min(10, 'Informe uma descrição editorial da loja'),
+  checkInPoints: z.number().int().min(5).max(500).default(40),
+  isFeatured: z.boolean().default(true),
+});
+
+export const adminModerationSchema = z.object({
+  targetType: z.enum(['CAMPAIGN', 'REWARD']),
+  targetId: z.string().min(1),
+  decision: z.enum(['APPROVED', 'REJECTED']),
+});
+
+export const adminGeofenceConfigSchema = z.object({
+  latitude: z.number().min(-90).max(90),
+  longitude: z.number().min(-180).max(180),
+  radiusMeters: z.number().int().min(50).max(5000),
 });
