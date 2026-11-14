@@ -1,16 +1,9 @@
 ﻿# ==============================================================================
-# SCRIPT AUTOMÁTICO: SINCRONIZAR BANCO NEON + ENVIAR ENV + DEPLOY VERCEL
+# SCRIPT AUTOMÁTICO: ENVIAR ENV + DEPLOY VERCEL (CLIENTE LEVE NEON SERVERLESS)
 # ==============================================================================
 
 Write-Host "==========================================================" -ForegroundColor Yellow
-Write-Host " 1. Sincronizando tabelas do Prisma no Neon PostgreSQL    " -ForegroundColor Yellow
-Write-Host "==========================================================" -ForegroundColor Yellow
-
-npx prisma generate
-npx prisma db push --accept-data-loss
-
-Write-Host "`n==========================================================" -ForegroundColor Yellow
-Write-Host " 2. Enviando variáveis do .env e fazendo Deploy na Vercel " -ForegroundColor Yellow
+Write-Host " Enviando variáveis do .env e fazendo Deploy na Vercel    " -ForegroundColor Yellow
 Write-Host "==========================================================" -ForegroundColor Yellow
 
 $envLines = Get-Content -Path ".env" | Where-Object {
@@ -30,5 +23,5 @@ foreach ($line in $envLines) {
     $vercelArgs += "$key=$val"
 }
 
-Write-Host "-> Executando npx vercel --prod com todas as variáveis de build e runtime..." -ForegroundColor Green
+Write-Host "-> Executando npx vercel --prod com cliente leve @neondatabase/serverless..." -ForegroundColor Green
 & npx vercel @vercelArgs
