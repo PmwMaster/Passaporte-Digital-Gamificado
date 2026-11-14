@@ -40,7 +40,10 @@ export async function POST(request: NextRequest) {
     const response = NextResponse.json(
       {
         success: true,
-        data: result,
+        data: {
+          ...result,
+          redirectUrl: '/passaporte',
+        },
         meta: { timestamp: new Date().toISOString() },
       },
       { status: 201 }
