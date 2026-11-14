@@ -1,6 +1,14 @@
 # 🌟 Passe Dourado Shopping — Passaporte Digital Gamificado
 > **Projeto Desenvolvido para o HackaRun 2026 • Capim Dourado Shopping (Palmas - TO)**  
-> 🔗 **MVP em Produção na Vercel:** [https://passaporteshopping.vercel.app](https://passaporteshopping.vercel.app)
+
+---
+
+> ### 🚀 COMO ACESSAR O PROJETO (ACESSO DIRETO)
+> **Para avaliar a plataforma, não é necessário instalar nem configurar nada!**  
+> Basta entrar no link oficial em produção pelo seu celular ou computador:  
+> 👉 **[https://passaporteshopping.vercel.app](https://passaporteshopping.vercel.app)**  
+> 
+> *A aplicação já está 100% online na nuvem, conectada ao banco de dados Neon Serverless PostgreSQL e com todas as funcionalidades ativas e prontas para uso imediato.*
 
 ---
 
@@ -79,7 +87,11 @@ passaporteshopping/
 
 ---
 
-## 4️⃣ Instruções de Execução Local
+## 4️⃣ Instruções de Execução Local (Opcional)
+
+> 💡 **Lembrete aos Avaliadores:** Para testar e avaliar a solução, **não é preciso rodar nada localmente**. Basta entrar diretamente no link oficial em produção: **[https://passaporteshopping.vercel.app](https://passaporteshopping.vercel.app)**.
+> 
+> As instruções técnicas abaixo são disponibilizadas caso a banca deseje inspecionar, auditar ou reproduzir o projeto em seu próprio ambiente de desenvolvimento.
 
 Siga os passos abaixo para clonar, configurar e executar o projeto na sua máquina:
 
