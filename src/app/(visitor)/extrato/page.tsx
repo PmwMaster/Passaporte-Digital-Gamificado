@@ -1,7 +1,15 @@
+import { redirect } from 'next/navigation';
+import { getCurrentSession } from '@/infrastructure/authentication/session';
 import { PointsLedgerService } from '@/modules/points';
 import { EditorialCard } from '@/components/ui/EditorialCard';
 
-export default function PointsStatementPage() {
+export default async function PointsStatementPage() {
+  const session = await getCurrentSession();
+
+  if (!session) {
+    redirect('/login?redirectTo=/extrato');
+  }
+
   const statement = PointsLedgerService.getStatement();
 
   return (
@@ -31,7 +39,7 @@ export default function PointsStatementPage() {
         </h1>
         {statement.transactions.length === 0 ? (
           <p className="mt-4 rounded-xl border border-dashed border-brand-border bg-brand-ivory p-6 text-center text-xs text-brand-muted">
-            Nenhuma movimentação de pontos registrada.
+            Nenhuma movimentação de pontos registrada ainda.
           </p>
         ) : (
           <div className="mt-4 overflow-x-auto">

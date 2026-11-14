@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { mockStores } from '@/infrastructure/database/mock-data';
 import { SHOPPING_CONFIG } from '@/shared/constants';
 import { EditorialCard } from '@/components/ui/EditorialCard';
@@ -11,6 +12,7 @@ export default function CheckInPage() {
   const [longitude, setLongitude] = useState<number>(SHOPPING_CONFIG.defaultCoordinates.longitude);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [isError, setIsError] = useState(false);
+  const [needsLogin, setNeedsLogin] = useState(false);
 
   function handleCaptureBrowserGps() {
     if (!navigator.geolocation) {
@@ -24,17 +26,19 @@ export default function CheckInPage() {
         setLatitude(Number(pos.coords.latitude.toFixed(6)));
         setLongitude(Number(pos.coords.longitude.toFixed(6)));
         setIsError(false);
-        setStatusMessage('Localização capturada.');
+        setStatusMessage('Localização capturada com sucesso.');
       },
       () => {
         setIsError(true);
-        setStatusMessage('Permissão de GPS negada. Use os botões rápidos abaixo.');
+        setStatusMessage('Permissão de GPS negada. Ative a localização ou utilize a posição no shopping.');
       }
     );
   }
 
   async function handleCheckInSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setNeedsLogin(false);
+
     const res = await fetch('/api/checkins', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -53,7 +57,12 @@ export default function CheckInPage() {
       );
     } else {
       setIsError(true);
-      setStatusMessage(json.error?.message ?? 'Erro ao realizar check-in.');
+      if (res.status === 401) {
+        setNeedsLogin(true);
+        setStatusMessage('Você precisa entrar na sua conta para pontuar no check-in.');
+      } else {
+        setStatusMessage(json.error?.message ?? 'Erro ao realizar check-in.');
+      }
     }
   }
 
@@ -130,16 +139,6 @@ export default function CheckInPage() {
             >
               No Shopping
             </button>
-            <button
-              type="button"
-              onClick={() => {
-                setLatitude(-10.2125);
-                setLongitude(-48.355);
-              }}
-              className="rounded-lg border border-red-300 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700"
-            >
-              Fora do Shopping
-            </button>
           </div>
 
           {statusMessage && (
@@ -150,7 +149,23 @@ export default function CheckInPage() {
                   : 'border border-brand-emerald/30 bg-brand-emerald/10 text-brand-emerald'
               }`}
             >
-              {statusMessage}
+              <p>{statusMessage}</p>
+              {needsLogin && (
+                <div className="mt-2 flex gap-2">
+                  <Link
+                    href="/login?redirectTo=/checkin"
+                    className="inline-block rounded-lg bg-primary px-3 py-1 text-xs font-bold text-on-primary"
+                  >
+                    Entrar
+                  </Link>
+                  <Link
+                    href="/cadastro?redirectTo=/checkin"
+                    className="inline-block rounded-lg bg-primary-fixed px-3 py-1 text-xs font-bold text-on-primary-fixed"
+                  >
+                    Criar Conta (+50 pts)
+                  </Link>
+                </div>
+              )}
             </div>
           )}
 

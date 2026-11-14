@@ -20,6 +20,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Verifica se existe conta cadastrada para o número antes de disparar o WhatsApp
+    const existingUser = await AuthenticationService.findUserByPhoneOrEmail(
+      parsed.data.phone
+    );
+    if (!existingUser) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: 'USER_NOT_FOUND',
+            message:
+              'Nenhuma conta encontrada para este número de WhatsApp. Crie sua conta primeiro na aba "Criar conta".',
+          },
+        },
+        { status: 404 }
+      );
+    }
+
     const dispatch = await AuthenticationService.generateAndSendOtp(
       parsed.data.phone
     );
@@ -45,12 +63,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (
+      err instanceof Error &&
+      (err.message.startsWith('WHATSAPP_CREDENTIALS_MISSING:') ||
+        err.message.startsWith('WHATSAPP_API_ERROR:'))
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: 'WHATSAPP_PROVIDER_ERROR',
+            message: err.message.replace(/^WHATSAPP_[A-Z_]+:\s*/, ''),
+          },
+        },
+        { status: 502 }
+      );
+    }
+
     return NextResponse.json(
       {
         success: false,
         error: {
           code: 'OTP_DISPATCH_ERROR',
-          message: 'Não foi possível enviar o código OTP.',
+          message: 'Não foi possível enviar o código OTP via WhatsApp.',
         },
       },
       { status: 500 }

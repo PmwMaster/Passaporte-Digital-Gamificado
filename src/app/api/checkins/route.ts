@@ -1,8 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getCurrentSession } from '@/infrastructure/authentication/session';
 import { CheckInService } from '@/modules/checkin';
 import { createCheckInSchema } from '@/shared/schemas/api.schemas';
 
 export async function POST(request: NextRequest) {
+  const session = await getCurrentSession();
+  if (!session) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: {
+          code: 'UNAUTHORIZED',
+          message: 'Faça login para realizar check-in e acumular pontos.',
+        },
+      },
+      { status: 401 }
+    );
+  }
+
   const body = await request.json();
   const parsed = createCheckInSchema.safeParse(body);
 
@@ -19,7 +34,10 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const result = CheckInService.performCheckIn(parsed.data);
+  const result = CheckInService.performCheckIn({
+    ...parsed.data,
+    visitorId: session.userId,
+  });
 
   if (!result.ok) {
     return NextResponse.json(

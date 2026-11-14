@@ -1,13 +1,11 @@
 // ==============================================================================
-// MÓDULO 03 — PASSAPORTE E PERFIL DO VISITANTE (RESPONSÁVEL: DEV 01)
+// MÓDULO 03 — PASSAPORTE E PERFIL DO VISITANTE
 // ==============================================================================
 
 import {
   mockCheckIns,
   mockMissions,
   mockStamps,
-  mockUsers,
-  mockVisitorProfile,
   mockVouchers,
 } from '@/infrastructure/database/mock-data';
 import { SessionPayload } from '@/infrastructure/authentication/session';
@@ -20,20 +18,22 @@ export class VisitorPassportService {
       ? await AuthenticationService.getProfileFromSession(session)
       : null;
 
-    const user = sessionProfile?.user ?? mockUsers[0];
-    const profile = sessionProfile?.profile
-      ? {
-          id: sessionProfile.profile.id,
-          userId: user.id,
-          visitorName: user.name,
-          memberCode: sessionProfile.profile.memberCode,
-          level: sessionProfile.profile.level,
-          currentPoints: sessionProfile.profile.currentPoints,
-          lifetimePoints: sessionProfile.profile.lifetimePoints,
-          totalCheckIns: sessionProfile.profile.totalCheckIns,
-          totalStamps: sessionProfile.profile.totalStamps,
-        }
-      : mockVisitorProfile;
+    if (!sessionProfile) {
+      throw new Error('UNAUTHORIZED');
+    }
+
+    const user = sessionProfile.user;
+    const profile = sessionProfile.profile ?? {
+      id: `vis_${user.id}`,
+      userId: user.id,
+      visitorName: user.name,
+      memberCode: `CD-2026-${user.id.slice(-4).toUpperCase()}`,
+      level: 'BRONZE' as const,
+      currentPoints: 0,
+      lifetimePoints: 0,
+      totalCheckIns: 0,
+      totalStamps: 0,
+    };
 
     const levelInfo = PASSPORT_LEVELS[profile.level];
     const progressPercent = Math.min(
@@ -46,10 +46,14 @@ export class VisitorPassportService {
       profile,
       levelInfo,
       progressPercent,
-      stamps: mockStamps,
+      stamps: mockStamps.filter((s) => s.visitorId === profile.id || s.visitorId === user.id),
       activeMissions: mockMissions,
-      activeVouchers: mockVouchers.filter((v) => v.status === 'ACTIVE'),
-      recentCheckIns: mockCheckIns,
+      activeVouchers: mockVouchers.filter(
+        (v) => (v.visitorId === profile.id || v.visitorId === user.id) && v.status === 'ACTIVE'
+      ),
+      recentCheckIns: mockCheckIns.filter(
+        (c) => c.visitorId === profile.id || c.visitorId === user.id
+      ),
     };
   }
 }

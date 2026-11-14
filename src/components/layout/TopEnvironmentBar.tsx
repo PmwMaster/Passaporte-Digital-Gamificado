@@ -27,7 +27,7 @@ export function TopEnvironmentBar() {
     try {
       const res = await fetch('/api/auth/me', { cache: 'no-store' });
       const json = await res.json();
-      if (json.success && json.data?.authenticated && json.data?.user) {
+      if (json.success && json.data?.user) {
         setUser(json.data.user);
         setProfile(json.data.profile ?? null);
       } else {
@@ -35,28 +35,14 @@ export function TopEnvironmentBar() {
         setProfile(null);
       }
     } catch {
-      // Ignora erro de rede silenciosamente
+      setUser(null);
+      setProfile(null);
     }
   }
 
   useEffect(() => {
     refreshSession();
   }, [pathname]);
-
-  async function handleQuickSwitch(identifier: string) {
-    setMenuOpen(false);
-    const res = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ identifier, password: 'Password@2026' }),
-    });
-    const json = await res.json();
-    if (json.success && json.data?.redirectUrl) {
-      await refreshSession();
-      router.push(json.data.redirectUrl);
-      router.refresh();
-    }
-  }
 
   async function handleLogout() {
     setMenuOpen(false);
@@ -96,7 +82,7 @@ export function TopEnvironmentBar() {
     <>
       <header className="sticky top-0 left-0 w-full z-50 bg-surface/95 backdrop-blur-xl border-b border-surface-container-high">
         <div className="h-16 max-w-[1400px] mx-auto px-4 sm:px-6 flex items-center justify-between gap-4">
-          {/* Left: Emblem + Brand */}
+          {/* Logo / Marca */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0">
             <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-primary-container p-0.5 flex items-center justify-center">
               <div className="w-full h-full rounded-full bg-surface-container-lowest flex items-center justify-center">
@@ -115,7 +101,7 @@ export function TopEnvironmentBar() {
             </div>
           </Link>
 
-          {/* Center Navigation */}
+          {/* Navegação Desktop */}
           <nav
             aria-label="Navegação Principal"
             className="hidden lg:flex items-center gap-1"
@@ -141,9 +127,9 @@ export function TopEnvironmentBar() {
             })}
           </nav>
 
-          {/* Right: Points Pill + Profile Menu */}
+          {/* Lado Direito: Pontos + Menu de Conta */}
           <div className="flex items-center gap-2.5 shrink-0 relative">
-            {(!user || user.role === 'VISITOR') && (
+            {user && user.role === 'VISITOR' && (
               <Link
                 href="/extrato"
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary-fixed/60 text-on-primary-container hover:bg-primary-fixed transition"
@@ -166,7 +152,7 @@ export function TopEnvironmentBar() {
               className="flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-full bg-surface-container-low hover:bg-surface-container transition cursor-pointer"
             >
               <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary-container to-primary text-on-primary flex items-center justify-center font-bold text-xs">
-                {user ? user.name.slice(0, 2).toUpperCase() : 'CD'}
+                {user ? user.name.slice(0, 2).toUpperCase() : <span className="material-symbols-outlined text-sm">person</span>}
               </div>
               <span className="hidden sm:inline font-label-md text-xs font-bold text-on-surface">
                 {user ? user.name.split(' ')[0] : 'Entrar'}
@@ -177,91 +163,67 @@ export function TopEnvironmentBar() {
             </button>
 
             {menuOpen && (
-              <div className="absolute right-0 top-12 w-64 rounded-2xl bg-surface-container-lowest p-3.5 shadow-xl border border-surface-container-high z-50">
+              <div className="absolute right-0 top-12 w-60 rounded-2xl bg-surface-container-lowest p-3 shadow-xl border border-surface-container-high z-50">
                 {user ? (
-                  <div className="pb-2.5 mb-2.5 border-b border-surface-container-high">
-                    <p className="font-label-md text-xs font-bold text-on-surface truncate">
-                      {user.name}
-                    </p>
-                    <p className="font-body-sm text-[11px] text-on-surface-variant truncate">
-                      {user.email}
-                    </p>
+                  <div>
+                    <div className="pb-2.5 mb-2.5 border-b border-surface-container-high">
+                      <p className="font-label-md text-xs font-bold text-on-surface truncate">
+                        {user.name}
+                      </p>
+                      <p className="font-body-sm text-[11px] text-on-surface-variant truncate">
+                        {user.email}
+                      </p>
+                      <span className="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold bg-primary-fixed/50 text-primary">
+                        {user.role}
+                      </span>
+                    </div>
+
+                    <div className="space-y-1">
+                      {user.role === 'VISITOR' && (
+                        <Link
+                          href="/passaporte"
+                          onClick={() => setMenuOpen(false)}
+                          className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-surface-container-low text-xs font-medium text-on-surface"
+                        >
+                          <span className="material-symbols-outlined text-primary text-[16px]">
+                            badge
+                          </span>
+                          <span>Meu Passaporte</span>
+                        </Link>
+                      )}
+                      <button
+                        type="button"
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-left text-xs font-medium text-red-700 hover:bg-red-50 cursor-pointer"
+                      >
+                        <span className="material-symbols-outlined text-[16px]">
+                          logout
+                        </span>
+                        <span>Sair da conta</span>
+                      </button>
+                    </div>
                   </div>
                 ) : (
-                  <div className="pb-2.5 mb-2.5 border-b border-surface-container-high grid grid-cols-2 gap-2">
-                    <Link
-                      href="/login"
-                      onClick={() => setMenuOpen(false)}
-                      className="py-1.5 rounded-full bg-primary text-on-primary text-center font-label-md text-xs font-bold"
-                    >
-                      Entrar
-                    </Link>
-                    <Link
-                      href="/cadastro"
-                      onClick={() => setMenuOpen(false)}
-                      className="py-1.5 rounded-full bg-primary-fixed/50 text-on-primary-fixed text-center font-label-md text-xs font-bold"
-                    >
-                      Criar Conta
-                    </Link>
-                  </div>
-                )}
-
-                <div className="space-y-1">
-                  <span className="block font-label-sm text-[10px] uppercase text-outline px-1">
-                    Trocar Perfil
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleQuickSwitch('mariana.alves@exemplo.com.br')
-                    }
-                    className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-surface-container-low text-left text-xs font-medium text-on-surface"
-                  >
-                    <span className="material-symbols-outlined text-primary text-[16px]">
-                      person
-                    </span>
-                    <span>Visitante (Mariana)</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleQuickSwitch('gerencia@cafejalapao.com.br')
-                    }
-                    className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-surface-container-low text-left text-xs font-medium text-on-surface"
-                  >
-                    <span className="material-symbols-outlined text-secondary text-[16px]">
-                      storefront
-                    </span>
-                    <span>Lojista / Caixa</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleQuickSwitch('admin@passedourado.com.br')
-                    }
-                    className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-surface-container-low text-left text-xs font-medium text-on-surface"
-                  >
-                    <span className="material-symbols-outlined text-tertiary text-[16px]">
-                      admin_panel_settings
-                    </span>
-                    <span>Administração</span>
-                  </button>
-                </div>
-
-                {user && (
-                  <div className="mt-2.5 pt-2.5 border-t border-surface-container-high">
-                    <button
-                      type="button"
-                      onClick={handleLogout}
-                      className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg bg-error-container/50 text-on-error-container font-label-md text-xs font-bold hover:bg-error-container transition"
-                    >
-                      <span className="material-symbols-outlined text-[15px]">
-                        logout
-                      </span>
-                      <span>Sair</span>
-                    </button>
+                  <div className="space-y-2">
+                    <p className="text-xs text-on-surface-variant px-1">
+                      Acesse para ver seus pontos e carimbos:
+                    </p>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Link
+                        href="/login"
+                        onClick={() => setMenuOpen(false)}
+                        className="py-2 rounded-xl bg-primary text-on-primary text-center font-label-md text-xs font-bold"
+                      >
+                        Entrar
+                      </Link>
+                      <Link
+                        href="/cadastro"
+                        onClick={() => setMenuOpen(false)}
+                        className="py-2 rounded-xl bg-primary-fixed/60 text-on-primary-fixed text-center font-label-md text-xs font-bold"
+                      >
+                        Cadastrar
+                      </Link>
+                    </div>
                   </div>
                 )}
               </div>
@@ -270,7 +232,7 @@ export function TopEnvironmentBar() {
         </div>
       </header>
 
-      {/* Mobile Bottom Navigation Bar */}
+      {/* Navegação Mobile Inferior */}
       <nav
         aria-label="Navegação Mobile"
         className="lg:hidden fixed bottom-0 left-0 w-full z-50 bg-surface/95 backdrop-blur-xl border-t border-surface-container-high"
@@ -326,7 +288,7 @@ export function TopEnvironmentBar() {
           </Link>
 
           <Link
-            href="/login"
+            href={user ? '/passaporte' : '/login'}
             className={`flex flex-col items-center justify-center gap-0.5 ${
               pathname.startsWith('/login') || pathname.startsWith('/cadastro')
                 ? 'text-primary font-bold'
@@ -334,7 +296,7 @@ export function TopEnvironmentBar() {
             }`}
           >
             <span className="material-symbols-outlined text-[22px]">person</span>
-            <span className="font-label-sm text-[10px]">Conta</span>
+            <span className="font-label-sm text-[10px]">{user ? 'Conta' : 'Entrar'}</span>
           </Link>
         </div>
       </nav>

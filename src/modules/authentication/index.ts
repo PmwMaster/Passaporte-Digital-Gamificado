@@ -1,13 +1,14 @@
 // ==============================================================================
-// MÓDULO 02 (FASE 1) — AUTENTICAÇÃO, CADASTRO, SESSÃO JWT & MOTOR OTP (DEV 01)
+// MÓDULO 02 (FASE 1) — AUTENTICAÇÃO, CADASTRO, SESSÃO JWT & MOTOR OTP REAL (DEV 01)
 // ==============================================================================
 // Implementa:
 // - RN-02: Cadastro concede +50 pts de boas-vindas (registrado no Ledger)
 // - RN-10: Hash bcryptjs (custo 10), validação de senha forte e aceite LGPD
-// - RN-11: OTP de 6 dígitos via WhatsApp, validade de 5 min, máx. 5 tentativas, reenvio após 60s
-// - Persistência Leve (Zero Prisma): Usa o driver oficial HTTP da Neon
-//   (@neondatabase/serverless) com criação automática de tabelas + fallback em memória.
+// - RN-11: OTP real de 6 dígitos via Meta WhatsApp Cloud API, validade de 5 min,
+//   máx. 5 tentativas, reenvio após 60s.
+// - Persistência Real no Neon PostgreSQL via HTTP (@neondatabase/serverless).
 
+import crypto from 'crypto';
 import {
   ensureNeonTables,
   getNeonSql,
@@ -49,13 +50,11 @@ export interface RegisterVisitorInput {
 interface InMemoryOtpRecord {
   phone: string;
   codeHash: string;
-  plainPreviewForDev: string;
   attempts: number;
   expiresAt: number;
   lastSentAt: number;
 }
 
-// Armazenamento em memória de hashes de senha e OTPs para sincronização e contas demo
 const inMemoryPasswordHashes = new Map<string, string>();
 const inMemoryProfilesByUserId = new Map<string, VisitorProfile>([
   [mockUsers[0].id, mockVisitorProfile],
@@ -64,7 +63,7 @@ const inMemoryOtpStore = new Map<string, InMemoryOtpRecord>();
 
 export function normalizePhone(phone: string): string {
   const digits = phone.replace(/\D/g, '');
-  if (!digits) return '+5563992114455';
+  if (!digits) return '';
   if (digits.startsWith('55') && digits.length >= 12) {
     return `+${digits}`;
   }
@@ -72,25 +71,25 @@ export function normalizePhone(phone: string): string {
 }
 
 function generateSixDigitOtp(): string {
-  return String(Math.floor(100000 + Math.random() * 900000));
+  return String(crypto.randomInt(100000, 1000000));
 }
 
 export class AuthenticationService {
   /**
-   * RN-02 + RN-10 + RN-11: Registra novo visitante no Neon PostgreSQL via HTTP
-   * (@neondatabase/serverless), credita +50 pts de boas-vindas no Ledger e gera OTP.
+   * RN-02 + RN-10 + RN-11: Registra novo visitante no Neon PostgreSQL via HTTP,
+   * credita +50 pts de boas-vindas no Ledger e dispara OTP real via Meta WhatsApp Cloud API.
    */
   static async registerVisitor(input: RegisterVisitorInput): Promise<{
     user: User;
     profile: VisitorProfile;
     welcomeTransaction: PointTransaction;
     otpDispatch: {
+      phone: string;
       provider: string;
       simulated: boolean;
-      messagePreview: string;
+      messageId?: string;
       expiresInSeconds: number;
       resendCooldownSeconds: number;
-      devPreviewCode?: string;
     };
   }> {
     const emailNormalized = input.email.trim().toLowerCase();
@@ -103,7 +102,6 @@ export class AuthenticationService {
     const profileId = `vis_${Date.now()}`;
     const txId = `ptx_welcome_${Date.now()}`;
 
-    // Verifica duplicidade nas contas demo em memória
     const existingMem = mockUsers.find(
       (u) =>
         u.email.toLowerCase() === emailNormalized ||
@@ -113,118 +111,113 @@ export class AuthenticationService {
       throw new Error('USER_ALREADY_EXISTS');
     }
 
-    // 1. Grava diretamente no Neon PostgreSQL via driver HTTP (@neondatabase/serverless)
     if (isNeonConfigured()) {
-      try {
-        await ensureNeonTables();
-        const sql = getNeonSql();
+      await ensureNeonTables();
+      const sql = getNeonSql();
 
-        const existingRows = await sql`
-          SELECT id FROM app_users
-          WHERE email = ${emailNormalized} OR phone = ${phoneNormalized}
-          LIMIT 1
-        `;
+      const existingRows = await sql`
+        SELECT id FROM app_users
+        WHERE email = ${emailNormalized} OR phone = ${phoneNormalized}
+        LIMIT 1
+      `;
 
-        if (existingRows.length > 0) {
-          throw new Error('USER_ALREADY_EXISTS');
-        }
-
-        await sql`
-          INSERT INTO app_users (
-            id, name, email, phone, password_hash, role,
-            is_phone_verified, lgpd_consent_at, lgpd_consent_version,
-            opt_in_marketing, is_active, created_at
-          ) VALUES (
-            ${userId}, ${input.name.trim()}, ${emailNormalized}, ${phoneNormalized},
-            ${passwordHash}, 'VISITOR', FALSE, NOW(), '1.0',
-            ${Boolean(input.optInMarketing)}, TRUE, NOW()
-          )
-        `;
-
-        await sql`
-          INSERT INTO app_visitor_profiles (
-            id, user_id, member_code, level,
-            current_points, lifetime_points, total_check_ins, total_stamps
-          ) VALUES (
-            ${profileId}, ${userId}, ${memberCode}, 'BRONZE',
-            ${WELCOME_BONUS_POINTS}, ${WELCOME_BONUS_POINTS}, 0, 0
-          )
-        `;
-
-        await sql`
-          INSERT INTO app_point_transactions (
-            id, visitor_id, type, amount, balance_after,
-            origin, reference_id, description
-          ) VALUES (
-            ${txId}, ${profileId}, 'CREDIT', ${WELCOME_BONUS_POINTS},
-            ${WELCOME_BONUS_POINTS}, 'PROMO_BONUS', 'WELCOME_BONUS_RN02',
-            'Bônus de Boas-Vindas (+50 pts) — Cadastro Passe Dourado'
-          )
-        `;
-      } catch (err) {
-        if (err instanceof Error && err.message === 'USER_ALREADY_EXISTS') {
-          throw err;
-        }
-        console.warn('[Neon HTTP] Registro salvo em modo híbrido local:', err);
+      if (existingRows.length > 0) {
+        throw new Error('USER_ALREADY_EXISTS');
       }
+
+      // Dispara primeiro o OTP real via Meta WhatsApp Cloud API antes de consolidar,
+      // garantindo que o número de WhatsApp receba o código de 6 dígitos
+      const otpDispatch = await this.generateAndSendOtp(phoneNormalized, true);
+
+      await sql`
+        INSERT INTO app_users (
+          id, name, email, phone, password_hash, role,
+          is_phone_verified, lgpd_consent_at, lgpd_consent_version,
+          opt_in_marketing, is_active, created_at
+        ) VALUES (
+          ${userId}, ${input.name.trim()}, ${emailNormalized}, ${phoneNormalized},
+          ${passwordHash}, 'VISITOR', FALSE, NOW(), '1.0',
+          ${Boolean(input.optInMarketing)}, TRUE, NOW()
+        )
+      `;
+
+      await sql`
+        INSERT INTO app_visitor_profiles (
+          id, user_id, member_code, level,
+          current_points, lifetime_points, total_check_ins, total_stamps
+        ) VALUES (
+          ${profileId}, ${userId}, ${memberCode}, 'BRONZE',
+          ${WELCOME_BONUS_POINTS}, ${WELCOME_BONUS_POINTS}, 0, 0
+        )
+      `;
+
+      await sql`
+        INSERT INTO app_point_transactions (
+          id, visitor_id, type, amount, balance_after,
+          origin, reference_id, description
+        ) VALUES (
+          ${txId}, ${profileId}, 'CREDIT', ${WELCOME_BONUS_POINTS},
+          ${WELCOME_BONUS_POINTS}, 'PROMO_BONUS', 'WELCOME_BONUS_RN02',
+          'Bônus de Boas-Vindas (+50 pts) — Cadastro Passe Dourado'
+        )
+      `;
+
+      const newUser: User = {
+        id: userId,
+        name: input.name.trim(),
+        email: emailNormalized,
+        phone: phoneNormalized,
+        role: 'VISITOR',
+        isPhoneVerified: false,
+        lgpdConsentAt: nowIso,
+        lgpdConsentVersion: '1.0',
+        isActive: true,
+        createdAt: nowIso,
+      };
+
+      const newProfile: VisitorProfile = {
+        id: profileId,
+        userId: newUser.id,
+        visitorName: newUser.name,
+        memberCode,
+        level: 'BRONZE',
+        currentPoints: WELCOME_BONUS_POINTS,
+        lifetimePoints: WELCOME_BONUS_POINTS,
+        totalCheckIns: 0,
+        totalStamps: 0,
+      };
+
+      const welcomeTx: PointTransaction = {
+        id: txId,
+        visitorId: newProfile.id,
+        type: 'CREDIT',
+        amount: WELCOME_BONUS_POINTS,
+        balanceAfter: WELCOME_BONUS_POINTS,
+        origin: 'PROMO_BONUS',
+        referenceId: 'WELCOME_BONUS_RN02',
+        description:
+          'Bônus de Boas-Vindas (+50 pts) — Cadastro Passe Dourado',
+        createdAt: nowIso,
+      };
+
+      mockUsers.unshift(newUser);
+      inMemoryPasswordHashes.set(newUser.id, passwordHash);
+      inMemoryProfilesByUserId.set(newUser.id, newProfile);
+      mockPointTransactions.unshift(welcomeTx);
+
+      return {
+        user: newUser,
+        profile: newProfile,
+        welcomeTransaction: welcomeTx,
+        otpDispatch,
+      };
     }
 
-    // 2. Mantém sincronizado em memória para leitura imediata em qualquer rota
-    const newUser: User = {
-      id: userId,
-      name: input.name.trim(),
-      email: emailNormalized,
-      phone: phoneNormalized,
-      role: 'VISITOR',
-      isPhoneVerified: false,
-      lgpdConsentAt: nowIso,
-      lgpdConsentVersion: '1.0',
-      isActive: true,
-      createdAt: nowIso,
-    };
-
-    const newProfile: VisitorProfile = {
-      id: profileId,
-      userId: newUser.id,
-      visitorName: newUser.name,
-      memberCode,
-      level: 'BRONZE',
-      currentPoints: WELCOME_BONUS_POINTS,
-      lifetimePoints: WELCOME_BONUS_POINTS,
-      totalCheckIns: 0,
-      totalStamps: 0,
-    };
-
-    const welcomeTx: PointTransaction = {
-      id: txId,
-      visitorId: newProfile.id,
-      type: 'CREDIT',
-      amount: WELCOME_BONUS_POINTS,
-      balanceAfter: WELCOME_BONUS_POINTS,
-      origin: 'PROMO_BONUS',
-      referenceId: 'WELCOME_BONUS_RN02',
-      description:
-        'Bônus de Boas-Vindas (+50 pts) — Cadastro Passe Dourado',
-      createdAt: nowIso,
-    };
-
-    mockUsers.unshift(newUser);
-    inMemoryPasswordHashes.set(newUser.id, passwordHash);
-    inMemoryProfilesByUserId.set(newUser.id, newProfile);
-    mockPointTransactions.unshift(welcomeTx);
-
-    const otpDispatch = await this.generateAndSendOtp(phoneNormalized, true);
-
-    return {
-      user: newUser,
-      profile: newProfile,
-      welcomeTransaction: welcomeTx,
-      otpDispatch,
-    };
+    throw new Error('DATABASE_NOT_CONFIGURED');
   }
 
   /**
-   * Busca usuário por telefone ou e-mail no Neon PostgreSQL ou contas demo.
+   * Busca usuário por telefone ou e-mail no Neon PostgreSQL.
    */
   static async findUserByPhoneOrEmail(identifier: string): Promise<User | null> {
     const normalized = identifier.trim().toLowerCase();
@@ -250,7 +243,7 @@ export class AuthenticationService {
             name: String(dbUser.name),
             email: String(dbUser.email),
             phone: String(dbUser.phone),
-            role: ((dbUser.role as UserRole) || 'VISITOR'),
+            role: (dbUser.role as UserRole) || 'VISITOR',
             isPhoneVerified: Boolean(dbUser.is_phone_verified),
             lgpdConsentAt: new Date(String(dbUser.lgpd_consent_at)).toISOString(),
             lgpdConsentVersion: String(dbUser.lgpd_consent_version ?? '1.0'),
@@ -275,9 +268,9 @@ export class AuthenticationService {
   }
 
   /**
-   * Autentica visitante, lojista, operador ou admin via Neon HTTP ou contas demo RBAC.
-   * Se requireOtp === true ou se o telefone do visitante ainda não estiver verificado,
-   * envia o código OTP de 6 dígitos para o WhatsApp e redireciona para /verificar-otp.
+   * Autentica visitante, lojista, operador ou admin via Neon HTTP.
+   * Quando requireOtp === true (ou visitante ainda sem telefone verificado),
+   * dispara o código real de 6 dígitos via Meta WhatsApp Cloud API.
    */
   static async authenticateUser(
     identifier: string,
@@ -288,7 +281,6 @@ export class AuthenticationService {
     user: User;
     redirectUrl: string;
     requiresOtp?: boolean;
-    otpPreview?: string;
   } | null> {
     const normalized = identifier.trim().toLowerCase();
     const phoneCandidate = normalizePhone(identifier);
@@ -373,25 +365,19 @@ export class AuthenticationService {
         ? redirectTo
         : defaultRedirectByRole[matchedUser.role];
 
-    // Se o usuário ainda não verificou o WhatsApp OU pediu confirmação via WhatsApp no login
     if (
       requireOtp ||
       (matchedUser.role === 'VISITOR' && !matchedUser.isPhoneVerified)
     ) {
-      const otpDispatch = await this.generateAndSendOtp(
-        matchedUser.phone,
-        true
-      );
-      const preview = otpDispatch.devPreviewCode ?? '482910';
+      await this.generateAndSendOtp(matchedUser.phone, true);
       const otpUrl = `/verificar-otp?phone=${encodeURIComponent(
         matchedUser.phone
-      )}&preview=${preview}&next=${encodeURIComponent(safeRedirect)}`;
+      )}&next=${encodeURIComponent(safeRedirect)}`;
 
       return {
         user: matchedUser,
         redirectUrl: otpUrl,
         requiresOtp: true,
-        otpPreview: preview,
       };
     }
 
@@ -402,7 +388,8 @@ export class AuthenticationService {
   }
 
   /**
-   * RN-11: Gera e envia código OTP de 6 dígitos (validade 5 min, reenvio após 60s).
+   * RN-11: Gera e envia código OTP real de 6 dígitos via Meta WhatsApp Cloud API
+   * (validade 5 min, reenvio após 60s).
    */
   static async generateAndSendOtp(
     rawPhone: string,
@@ -411,10 +398,9 @@ export class AuthenticationService {
     phone: string;
     provider: string;
     simulated: boolean;
-    messagePreview: string;
+    messageId?: string;
     expiresInSeconds: number;
     resendCooldownSeconds: number;
-    devPreviewCode?: string;
   }> {
     const phone = normalizePhone(rawPhone);
     const now = Date.now();
@@ -435,47 +421,43 @@ export class AuthenticationService {
     const codeHash = await hashPassword(plainCode);
     const expiresAt = now + OTP_VALIDITY_MINUTES * 60 * 1000;
 
+    // 1. Dispara o código real na Meta WhatsApp Cloud API
+    const dispatch = await otpProviderAdapter.sendOtpCode(phone, plainCode);
+
+    // 2. Salva o hash bcrypt do código no Neon PostgreSQL e em memória
     inMemoryOtpStore.set(phone, {
       phone,
       codeHash,
-      plainPreviewForDev: plainCode,
       attempts: 0,
       expiresAt,
       lastSentAt: now,
     });
 
     if (isNeonConfigured()) {
-      try {
-        await ensureNeonTables();
-        const sql = getNeonSql();
-        const expiresIso = new Date(expiresAt).toISOString();
-        await sql`
-          INSERT INTO app_otp_verifications (phone, code_hash, attempts, expires_at, last_sent_at)
-          VALUES (${phone}, ${codeHash}, 0, ${expiresIso}, NOW())
-          ON CONFLICT (phone) DO UPDATE SET
-            code_hash = EXCLUDED.code_hash,
-            attempts = 0,
-            expires_at = EXCLUDED.expires_at,
-            last_sent_at = NOW()
-        `;
-      } catch {
-        // Mantém no inMemoryOtpStore
-      }
+      await ensureNeonTables();
+      const sql = getNeonSql();
+      const expiresIso = new Date(expiresAt).toISOString();
+      await sql`
+        INSERT INTO app_otp_verifications (phone, code_hash, attempts, expires_at, last_sent_at)
+        VALUES (${phone}, ${codeHash}, 0, ${expiresIso}, NOW())
+        ON CONFLICT (phone) DO UPDATE SET
+          code_hash = EXCLUDED.code_hash,
+          attempts = 0,
+          expires_at = EXCLUDED.expires_at,
+          last_sent_at = NOW()
+      `;
     }
-
-    const dispatch = await otpProviderAdapter.sendOtpCode(phone, plainCode);
 
     return {
       phone,
       ...dispatch,
       expiresInSeconds: OTP_VALIDITY_MINUTES * 60,
       resendCooldownSeconds: OTP_RESEND_COOLDOWN_SECONDS,
-      devPreviewCode: plainCode,
     };
   }
 
   /**
-   * RN-11: Verifica o código OTP de 6 dígitos (máx. 5 tentativas e validade de 5 min),
+   * RN-11: Verifica o código OTP real de 6 dígitos (máx. 5 tentativas e validade de 5 min),
    * marca o telefone como verificado no Neon e retorna o usuário autenticado.
    */
   static async verifyOtpCode(
@@ -488,7 +470,6 @@ export class AuthenticationService {
     const phone = normalizePhone(rawPhone);
     let record = inMemoryOtpStore.get(phone);
 
-    // Se não estiver na memória local (ex.: outra instância Serverless na Vercel), busca no Neon PostgreSQL
     if (!record && isNeonConfigured()) {
       try {
         await ensureNeonTables();
@@ -504,7 +485,6 @@ export class AuthenticationService {
           record = {
             phone: String(r.phone),
             codeHash: String(r.code_hash),
-            plainPreviewForDev: '',
             attempts: Number(r.attempts ?? 0),
             expiresAt: new Date(String(r.expires_at)).getTime(),
             lastSentAt: new Date(String(r.last_sent_at)).getTime(),
@@ -512,38 +492,17 @@ export class AuthenticationService {
           inMemoryOtpStore.set(phone, record);
         }
       } catch {
-        // Segue para fallback em memória
+        // Fallback
       }
     }
 
     if (!record) {
-      if (code === '482910') {
-        if (isNeonConfigured()) {
-          try {
-            const sql = getNeonSql();
-            await sql`UPDATE app_users SET is_phone_verified = TRUE WHERE phone = ${phone}`;
-          } catch {
-            // Ignora erro
-          }
-        }
-        const foundUser =
-          (await this.findUserByPhoneOrEmail(phone)) ?? mockUsers[0];
-        foundUser.isPhoneVerified = true;
-
-        return {
-          ok: true,
-          phone,
-          verifiedAt: new Date().toISOString(),
-          user: foundUser,
-        };
-      }
-
       return {
         ok: false,
         httpStatus: 404,
         errorCode: 'OTP_NOT_FOUND',
         message:
-          'Nenhum código OTP ativo para este telefone. Clique em "Reenviar via WhatsApp".',
+          'Nenhum código OTP ativo encontrado para este número. Clique em "Reenviar via WhatsApp".',
       };
     }
 
@@ -567,8 +526,7 @@ export class AuthenticationService {
     }
 
     record.attempts += 1;
-    const isMatch =
-      (await verifyPassword(code, record.codeHash)) || code === '482910';
+    const isMatch = await verifyPassword(code, record.codeHash);
 
     if (!isMatch) {
       if (isNeonConfigured()) {
@@ -580,7 +538,7 @@ export class AuthenticationService {
             WHERE phone = ${phone}
           `;
         } catch {
-          // Ignora erro em modo fallback
+          // Ignora erro
         }
       }
       const remaining = OTP_MAX_ATTEMPTS - record.attempts;
@@ -605,12 +563,21 @@ export class AuthenticationService {
         await sql`UPDATE app_users SET is_phone_verified = TRUE WHERE phone = ${phone}`;
         await sql`DELETE FROM app_otp_verifications WHERE phone = ${phone}`;
       } catch {
-        // Ignora caso em modo fallback
+        // Ignora erro
       }
     }
 
-    const verifiedUser =
-      (await this.findUserByPhoneOrEmail(phone)) ?? mockUsers[0];
+    const verifiedUser = await this.findUserByPhoneOrEmail(phone);
+    if (!verifiedUser) {
+      return {
+        ok: false,
+        httpStatus: 404,
+        errorCode: 'USER_NOT_FOUND',
+        message:
+          'Nenhuma conta encontrada para este número de WhatsApp. Crie sua conta primeiro na aba "Criar conta".',
+      };
+    }
+
     verifiedUser.isPhoneVerified = true;
 
     return {

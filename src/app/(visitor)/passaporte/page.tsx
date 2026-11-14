@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { getCurrentSession } from '@/infrastructure/authentication/session';
 import { VisitorPassportService } from '@/modules/visitor';
 import { PassportMemberCard } from '@/components/shared/PassportMemberCard';
@@ -6,6 +7,11 @@ import { EditorialCard } from '@/components/ui/EditorialCard';
 
 export default async function VisitorPassportPage() {
   const session = await getCurrentSession();
+
+  if (!session) {
+    redirect('/login?redirectTo=/passaporte');
+  }
+
   const passport = await VisitorPassportService.getPassportOverview(session);
 
   return (
@@ -111,10 +117,12 @@ export default async function VisitorPassportPage() {
               <dt className="text-brand-muted">E-mail:</dt>
               <dd className="font-semibold text-brand-ink">{passport.user.email}</dd>
             </div>
-            <div className="flex justify-between pb-2">
-              <dt className="text-brand-muted">WhatsApp:</dt>
-              <dd className="font-semibold text-brand-emerald">{passport.user.phone}</dd>
-            </div>
+            {passport.user.phone && (
+              <div className="flex justify-between pb-2">
+                <dt className="text-brand-muted">WhatsApp:</dt>
+                <dd className="font-semibold text-brand-emerald">{passport.user.phone}</dd>
+              </div>
+            )}
           </dl>
           <div className="mt-5 grid grid-cols-2 gap-2">
             <Link

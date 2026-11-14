@@ -70,12 +70,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (
+      err instanceof Error &&
+      (err.message.startsWith('WHATSAPP_CREDENTIALS_MISSING:') ||
+        err.message.startsWith('WHATSAPP_API_ERROR:'))
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: 'WHATSAPP_PROVIDER_ERROR',
+            message: err.message.replace(/^WHATSAPP_[A-Z_]+:\s*/, ''),
+          },
+        },
+        { status: 502 }
+      );
+    }
+
     return NextResponse.json(
       {
         success: false,
         error: {
           code: 'INTERNAL_ERROR',
-          message: 'Erro ao processar cadastro do Passaporte Digital.',
+          message: 'Erro ao processar cadastro do Passe Dourado.',
         },
       },
       { status: 500 }

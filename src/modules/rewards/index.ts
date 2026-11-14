@@ -1,9 +1,10 @@
 // ==============================================================================
-// MÓDULO 07 (FASE 3) — CATÁLOGO DE RECOMPENSAS E VOUCHERS (RESPONSÁVEL: DEV 03)
+// MÓDULO 07 — CATÁLOGO DE RECOMPENSAS E VOUCHERS
 // ==============================================================================
 
 import {
   mockRewards,
+  mockUsers,
   mockVisitorProfile,
   mockVouchers,
 } from '@/infrastructure/database/mock-data';
@@ -23,8 +24,7 @@ export class RewardsCatalogService {
     };
   }
 
-  static listVisitorVouchers(statusFilter?: 'ACTIVE' | 'USED' | 'EXPIRED'): Voucher[] {
-    // Atualiza automaticamente status EXPIRED caso o prazo tenha vencido
+  static listVisitorVouchers(statusFilter?: 'ACTIVE' | 'USED' | 'EXPIRED', visitorId?: string): Voucher[] {
     const now = Date.now();
     for (const v of mockVouchers) {
       if (v.status === 'ACTIVE' && new Date(v.expiresAt).getTime() < now) {
@@ -32,11 +32,17 @@ export class RewardsCatalogService {
       }
     }
 
-    if (!statusFilter) return mockVouchers;
-    return mockVouchers.filter((v) => v.status === statusFilter);
+    let list = mockVouchers;
+    if (visitorId) {
+      list = list.filter((v) => v.visitorId === visitorId);
+    }
+    if (statusFilter) {
+      list = list.filter((v) => v.status === statusFilter);
+    }
+    return list;
   }
 
-  static redeemReward(rewardId: string) {
+  static redeemReward(rewardId: string, visitorId = mockVisitorProfile.id) {
     const reward = mockRewards.find((r) => r.id === rewardId && r.isActive);
     if (!reward || reward.approvalStatus !== 'APPROVED') {
       return {
@@ -59,7 +65,7 @@ export class RewardsCatalogService {
     // Verifica limite de resgates por visitante (RN-07: maxPerVisitor)
     const visitorRedemptionsCount = mockVouchers.filter(
       (v) =>
-        v.visitorId === mockVisitorProfile.id &&
+        v.visitorId === visitorId &&
         v.rewardId === reward.id &&
         v.status !== 'CANCELLED'
     ).length;
@@ -92,12 +98,15 @@ export class RewardsCatalogService {
     // Operação atômica: decrementa estoque, debita no ledger e emite voucher
     reward.availableStock -= 1;
 
+    const user = mockUsers.find((u) => u.id === visitorId);
+    const visitorName = user?.name ?? mockVisitorProfile.visitorName;
+
     const voucher: Voucher = {
       id: `vch_${Date.now()}`,
       code,
       qrPayload: `PASSAPORTE-CD:VOUCHER:${code}`,
-      visitorId: mockVisitorProfile.id,
-      visitorName: mockVisitorProfile.visitorName,
+      visitorId,
+      visitorName,
       rewardId: reward.id,
       rewardTitle: reward.title,
       storeId: reward.storeId,
@@ -110,7 +119,7 @@ export class RewardsCatalogService {
     };
 
     const ledgerTx = PointsLedgerService.recordDebit({
-      visitorId: mockVisitorProfile.id,
+      visitorId,
       amount: reward.pointsCost,
       origin: 'REWARD_REDEMPTION',
       referenceId: voucher.id,
