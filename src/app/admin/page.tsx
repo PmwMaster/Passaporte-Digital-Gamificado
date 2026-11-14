@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { AdministrationService } from '@/modules/administration';
 import { Campaign, Store, StoreCategory } from '@/shared/types/domain';
 import { PasseDouradoLogo } from '@/components/shared/PasseDouradoLogo';
@@ -97,17 +99,13 @@ const DESKTOP_ENGAGED_STORES = [
 ];
 
 export default function AdminDashboardPage() {
+  const router = useRouter();
   const initialData = AdministrationService.getExecutiveDashboard();
 
   // RBAC: Controle de Acesso Restrito ao Administrador Geral (role === 'ADMIN')
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
   const [adminUserEmail, setAdminUserEmail] = useState('admin@passedourado.com.br');
-  const [loginIdentifier, setLoginIdentifier] = useState('admin@passedourado.com.br');
-  const [loginPassword, setLoginPassword] = useState('');
-  const [showLoginPassword, setShowLoginPassword] = useState(false);
-  const [loginError, setLoginError] = useState<string | null>(null);
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const [period, setPeriod] = useState<'TODAY' | '7D' | 'MONTH' | 'YEAR'>('TODAY');
   const [adminTab, setAdminTab] = useState<'STORES' | 'QR' | 'MODERATION' | 'RULES'>('STORES');
@@ -126,61 +124,23 @@ export default function AdminDashboardPage() {
           setAdminUserEmail(json.data.user.email);
         } else {
           setIsAdminAuthenticated(false);
+          router.replace('/admin/login');
         }
       })
       .catch(() => {
         setIsAdminAuthenticated(false);
+        router.replace('/admin/login');
       })
       .finally(() => {
         setIsCheckingAuth(false);
       });
-  }, []);
-
-  async function handleAdminLogin(e: React.FormEvent) {
-    e.preventDefault();
-    setLoginError(null);
-    setIsLoggingIn(true);
-    try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          identifier: loginIdentifier.trim(),
-          password: loginPassword,
-          redirectTo: '/admin',
-        }),
-      });
-      const json = await res.json();
-      if (!json.success || !json.data?.user) {
-        setLoginError(
-          json.error?.message ?? 'Credenciais administrativas inválidas.'
-        );
-        return;
-      }
-      if (json.data.user.role !== 'ADMIN') {
-        setLoginError(
-          `Acesso bloqueado: a conta "${json.data.user.email}" possui perfil ${json.data.user.role} e não tem permissão de Administrador Geral.`
-        );
-        return;
-      }
-      setIsAdminAuthenticated(true);
-      setAdminUserEmail(json.data.user.email);
-      window.dispatchEvent(new Event('passport:auth-updated'));
-      showToast(
-        `Bem-vindo(a), ${json.data.user.name}! Sessão administrativa iniciada.`
-      );
-    } catch {
-      setLoginError('Falha ao conectar com o servidor de autenticação.');
-    } finally {
-      setIsLoggingIn(false);
-    }
-  }
+  }, [router]);
 
   async function handleAdminLogout() {
     await fetch('/api/auth/logout', { method: 'POST' }).catch(() => {});
     setIsAdminAuthenticated(false);
-    setLoginPassword('');
     window.dispatchEvent(new Event('passport:auth-updated'));
+    router.replace('/admin/login');
   }
 
   const [bannersOrder, setBannersOrder] = useState([
@@ -327,115 +287,20 @@ export default function AdminDashboardPage() {
     );
   });
 
-  if (isCheckingAuth) {
+  if (isCheckingAuth || !isAdminAuthenticated) {
     return (
-      <div className="mx-auto max-w-md py-16 text-center text-xs font-bold text-[#6E655A]">
-        Verificando credenciais administrativas (RBAC)...
-      </div>
-    );
-  }
-
-  if (!isAdminAuthenticated) {
-    return (
-      <div className="mx-auto max-w-md py-8 text-[#1E1914]">
-        <div className="rounded-[28px] border border-[#EAE3D5] bg-white p-6 shadow-sm sm:p-8">
-          <div className="flex flex-col items-center text-center">
-            <PasseDouradoLogo size={54} variant="circle" />
-            <span className="mt-3 rounded-full bg-[#F3E2BA] px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#74520B]">
-              🔒 ACESSO RESTRITO · RBAC ADMIN
-            </span>
-            <h1 className="mt-2 font-headline text-2xl font-bold text-[#1E1914]">
-              Administração Passe Dourado
-            </h1>
-            <p className="mt-1 text-xs leading-relaxed text-[#6E655A]">
-              Esta área é exclusiva para a Superintendência e Administração Geral do shopping. Visitantes e lojistas não possuem permissão de acesso.
-            </p>
-          </div>
-
-          {/* Credencial do Admin Padrão para Teste Rápido */}
-          <div className="mt-5 rounded-2xl border border-[#E6DFCE] bg-[#FAF6EE] p-3.5 text-xs">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#74520B]">
-                Credencial de Admin Padrão
-              </span>
-              <button
-                type="button"
-                onClick={() => {
-                  setLoginIdentifier('admin@passedourado.com.br');
-                  setLoginPassword('Admin@2026');
-                  setLoginError(null);
-                }}
-                className="rounded-full bg-[#74520B] px-3 py-1 text-[10px] font-bold text-white"
-              >
-                Preencher Admin Padrão
-              </button>
-            </div>
-            <p className="mt-1.5 text-[11px] text-[#4E463E]">
-              <strong>Usuário/E-mail:</strong>{' '}
-              <code className="font-mono font-bold">admin@passedourado.com.br</code>{' '}
-              (ou <code className="font-mono font-bold">admin_geral</code>)
-            </p>
-            <p className="text-[11px] text-[#4E463E]">
-              <strong>Senha:</strong>{' '}
-              <code className="font-mono font-bold">Admin@2026</code>
-            </p>
-          </div>
-
-          {loginError && (
-            <div className="mt-4 rounded-2xl border border-[#C92A2A]/30 bg-[#FDECEC] p-3 text-xs font-bold text-[#C92A2A]">
-              ✕ {loginError}
-            </div>
-          )}
-
-          <form onSubmit={handleAdminLogin} className="mt-5 space-y-4">
-            <div>
-              <label className="block text-xs font-bold text-[#1E1914]">
-                E-mail ou usuário administrativo
-              </label>
-              <input
-                type="text"
-                value={loginIdentifier}
-                onChange={(e) => setLoginIdentifier(e.target.value)}
-                placeholder="admin@passedourado.com.br"
-                className="mt-1.5 w-full rounded-2xl border border-[#DFD7C8] bg-[#FAF6EE] px-4 py-3 text-sm font-medium text-[#1E1914]"
-                required
-              />
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between">
-                <label className="block text-xs font-bold text-[#1E1914]">
-                  Senha do Administrador
-                </label>
-                <button
-                  type="button"
-                  onClick={() => setShowLoginPassword((v) => !v)}
-                  className="text-[11px] font-bold text-[#74520B]"
-                >
-                  {showLoginPassword ? 'Ocultar' : 'Mostrar'}
-                </button>
-              </div>
-              <input
-                type={showLoginPassword ? 'text' : 'password'}
-                value={loginPassword}
-                onChange={(e) => setLoginPassword(e.target.value)}
-                placeholder="••••••••••"
-                className="mt-1.5 w-full rounded-2xl border border-[#DFD7C8] bg-[#FAF6EE] px-4 py-3 text-sm font-medium text-[#1E1914]"
-                required
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={isLoggingIn}
-              className="w-full rounded-full bg-[#74520B] py-3.5 text-xs font-extrabold text-white shadow-sm transition hover:bg-[#5E4108] disabled:opacity-50"
-            >
-              {isLoggingIn
-                ? 'Validando permissão ADMIN...'
-                : 'Entrar no Painel Administrativo →'}
-            </button>
-          </form>
-        </div>
+      <div className="mx-auto max-w-md py-16 text-center space-y-4">
+        <p className="text-xs font-bold text-[#6E655A]">
+          {isCheckingAuth
+            ? 'Verificando credenciais administrativas (RBAC)...'
+            : 'Acesso restrito. Redirecionando para o Login Administrativo...'}
+        </p>
+        <Link
+          href="/admin/login"
+          className="inline-flex items-center justify-center rounded-full bg-[#74520B] px-5 py-2.5 text-xs font-bold text-white shadow-sm"
+        >
+          Ir para Login Administrativo →
+        </Link>
       </div>
     );
   }
