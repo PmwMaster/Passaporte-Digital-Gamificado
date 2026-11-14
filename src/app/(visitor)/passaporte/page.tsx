@@ -1,11 +1,13 @@
 import Link from 'next/link';
+import { getCurrentSession } from '@/infrastructure/authentication/session';
 import { VisitorPassportService } from '@/modules/visitor';
 import { VisitorNavigation } from '@/components/layout/VisitorNavigation';
 import { PassportMemberCard } from '@/components/shared/PassportMemberCard';
 import { EditorialCard, ModuleHeader } from '@/components/ui/EditorialCard';
 
-export default function VisitorPassportPage() {
-  const passport = VisitorPassportService.getPassportOverview();
+export default async function VisitorPassportPage() {
+  const session = await getCurrentSession();
+  const passport = await VisitorPassportService.getPassportOverview(session);
 
   return (
     <div>

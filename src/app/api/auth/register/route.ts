@@ -17,7 +17,9 @@ export async function POST(request: NextRequest) {
           success: false,
           error: {
             code: 'VALIDATION_ERROR',
-            message: parsed.error.issues[0]?.message ?? 'Dados de cadastro inválidos.',
+            message:
+              parsed.error.issues[0]?.message ?? 'Dados de cadastro inválidos.',
+            details: { issues: parsed.error.issues },
           },
         },
         { status: 400 }
@@ -30,6 +32,7 @@ export async function POST(request: NextRequest) {
       userId: result.user.id,
       name: result.user.name,
       email: result.user.email,
+      phone: result.user.phone,
       role: result.user.role,
       issuedAt: Date.now(),
     });
@@ -59,7 +62,8 @@ export async function POST(request: NextRequest) {
           success: false,
           error: {
             code: 'USER_ALREADY_EXISTS',
-            message: 'Já existe um passaporte cadastrado com este e-mail ou telefone.',
+            message:
+              'Já existe um passaporte cadastrado com este e-mail ou telefone.',
           },
         },
         { status: 409 }
@@ -71,7 +75,7 @@ export async function POST(request: NextRequest) {
         success: false,
         error: {
           code: 'INTERNAL_ERROR',
-          message: 'Erro ao processar cadastro.',
+          message: 'Erro ao processar cadastro do Passaporte Digital.',
         },
       },
       { status: 500 }

@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
+import { getCurrentSession } from '@/infrastructure/authentication/session';
 import { VisitorPassportService } from '@/modules/visitor';
 
 export async function GET() {
-  const passport = VisitorPassportService.getPassportOverview();
+  const session = await getCurrentSession();
+  const passport = await VisitorPassportService.getPassportOverview(session);
   return NextResponse.json({
     success: true,
     data: passport,

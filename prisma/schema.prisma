@@ -122,6 +122,7 @@ model User {
   isPhoneVerified    Boolean         @default(false)
   lgpdConsentAt      DateTime
   lgpdConsentVersion String          @default("1.0")
+  optInMarketing     Boolean         @default(false)
   isActive           Boolean         @default(true)
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @updatedAt
@@ -130,6 +131,16 @@ model User {
   merchant           Merchant?
   operator           Operator?
   administrator      Administrator?
+}
+
+model OtpVerification {
+  id         String   @id @default(cuid())
+  phone      String   @unique
+  codeHash   String
+  attempts   Int      @default(0)
+  expiresAt  DateTime
+  lastSentAt DateTime @default(now())
+  createdAt  DateTime @default(now())
 }
 
 model VisitorProfile {
