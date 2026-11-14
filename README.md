@@ -16,6 +16,10 @@ Toda a documentação técnica, de produto e de governança entre os três desen
 - [`docs/TEAM_DIVISION.md`](./docs/TEAM_DIVISION.md) — **Divisão de Trabalho (3 Devs / 9 Funcionalidades)**: Mapa de responsabilidades, *code ownership* por pasta, estratégia de branches e checklist de Pull Request.
 - [`docs/DEVELOPMENT_GUIDE.md`](./docs/DEVELOPMENT_GUIDE.md) — **Guia de Desenvolvimento**: Como instalar, configurar variáveis de ambiente e executar localmente.
 - [`docs/DUVIDAS_E_PREMISSAS.md`](./docs/DUVIDAS_E_PREMISSAS.md) — **Dúvidas e Decisões Pendentes (P0, P1 e P2)**: Mapeamento completo das definições comerciais/técnicas em aberto e recomendações arquiteturais.
+- [`docs/ESPECIFICACAO_TELAS.md`](./docs/ESPECIFICACAO_TELAS.md) — **Especificação Detalhada das Telas**: Descrição do desafio, telas 01–05 (mobile/desktop) e incorporação da tecnologia sorteada (dados em tempo real).
+- [`docs/tech-spec/`](./docs/tech-spec/README.md) — **Tech Spec em 3 Partes**: Fundação e Visitante · Lojista, Cupons e Tempo Real · Administração, PWA e Entrega.
+- [`docs/Passaporte_do_Shopping_Atualizado.pdf`](./docs/Passaporte_do_Shopping_Atualizado.pdf) — **Especificação original** com as regras de negócio.
+- [`prototipos/`](./prototipos) — **Protótipos Stitch** (`code.html` + `screen.png`) das telas mobile e `_desktop`.
 
 ---
 

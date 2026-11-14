@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&amp;family=Outfit:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"secondary-fixed-dim":"#88d982","tertiary-container":"#c19e26","on-error-container":"#93000a","tertiary-fixed":"#ffe088","surface":"#fcf9f8","tertiary":"#735c00","inverse-surface":"#313030","on-surface-variant":"#4e4638","primary":"#7a580f","error-container":"#ffdad6","surface-container-low":"#f6f3f2","inverse-primary":"#edc06f","primary-fixed-dim":"#edc06f","tertiary-fixed-dim":"#e9c349","error":"#ba1a1a","outline-variant":"#d2c5b3","secondary":"#1b6d24","on-tertiary-container":"#463600","primary-fixed":"#ffdea8","on-tertiary-fixed":"#241a00","secondary-fixed":"#a3f69c","surface-container-lowest":"#ffffff","inverse-on-surface":"#f3f0ef","surface-tint":"#7a580f","primary-container":"#c59b4e","on-tertiary":"#ffffff","surface-container-highest":"#e5e2e1","surface-bright":"#fcf9f8","on-error":"#ffffff","surface-variant":"#e5e2e1","secondary-container":"#a0f399","outline":"#807666","on-primary-fixed-variant":"#5e4200","on-secondary-fixed":"#002204","on-primary-fixed":"#271900","background":"#fcf9f8","on-secondary-container":"#217128","on-primary":"#ffffff","on-tertiary-fixed-variant":"#574500","on-background":"#1c1b1b","surface-dim":"#dcd9d9","on-secondary-fixed-variant":"#005312","surface-container":"#f0eded","on-primary-container":"#4c3400","surface-container-high":"#eae7e7","on-secondary":"#ffffff","on-surface":"#1c1b1b"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"space-xl":"2.25rem","space-md":"1rem","space-xs":"0.25rem","margin":"1.25rem","space-lg":"1.5rem","gutter":"1rem","space-sm":"0.5rem"},fontFamily:{"headline-lg":["Playfair Display"],"headline-md":["Playfair Display"],"label-md":["Outfit"],"body-sm":["Outfit"],"body-lg":["Outfit"],"label-lg":["Outfit"],"headline-sm":["Outfit"],"display-lg":["Playfair Display"],"body-md":["Outfit"],"label-sm":["Outfit"],"title-md":["Outfit"]},fontSize:{"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"0em","fontWeight":"600"}],"headline-md":["22px",{"lineHeight":"28px","fontWeight":"600"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.05em","fontWeight":"500"}],"body-sm":["12px",{"lineHeight":"16px","fontWeight":"400"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}],"label-lg":["14px",{"lineHeight":"18px","letterSpacing":"0.04em","fontWeight":"600"}],"headline-sm":["18px",{"lineHeight":"24px","fontWeight":"600"}],"display-lg":["36px",{"lineHeight":"44px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"label-sm":["10px",{"lineHeight":"14px","letterSpacing":"0.08em","fontWeight":"600"}],"title-md":["16px",{"lineHeight":"22px","letterSpacing":"0.01em","fontWeight":"600"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed"><header class="fixed top-0 left-0 w-full z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_12px_rgba(122,88,15,0.06)]"><div class="h-20 w-full px-margin flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg shrink-0"><div class="flex items-center gap-space-sm"><div class="w-11 h-11 rounded-full bg-gradient-to-tr from-primary to-primary-container p-0.5 shadow-[0_2px_10px_rgba(197,155,78,0.3)] flex items-center justify-center"><div class="w-full h-full rounded-full bg-surface-container-lowest flex items-center justify-center"><span class="material-symbols-outlined text-primary text-xl font-bold">local_florist</span></div></div><div class="flex flex-col"><span class="font-headline-md text-headline-sm text-primary tracking-tight leading-none">Capim Dourado</span><span class="font-label-sm text-label-sm tracking-wider uppercase text-on-surface-variant font-semibold mt-0.5">Shopping · Passaporte</span></div></div><div class="hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-low text-on-surface-variant hover:text-primary transition-colors cursor-pointer"><span class="material-symbols-outlined text-primary text-sm">pin_drop</span><span class="font-label-md text-label-md font-medium">Piso L1 · Principal</span><span class="material-symbols-outlined text-xs">expand_more</span></div></div><nav class="hidden lg:flex items-center gap-1 xl:gap-2 px-space-sm" data-active-classes="text-primary font-bold bg-primary-fixed/40 rounded-full"><a class="px-3 py-1.5 font-label-lg text-label-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all" data-path="inicio-vitrine" href="#">Início</a><a class="px-3 py-1.5 font-label-lg text-label-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all" data-path="lojas" href="#">Lojas</a><a class="px-3 py-1.5 font-label-lg text-label-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all" data-path="cupons-e-pontos" href="#">Cupons &amp; Pontos</a><a class="px-3 py-1.5 font-label-lg text-label-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all" data-path="missoes" href="#">Missões</a><a class="px-3 py-1.5 font-label-lg text-label-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all" data-path="portal-do-lojista" href="#">Lojista</a><a class="px-3 py-1.5 font-label-lg text-label-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all" data-path="admin-concierge" href="#">Admin</a></nav><div class="flex items-center gap-space-md shrink-0"><div class="hidden md:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-container-low text-on-surface-variant hover:bg-surface-container transition-all w-52"><span class="material-symbols-outlined text-outline text-lg">search</span><span class="font-body-sm text-body-sm text-outline flex-1">Buscar lojas, ofertas...</span><kbd class="px-1.5 py-0.5 rounded text-[10px] bg-surface-container-highest text-on-surface-variant font-label-sm">⌘K</kbd></div><div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-primary-fixed/60 to-tertiary-fixed/60 text-on-primary-container shadow-[0_2px_8px_rgba(197,155,78,0.15)]"><span class="material-symbols-outlined text-primary text-base font-bold">stars</span><span class="font-label-lg text-label-lg font-bold">150</span><span class="font-label-sm text-label-sm text-primary font-semibold uppercase">pts</span></div><div class="flex items-center gap-2 pl-1 cursor-pointer group"><img alt="Profile" class="w-9 h-9 rounded-full object-cover shadow-[0_2px_6px_rgba(0,0,0,0.1)] group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida/ALJJyrDpGI09usp1fchf7xC0ke7EZt73LF0VPWzqzw5kkRC3RbEGbNsFyYVD5kgq-PnrUfi6LQpFTU3zR2iL_pUAarrYjLo7l8ksKTQS3BwW638fy4kh8b2-YqjLNVyTcIdyy2ibkKMos1Mz6sYsRg23u7iEWu6hg-mzJG9d28GdgsuMRkIybsv2Ir9T1FPgjUH0KhIYb6fp1st4NvjadxnTNk6tCelqA0-_9oO2eCVix04vhRt0WEc19ZMfA3WQB4BQPQyYAakDYEyWuA"/><span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors text-sm">expand_more</span></div></div></div></header><main class="w-full pt-20 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<!-- Top Notification & Location Bar -->
+<div class="w-full bg-gradient-to-r from-primary/10 via-primary-fixed/20 to-tertiary-fixed/20 px-margin py-2.5 flex items-center justify-between text-on-surface">
+<div class="flex items-center gap-3">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary text-on-primary">
+<span class="material-symbols-outlined text-xs">local_activity</span>
+</span>
+<p class="font-body-sm text-body-sm text-on-surface">
+<strong class="font-semibold text-primary">Campanha Especial:</strong> Visite 3 lojas hoje no piso L1 e desbloqueie um voucher cortesia Havanna.
+      </p>
+</div>
+<div class="hidden lg:flex items-center gap-6 font-label-sm text-label-sm">
+<span class="flex items-center gap-1.5 text-secondary font-semibold">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+        Raio Ativo • Check-in Disponível (Piso L1/L2)
+      </span>
+<span class="text-outline">|</span>
+<span class="text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">schedule</span> Aberto hoje até 22h
+      </span>
+</div>
+</div>
+<!-- Hero Banner Principal: Widescreen Festive Luxury -->
+<section class="relative w-full overflow-hidden bg-gradient-to-b from-surface-container-low to-surface px-margin py-space-xl">
+<div class="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center relative z-10">
+<!-- Left Editorial Story -->
+<div class="lg:col-span-7 flex flex-col items-start gap-space-md">
+<div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary-fixed/50 text-on-primary-fixed shadow-sm">
+<span class="material-symbols-outlined text-primary text-sm font-bold">award_star</span>
+<span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider">Festival de Celebração • Temporada Ouro</span>
+</div>
+<div class="flex flex-col gap-2">
+<span class="font-label-md text-label-md uppercase tracking-[0.25em] text-primary font-semibold">Passaporte Capim Dourado</span>
+<h1 class="font-display-lg text-display-lg md:text-[52px] md:leading-[60px] text-on-surface tracking-tight">
+            Doce Natal &amp; <br/>
+<span class="italic font-headline-lg text-primary">Momentos Exclusivos</span>
+</h1>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl leading-relaxed">
+          Vivencie a elegância do cerrado com recompensas reais. Faça check-in pelo smartphone, acumule selos dourados a cada consumo e converta visitas em experiências gastronômicas exclusivas.
+        </p>
+<!-- CTAs & Highlights -->
+<div class="flex flex-wrap items-center gap-4 pt-2 w-full sm:w-auto">
+<button class="flex items-center gap-3 px-7 py-4 rounded-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-label-lg text-label-lg shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer" id="openScannerBtn">
+<span class="material-symbols-outlined text-xl">qr_code_scanner</span>
+<span>Escanear QR nas Lojas</span>
+</button>
+<a class="flex items-center gap-2 px-6 py-4 rounded-full bg-surface-container-lowest text-on-surface font-label-lg text-label-lg hover:bg-surface-container transition-all shadow-sm" href="#catalogo">
+<span class="material-symbols-outlined text-primary text-lg">local_mall</span>
+<span>Explorar Ofertas do Dia</span>
+</a>
+</div>
+<!-- Badges Bar -->
+<div class="grid grid-cols-3 gap-4 pt-4 w-full max-w-lg">
+<div class="flex items-center gap-3 p-3 rounded-xl bg-surface-container-lowest shadow-sm">
+<div class="w-9 h-9 rounded-full bg-primary-fixed/40 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-base">loyalty</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface font-bold leading-none">+150 pts</span>
+<span class="font-label-sm text-label-sm text-outline mt-1">no 1º Check-in</span>
+</div>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-xl bg-surface-container-lowest shadow-sm">
+<div class="w-9 h-9 rounded-full bg-secondary-fixed/50 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-base">pin_drop</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface font-bold leading-none">Raio 250m</span>
+<span class="font-label-sm text-label-sm text-outline mt-1">Validação VIP</span>
+</div>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-xl bg-surface-container-lowest shadow-sm">
+<div class="w-9 h-9 rounded-full bg-tertiary-fixed/50 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-base">percent</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface font-bold leading-none">Até 40% OFF</span>
+<span class="font-label-sm text-label-sm text-outline mt-1">Resgate Imediato</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Visual Feature (Editorial Hero Image with Glass Card Overlay) -->
+<div class="lg:col-span-5 relative">
+<div class="relative w-full h-[460px] rounded-3xl overflow-hidden shadow-2xl">
+<img class="w-full h-full object-cover" data-alt="Refined holiday luxury setting at shopping mall with golden festive ornaments, warm golden lights bokeh, elegant gift boxes wrapped with deep ruby satin ribbons and gold threads, artisanal pastry presentation on marble pedestal with soft golden hour illumination." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEulukI_0Yci_gUF1yQM1OzbpPn6GICE-aePp5DHo3O6L-YZWBmpVlvvewaKel1aHMDCymKCaFy-DmrJxtLN-IJgxzweQ65kBr21WTdR3_viVyGjCYWOLaWuvpEUMkNmR7hQMcXlnyvt9T4vIRwpUzGS55uz7elk33b8B9AgYTFpG34vnefH4N5HhUd5927lju36Ait4_1jxQ1shG5Mpe_POWLUXyclImvWSc_Llc"/>
+<div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/80 via-transparent to-transparent"></div>
+<!-- Floating Passaporte Hologram Card -->
+<div class="absolute top-6 right-6 px-4 py-2.5 rounded-2xl bg-surface-container-lowest/90 backdrop-blur-md shadow-lg flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-xl">stars</span>
+<div class="flex flex-col text-left">
+<span class="font-label-sm text-label-sm text-outline uppercase">Membro Ouro</span>
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Carolina Mendes</span>
+</div>
+</div>
+<!-- Bottom Card Overlay -->
+<div class="absolute bottom-6 inset-x-6 p-5 rounded-2xl bg-surface-container-lowest/95 backdrop-blur-md shadow-xl flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-container to-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-2xl">cake</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-wide text-primary font-bold">Destaque da Confeitaria</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Petit Gâteau Trufado Kopenhagen</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Resgate cortesia com 120 pontos</p>
+</div>
+</div>
+<button class="px-4 py-2 rounded-full bg-primary-fixed text-on-primary-fixed font-label-md text-label-md font-bold hover:bg-primary hover:text-on-primary transition-all">
+              Ver Detalhes
+            </button>
+</div>
+</div>
+<!-- Ambient decorative blur orb behind image -->
+<div class="absolute -top-10 -right-10 w-72 h-72 rounded-full bg-primary-fixed/40 blur-3xl -z-10 pointer-events-none"></div>
+<div class="absolute -bottom-8 -left-8 w-60 h-60 rounded-full bg-secondary-fixed/40 blur-3xl -z-10 pointer-events-none"></div>
+</div>
+</div>
+</section>
+<!-- Partner Stores Showcase Ribbon -->
+<section class="w-full bg-surface-container-lowest py-space-lg px-margin shadow-[0_4px_20px_-8px_rgba(122,88,15,0.08)]">
+<div class="max-w-[1400px] mx-auto">
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-space-md">
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold">Circuito de Parceiros Oficiais</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Lojas com Pontuação Ativa no Shopping</h3>
+</div>
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary/10 text-secondary font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> 18 Lojas com Carimbo +10 pts hoje
+          </span>
+<button class="text-primary font-label-md text-label-md hover:underline font-semibold ml-2">Ver todas (84)</button>
+</div>
+</div>
+<!-- Horizontal Scroll/Grid of Stores -->
+<div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 gap-3 pt-2">
+<!-- Store: Todas (All) -->
+<button class="flex flex-col items-center justify-center p-3 rounded-2xl bg-primary text-on-primary shadow-sm hover:scale-105 transition-transform group text-center">
+<div class="w-14 h-14 rounded-full bg-surface-container-lowest/20 flex items-center justify-center mb-2">
+<span class="material-symbols-outlined text-2xl text-on-primary">storefront</span>
+</div>
+<span class="font-label-md text-label-md font-bold truncate w-full">Todas</span>
+<span class="font-label-sm text-[10px] opacity-80">84 lojas</span>
+</button>
+<!-- Store: Havanna -->
+<div class="relative flex flex-col items-center p-3 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group text-center">
+<span class="absolute top-2 right-2 px-1.5 py-0.5 rounded-full bg-secondary text-on-secondary text-[9px] font-bold">+10 pts</span>
+<div class="w-14 h-14 rounded-full bg-surface-container-lowest p-1 shadow-sm mb-2 group-hover:shadow-md transition-shadow">
+<img class="w-full h-full rounded-full object-cover" data-alt="Havanna Cafe gourmet confectionery round brand logo icon in warm amber tones on clean white disc background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1t3ki9OBy-Wle5pmP85CtUxFyw4rf-Tv-_80WTIipGD-qv2JYJxS7YFjpMYdrWku_fvBw9I5R1WtNamiuH1717Fj8c5MPkWEheABwgpvRakJk4GZvVDGZMqicS_ETOKiQ-NwUVUD4_XP7Hl7-juLzwf5M9KXF5240zeVJtIfvjpScMzBcAk1VGoYE1vUezKeLSsJN6dLWeBac5XjTsbg0dDZPn7Hnl2AOJxmADKk"/>
+</div>
+<span class="font-label-md text-label-md font-semibold text-on-surface truncate w-full">Havanna</span>
+<span class="font-body-sm text-body-sm text-outline text-[11px]">Cafés &amp; Doces</span>
+</div>
+<!-- Store: Outback -->
+<div class="relative flex flex-col items-center p-3 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group text-center">
+<span class="absolute top-2 right-2 px-1.5 py-0.5 rounded-full bg-secondary text-on-secondary text-[9px] font-bold">+15 pts</span>
+<div class="w-14 h-14 rounded-full bg-surface-container-lowest p-1 shadow-sm mb-2 group-hover:shadow-md transition-shadow">
+<img class="w-full h-full rounded-full object-cover" data-alt="Outback Steakhouse casual dining logo symbol centered on clean circular badge" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFHSOOnSLZDRkOu74rE43QyEL03LJHDxB3IUI65MikPw40AQFqWoMbHB0ziYbtoPW_QJHrHIFdek1QcCMOtOX6wdHb_klSyED2btzQCVDiUGCZZC0uxJZnwt3p8b6YwO1Lj1wn7mC81vYqIoSok0n28S78ntxrW1jmG7dJOHRPEOmD4jOSpYWz6e2e-Mh5A7JOJAoC7HOmFwQUB4q_T29VGA_s_eloWY4Vp1omTLc"/>
+</div>
+<span class="font-label-md text-label-md font-semibold text-on-surface truncate w-full">Outback</span>
+<span class="font-body-sm text-body-sm text-outline text-[11px]">Gastronomia</span>
+</div>
+<!-- Store: Kopenhagen -->
+<div class="relative flex flex-col items-center p-3 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group text-center">
+<span class="absolute top-2 right-2 px-1.5 py-0.5 rounded-full bg-secondary text-on-secondary text-[9px] font-bold">+10 pts</span>
+<div class="w-14 h-14 rounded-full bg-surface-container-lowest p-1 shadow-sm mb-2 group-hover:shadow-md transition-shadow">
+<img class="w-full h-full rounded-full object-cover" data-alt="Kopenhagen luxury chocolatier brand emblem circular insignia in deep brown and gold" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqJsxSgAxm1m7kZCRXEIiTN20SdJAN2-mu-60zC8HptX3dv7B1EDDCQ9ApDWXmjmrbmFHUZMLUs3LWv4BafA3c-ysOndJ_8WahLl4JZWQ3sOUnJp6LTomX_XBP26FZRpow-t-Rdgw3soxUCAS6w6hcYp43eYF-sbKmqUsGnDLMYgoZraWt6waj6G8ez-RBfw8Pgoo-nn6Hjk0Fe9otapX81judoaTNnPn826UQ3U4"/>
+</div>
+<span class="font-label-md text-label-md font-semibold text-on-surface truncate w-full">Kopenhagen</span>
+<span class="font-body-sm text-body-sm text-outline text-[11px]">Chocolates</span>
+</div>
+<!-- Store: Vivara -->
+<div class="relative flex flex-col items-center p-3 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group text-center">
+<span class="absolute top-2 right-2 px-1.5 py-0.5 rounded-full bg-secondary text-on-secondary text-[9px] font-bold">+25 pts</span>
+<div class="w-14 h-14 rounded-full bg-surface-container-lowest p-1 shadow-sm mb-2 group-hover:shadow-md transition-shadow">
+<img class="w-full h-full rounded-full object-cover" data-alt="Vivara jewelry luxury brand typography seal on clean minimal round icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGgF3WBr84J-x5wjqfiy2SqrCbAtljllXpaZ80bwSl5SoS_vVO2sKlQNJzAbfR55B4l5JXr0kW1Wa20ykq9GshcjlbhgsV0QERVNpZBt4sLFeOh4LC1eAiFhh5TQhtn7G3aLKIfQRhUpZxhxehfHzF8oBgGcJLIbpKKh1T_QVJXV4JPPLihr-THY-eOIS0HzqPW2BLMO27S4iOLB6yfPHm1sdDxcqnvkKkTroyelA"/>
+</div>
+<span class="font-label-md text-label-md font-semibold text-on-surface truncate w-full">Vivara</span>
+<span class="font-body-sm text-body-sm text-outline text-[11px]">Joalheria</span>
+</div>
+<!-- Store: Farm Rio -->
+<div class="relative flex flex-col items-center p-3 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group text-center">
+<span class="absolute top-2 right-2 px-1.5 py-0.5 rounded-full bg-secondary text-on-secondary text-[9px] font-bold">+10 pts</span>
+<div class="w-14 h-14 rounded-full bg-surface-container-lowest p-1 shadow-sm mb-2 group-hover:shadow-md transition-shadow">
+<img class="w-full h-full rounded-full object-cover" data-alt="Farm Rio tropical bohemian fashion brand circular emblem with warm artistic sun motifs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBku1XJbodVBSrTyPoNlrF650Cr3vnjEG6NXO2_8XSWzGjda6mWNQyQ7D3walemWg7jabbsBlcKfSdVDKDklBObwf8PIRR8T0-IWFRG_JPROx0nm6kjxNzMr4DEU9nGY-lApetl_U2wRVTKnnFaWpPq9QZeLlHJesFA-KHFzonnFtTztdKht0ov8H9CHTecwg27aryxtQVC7ZIftOVP77JMQ6e9eWkJL9yTcinKKgo"/>
+</div>
+<span class="font-label-md text-label-md font-semibold text-on-surface truncate w-full">Farm Rio</span>
+<span class="font-body-sm text-body-sm text-outline text-[11px]">Moda Fem.</span>
+</div>
+<!-- Store: Madero -->
+<div class="relative flex flex-col items-center p-3 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group text-center">
+<span class="absolute top-2 right-2 px-1.5 py-0.5 rounded-full bg-secondary text-on-secondary text-[9px] font-bold">+10 pts</span>
+<div class="w-14 h-14 rounded-full bg-surface-container-lowest p-1 shadow-sm mb-2 group-hover:shadow-md transition-shadow">
+<img class="w-full h-full rounded-full object-cover" data-alt="Madero burger steakhouse logo badge in rich natural wood and gold tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXf8OqmQszmyuV2HNHiQItWKIA1ysbfJOLz9sAxs2sDW9sLFqbGg8CUeAfGT46CeoHCvc-CoJUFdIyHPkVhwVq3MPsx2S3PHFZKUIMZWm0bY9pgQhk5z8HRDTc3k34fiXKhsw79kHxCcsA5A7kzynRPPX7kNBCD8yDOAE_A3_2ClfVsgiWveC0IgAv2vHrorgPDLtjxe9LEXQ_Grg89cju9axMitsiLrbU1nQAkow"/>
+</div>
+<span class="font-label-md text-label-md font-semibold text-on-surface truncate w-full">Madero</span>
+<span class="font-body-sm text-body-sm text-outline text-[11px]">Burgers</span>
+</div>
+<!-- Store: Arezzo -->
+<div class="relative flex flex-col items-center p-3 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group text-center">
+<span class="absolute top-2 right-2 px-1.5 py-0.5 rounded-full bg-secondary text-on-secondary text-[9px] font-bold">+10 pts</span>
+<div class="w-14 h-14 rounded-full bg-surface-container-lowest p-1 shadow-sm mb-2 group-hover:shadow-md transition-shadow">
+<img class="w-full h-full rounded-full object-cover" data-alt="Arezzo elegant footwear and leather goods signature monogram logo disc" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbFEh9IuPDher20uw_ndvTfpi-yh7VptO_3kiE05zovFrQBYRJcBOAW_W2219YP7cTFIlqEuylMJRwi1U3KB06atzujx8rm34nPyLPI60dcICfoJFJOb1vN3JDtgB-yd7Ll2r3YGE-Fg9_ET3pzwkGJ-YZeA58hJsMoO9QAJ5U5pOMwOz1WB3XNIxRSzBL0kMwATI2-vlh4Xed6SmomQJ7rkeV9vMVwLNEhOkf9Fg"/>
+</div>
+<span class="font-label-md text-label-md font-semibold text-on-surface truncate w-full">Arezzo</span>
+<span class="font-body-sm text-body-sm text-outline text-[11px]">Calçados</span>
+</div>
+<!-- Store: Renner -->
+<div class="relative flex flex-col items-center p-3 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group text-center">
+<span class="absolute top-2 right-2 px-1.5 py-0.5 rounded-full bg-secondary text-on-secondary text-[9px] font-bold">+5 pts</span>
+<div class="w-14 h-14 rounded-full bg-surface-container-lowest p-1 shadow-sm mb-2 group-hover:shadow-md transition-shadow">
+<img class="w-full h-full rounded-full object-cover" data-alt="Lojas Renner department store clean modern crimson and white logo icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXNP7vJTBcaK3iHKT-4Phac4fPuAL7ZIH6gg3VOux5VKD8uPEsMJp1s9RHAU6bsuad53kV3WDiM8trXNfKzKpDMr7prbMWfJdCAzAB_EeOCGvBR9PZUxKI78xCADgwdEXLfS9Twzo7_OyRlo5x_FisRFoK_v353jTkbbAVpyIcCZqB69Xut-JnfZfW2QN6Rqw9TWhuUnnBLFFjFS9O6SVHnIezt-hZrv3jTsjwIoA"/>
+</div>
+<span class="font-label-md text-label-md font-semibold text-on-surface truncate w-full">Renner</span>
+<span class="font-body-sm text-body-sm text-outline text-[11px]">Vestuário</span>
+</div>
+<!-- Store: Riachuelo -->
+<div class="relative flex flex-col items-center p-3 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group text-center">
+<span class="absolute top-2 right-2 px-1.5 py-0.5 rounded-full bg-secondary text-on-secondary text-[9px] font-bold">+5 pts</span>
+<div class="w-14 h-14 rounded-full bg-surface-container-lowest p-1 shadow-sm mb-2 group-hover:shadow-md transition-shadow">
+<img class="w-full h-full rounded-full object-cover" data-alt="Riachuelo modern retail fashion brand monogram icon in monochrome and gold accent" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDndjB6AATtXHbAPcD3HW3nK8qRd0azqFj3LLq16DnHLSOFvTaU-AKN0zCl9DzxQeNgdIbCwGr8XtFaKituFtzl6hYLwNFOFeDS9CsBXVPJYcxKUD7O4aaXsCKjqRf888YIGDKCvU-ZojTVgJhsiwrC-Y1d8B_slf_ovkpdmbHRcLcx1Rv-A7nTJtGjwxVu2yJp7n1h_3j-6Ajd9dz16-T-sK9T8PqJSwjUjTPqwX0"/>
+</div>
+<span class="font-label-md text-label-md font-semibold text-on-surface truncate w-full">Riachuelo</span>
+<span class="font-body-sm text-body-sm text-outline text-[11px]">Casa &amp; Moda</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Category Filter Bar (Refined Chips) -->
+<section class="w-full px-margin py-6 max-w-[1400px] mx-auto">
+<div class="flex items-center justify-between gap-4 overflow-x-auto pb-2 scrollbar-none">
+<div class="flex items-center gap-2.5 shrink-0">
+<button class="px-5 py-2.5 rounded-full bg-primary text-on-primary font-label-md text-label-md font-semibold shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-base">apps</span>
+<span>Todas as Categorias</span>
+</button>
+<button class="px-5 py-2.5 rounded-full bg-surface-container-lowest hover:bg-surface-container text-on-surface font-label-md text-label-md font-medium shadow-sm flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-primary text-base">restaurant</span>
+<span>Gastronomia &amp; Cafés</span>
+</button>
+<button class="px-5 py-2.5 rounded-full bg-surface-container-lowest hover:bg-surface-container text-on-surface font-label-md text-label-md font-medium shadow-sm flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-primary text-base">checkroom</span>
+<span>Moda &amp; Calçados</span>
+</button>
+<button class="px-5 py-2.5 rounded-full bg-surface-container-lowest hover:bg-surface-container text-on-surface font-label-md text-label-md font-medium shadow-sm flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-primary text-base">diamond</span>
+<span>Joias &amp; Relógios</span>
+</button>
+<button class="px-5 py-2.5 rounded-full bg-surface-container-lowest hover:bg-surface-container text-on-surface font-label-md text-label-md font-medium shadow-sm flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-primary text-base">theaters</span>
+<span>Cinema &amp; Lazer</span>
+</button>
+<button class="px-5 py-2.5 rounded-full bg-surface-container-lowest hover:bg-surface-container text-on-surface font-label-md text-label-md font-medium shadow-sm flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-primary text-base">spa</span>
+<span>Beleza &amp; Bem-estar</span>
+</button>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-low text-on-surface-variant text-label-sm font-medium">
+<span>Ordenar:</span>
+<strong class="text-primary font-semibold">Maior Desconto</strong>
+<span class="material-symbols-outlined text-xs">keyboard_arrow_down</span>
+</div>
+</div>
+</div>
+</section>
+<!-- BOX 1: Widescreen Carousel of Highlights and Daily Deals -->
+<section class="w-full px-margin py-space-md max-w-[1400px] mx-auto">
+<div class="flex items-end justify-between mb-space-md">
+<div>
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold">Resgates de Alta Procura</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mt-1">Destaques &amp; Promoções do Dia</h2>
+</div>
+<div class="hidden sm:flex items-center gap-2">
+<button class="w-10 h-10 rounded-full bg-surface-container-lowest shadow-sm flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-10 h-10 rounded-full bg-surface-container-lowest shadow-sm flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- 3 Wide Showcase Promo Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<!-- Highlight Card 1: Outback -->
+<div class="group relative rounded-3xl overflow-hidden bg-surface-container-lowest shadow-md hover:shadow-xl transition-all flex flex-col justify-between">
+<div class="relative h-56 w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Crispy blooming onion appetizer served on artisanal wooden plate with signature dip sauce at premium Australian steakhouse in warm cozy restaurant ambiance" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQEqfJnArjhCP8HaF3KilaV043g6Ow6a3PS7S3WKwEMY4xkhH6jkYSwb108exf8zV1MfnZbPmovwwCkw_y9D6T0Mp-BFfJK67m4uP_U5xsaCB5R8gVOW0Q6NTZm6fQgahp-ikV0ACERZ5zC-PfaRLQ_qu8M7DJQhNZjhDIhpmjX1Z6KSOxtBE4pFT737YnHYnjfNxHKmgqr99jRsuKX_ylXwHE9rLkVTyHnhqkcUs"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="px-3 py-1 rounded-full bg-secondary text-on-secondary font-label-sm text-label-sm font-bold shadow-sm">
+              Cortesia Especial
+            </span>
+</div>
+<div class="absolute top-4 right-4 px-3 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur text-primary font-label-md text-label-md font-bold shadow-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">stars</span> 80 pts
+          </div>
+<div class="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white">
+<div class="flex items-center gap-2">
+<span class="w-7 h-7 rounded-full bg-surface-container-lowest text-primary flex items-center justify-center font-bold text-xs">OB</span>
+<span class="font-label-md text-label-md font-bold">Outback Steakhouse</span>
+</div>
+<span class="font-label-sm text-label-sm opacity-90">Piso L2 • Gourmet</span>
+</div>
+</div>
+<div class="p-5 flex flex-col gap-3 flex-1 justify-between">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">
+              Bloomin' Onion ou Kookaburra Wings
+            </h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1 line-clamp-2">
+              Na compra de qualquer prato principal, ganhe uma entrada icônica cortesia pelo passaporte digital.
+            </p>
+</div>
+<div class="pt-3 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-outline">Válido até</span>
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">Hoje às 22h</span>
+</div>
+<button class="px-5 py-2.5 rounded-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-label-md text-label-md font-bold shadow hover:shadow-md transition-all cursor-pointer">
+              Resgatar Cupom
+            </button>
+</div>
+</div>
+</div>
+<!-- Highlight Card 2: Havanna -->
+<div class="group relative rounded-3xl overflow-hidden bg-surface-container-lowest shadow-md hover:shadow-xl transition-all flex flex-col justify-between">
+<div class="relative h-56 w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Artisanal alfajor filled with rich Argentine dulce de leche coated in dark chocolate next to a porcelain cup of espresso coffee in golden cafe lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOJVC5S-cRprNc-iqECw8zLg4ITAWhAlnqJpo95yCvAFcv4IiAoUcWhu8h_RlJ9SbLGdO0y-y-G1vhIMLVGSDjqkvqS3tO1_dAMk-TPyAYVvDkPO1dkbL8FsH0yOJa_yPj9_ODNfjCrHUAUaIgpvwqZDoe61VlJ-hayh6QMYKiyQALePpKEI0Tz6iMrSEPJkNVE-pLzO4XS4Wb4nGRnCkcyGM2tAujPkqNFADw0lk"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="px-3 py-1 rounded-full bg-primary text-on-primary font-label-sm text-label-sm font-bold shadow-sm">
+              2 por 1
+            </span>
+</div>
+<div class="absolute top-4 right-4 px-3 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur text-primary font-label-md text-label-md font-bold shadow-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">stars</span> Grátis hoje
+          </div>
+<div class="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white">
+<div class="flex items-center gap-2">
+<span class="w-7 h-7 rounded-full bg-surface-container-lowest text-primary flex items-center justify-center font-bold text-xs">HV</span>
+<span class="font-label-md text-label-md font-bold">Havanna Café</span>
+</div>
+<span class="font-label-sm text-label-sm opacity-90">Piso L1 • Quiosque</span>
+</div>
+</div>
+<div class="p-5 flex flex-col gap-3 flex-1 justify-between">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">
+              Double Alfajor Tradicional Havanna
+            </h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1 line-clamp-2">
+              Compre um alfajor de doce de leite 50g e ganhe o segundo carimbando o seu Passaporte Digital no balcão.
+            </p>
+</div>
+<div class="pt-3 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-outline">Estoque</span>
+<span class="font-body-sm text-body-sm font-semibold text-error">Últimos 14 vouchers</span>
+</div>
+<button class="px-5 py-2.5 rounded-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-label-md text-label-md font-bold shadow hover:shadow-md transition-all cursor-pointer">
+              Resgatar Cupom
+            </button>
+</div>
+</div>
+</div>
+<!-- Highlight Card 3: Cinemark VIP -->
+<div class="group relative rounded-3xl overflow-hidden bg-surface-container-lowest shadow-md hover:shadow-xl transition-all flex flex-col justify-between">
+<div class="relative h-56 w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Luxury VIP cinema theater auditorium with plush burgundy leather reclining seats, warm ambient floor lamps and movie theater screen glow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAonra74rLnksbs9FFBaV9HSr47J9VMQRaDaZxHOk6APVPFRaaZ27_nLLbm70sVsPzd-06dfHpMWhVGj0kuDNyAB8sNYqUAWF8K_SV8gHgPon3i_GjiX9dSBv43H0O3grxvrhRLmQ48oZpr6oVFcQrIY6bMvqPsDgbT8mAAk9DqeNTeChFu2s2uvzqTj0_jvaZDAkIbNlMrFDC5kmAyDNEOfwxHRhqmrYquW7h1kpQ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="px-3 py-1 rounded-full bg-tertiary-container text-on-tertiary-container font-label-sm text-label-sm font-bold shadow-sm">
+              Upgrade VIP
+            </span>
+</div>
+<div class="absolute top-4 right-4 px-3 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur text-primary font-label-md text-label-md font-bold shadow-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">stars</span> 60 pts
+          </div>
+<div class="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white">
+<div class="flex items-center gap-2">
+<span class="w-7 h-7 rounded-full bg-surface-container-lowest text-primary flex items-center justify-center font-bold text-xs">CM</span>
+<span class="font-label-md text-label-md font-bold">Cinemark Capim Dourado</span>
+</div>
+<span class="font-label-sm text-label-sm opacity-90">Piso L2 • Lazer</span>
+</div>
+</div>
+<div class="p-5 flex flex-col gap-3 flex-1 justify-between">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">
+              Pipoca Grande Trufada + Refil
+            </h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1 line-clamp-2">
+              Resgate 50% de desconto no combo premium com pipoca com azeite trufado para qualquer sessão 2D/3D.
+            </p>
+</div>
+<div class="pt-3 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-outline">Válido até</span>
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">30/11 • Todas as sessões</span>
+</div>
+<button class="px-5 py-2.5 rounded-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-label-md text-label-md font-bold shadow hover:shadow-md transition-all cursor-pointer">
+              Resgatar Cupom
+            </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- BOX 2: Interactive Passport Engagement Banner (Geofence & Mission Hub) -->
+<section class="w-full px-margin py-space-xl max-w-[1400px] mx-auto">
+<div class="rounded-3xl bg-gradient-to-br from-primary via-primary to-on-primary-container text-on-primary p-space-lg md:p-12 relative overflow-hidden shadow-xl">
+<!-- Decorative Filigree Accent SVGs -->
+<div class="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-primary-container/20 blur-2xl pointer-events-none"></div>
+<div class="absolute right-10 top-1/2 -translate-y-1/2 opacity-10 pointer-events-none hidden xl:block">
+<svg fill="currentColor" height="340" viewbox="0 0 100 100" width="340">
+<circle cx="50" cy="50" fill="none" r="45" stroke="currentColor" stroke-dasharray="4 2" stroke-width="2"></circle>
+<circle cx="50" cy="50" fill="none" r="30" stroke="currentColor" stroke-width="1.5"></circle>
+<path d="M50 15 C30 35 30 65 50 85 C70 65 70 35 50 15 Z" fill="none" stroke="currentColor" stroke-width="1"></path>
+</svg>
+</div>
+<div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center">
+<!-- Left: Geofence Badge & Main Info -->
+<div class="lg:col-span-6 flex flex-col items-start gap-4">
+<div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-container-lowest/15 backdrop-blur-md text-primary-fixed">
+<span class="material-symbols-outlined text-secondary-fixed text-base animate-pulse">radar</span>
+<span class="font-label-sm text-label-sm font-bold uppercase tracking-wider">Geolocalização Ativa • Raio 250m detectado</span>
+</div>
+<h2 class="font-display-lg text-display-lg md:text-[40px] md:leading-[48px] text-white">
+            Ganhe pontos visitando o shopping agora mesmo!
+          </h2>
+<p class="font-body-lg text-body-lg text-surface-container-high/90 max-w-lg leading-relaxed">
+            Aponte a câmera para os totens dourados distribuídos pelos corredores ou apresente o leitor nos caixas parceiros. Cada check-in valida sua presença e destrava novos níveis de benefícios.
+          </p>
+<div class="flex flex-wrap items-center gap-4 pt-2">
+<button class="flex items-center gap-3 px-8 py-4 rounded-full bg-surface-container-lowest text-primary font-label-lg text-label-lg font-bold shadow-lg hover:bg-surface-bright hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer">
+<span class="material-symbols-outlined text-2xl text-primary">photo_camera</span>
+<span>Escanear QR Code com a Câmera</span>
+</button>
+<div class="flex items-center gap-2 text-surface-container-low font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-sm text-secondary-fixed">check_circle</span>
+<span>Sem download obrigatório</span>
+</div>
+</div>
+</div>
+<!-- Right: Active Missions Digital Punch Card -->
+<div class="lg:col-span-6">
+<div class="p-6 md:p-8 rounded-2xl bg-surface-container-lowest/10 backdrop-blur-md shadow-inner flex flex-col gap-5">
+<div class="flex items-center justify-between pb-3 border-b border-white/10">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-fixed">military_tech</span>
+<span class="font-label-lg text-label-lg font-bold text-white uppercase tracking-wider">Missões Ativas na Visita de Hoje</span>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm font-bold">+200 pts bônus</span>
+</div>
+<!-- Mission 1 -->
+<div class="flex flex-col gap-2 p-4 rounded-xl bg-surface-container-lowest/10">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-bold text-xs">
+<span class="material-symbols-outlined text-sm">done</span>
+</div>
+<div>
+<h4 class="font-label-lg text-label-lg font-bold text-white">Missão Explorador Gastronômico</h4>
+<p class="font-body-sm text-body-sm text-surface-container-high/80">Faça check-in em 3 operações de alimentação</p>
+</div>
+</div>
+<span class="font-label-md text-label-md font-bold text-primary-fixed">2 / 3 concluídos</span>
+</div>
+<!-- Digital Stamp Slots -->
+<div class="flex items-center gap-3 mt-2">
+<div class="flex-1 h-3 rounded-full bg-secondary-fixed"></div>
+<div class="flex-1 h-3 rounded-full bg-secondary-fixed"></div>
+<div class="flex-1 h-3 rounded-full bg-surface-container-lowest/20 flex items-center justify-center">
+<div class="w-1.5 h-1.5 rounded-full bg-white/40"></div>
+</div>
+</div>
+<span class="text-right font-label-sm text-[11px] text-surface-container-low opacity-90">Falta apenas 1 check-in (ex: Havanna ou Madero)</span>
+</div>
+<!-- Mission 2 -->
+<div class="flex flex-col gap-2 p-4 rounded-xl bg-surface-container-lowest/10">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-bold text-xs">
+<span class="material-symbols-outlined text-sm">flag</span>
+</div>
+<div>
+<h4 class="font-label-lg text-label-lg font-bold text-white">Missão Cinema &amp; Estilo</h4>
+<p class="font-body-sm text-body-sm text-surface-container-high/80">Compre na Arezzo ou Farm e assista um filme</p>
+</div>
+</div>
+<span class="font-label-md text-label-md font-bold text-surface-container-low">0 / 2 concluídos</span>
+</div>
+<div class="flex items-center gap-3 mt-2">
+<div class="flex-1 h-3 rounded-full bg-surface-container-lowest/20"></div>
+<div class="flex-1 h-3 rounded-full bg-surface-container-lowest/20"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- BOX 3: 4-Column Grid of Exclusive Deals & Instant Coupons -->
+<section class="w-full px-margin py-space-xl max-w-[1400px] mx-auto" id="catalogo">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-space-lg">
+<div>
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold">Catálogo Selecionado</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mt-1">Ofertas Exclusivas do Passaporte</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Apresente o voucher gerado diretamente no caixa para validar o desconto imediato.</p>
+</div>
+<div class="flex items-center gap-3">
+<span class="font-label-md text-label-md text-outline">Mostrando 8 de 42 ofertas</span>
+<button class="px-4 py-2 rounded-full bg-surface-container-low text-primary font-label-md text-label-md font-bold hover:bg-surface-container transition-colors">
+          Filtros Avançados
+        </button>
+</div>
+</div>
+<!-- 4-Column Product Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- Card 1: Kopenhagen Truffles -->
+<div class="group rounded-3xl overflow-hidden bg-surface-container-lowest shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div>
+<div class="relative h-48 w-full overflow-hidden bg-surface-container-low">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Artisanal chocolate truffles with fine cocoa powder dusting arranged neatly on handcrafted dark slate plate with gold rim" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjNNXbUMa4wMN4MulB23on8ZxpO5hwM_o_LDyi67aX-e875LYCYYqTeakdfdKKWZT6K1CF07lxt-IqY1RhY9WGQT4Lg88MIqpPtvmwfB0EcjdN3NIOaKWNsntJbLVV-2Mgyj0F_gltZ9PiWiyYktb16GzLtDWqfEWaqrY6Em6ySU2HBS3H3IKNQF6a7jvpeunFybfadtyztAqFwACJWRiQekIquHxX0TmF3d4K57w"/>
+<span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-secondary text-on-secondary font-label-sm text-label-sm font-bold shadow-sm">
+              -30% OFF
+            </span>
+<span class="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur text-error font-label-sm text-label-sm font-semibold shadow-sm">
+              Últimas 5 unidades
+            </span>
+</div>
+<div class="p-4 flex flex-col gap-2">
+<div class="flex items-center justify-between text-outline font-label-sm text-label-sm">
+<span class="font-semibold text-primary">Kopenhagen • L1</span>
+<span>+15 pts</span>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors line-clamp-1">
+              Caixa Trufas Clássicas 150g
+            </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+              Seleção nobre com trufas tradicionais de chocolate ao leite e amargo 70%.
+            </p>
+</div>
+</div>
+<div class="p-4 pt-0 flex flex-col gap-3">
+<div class="flex items-baseline gap-2 pt-2 border-t border-surface-container">
+<span class="font-body-sm text-body-sm text-outline line-through">R$ 54,90</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">R$ 38,40</span>
+</div>
+<button class="w-full py-2.5 rounded-full bg-surface-container-low hover:bg-primary hover:text-on-primary text-primary font-label-md text-label-md font-bold transition-all text-center">
+            Pegar Voucher
+          </button>
+</div>
+</div>
+<!-- Card 2: Vivara Pendant -->
+<div class="group rounded-3xl overflow-hidden bg-surface-container-lowest shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div>
+<div class="relative h-48 w-full overflow-hidden bg-surface-container-low">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Elegant silver pendant necklace with delicate crystal charm resting on silk beige cloth under soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgb1n_mRCJoVHcB0tUZJmYc1-GkGPSrp9p8W_RLVREOqEwoNNSY1kp842L6X6Ahbgwfhc7UKEq8_sdVUB7hXzcc58StGD0vW3MQmFgJDNmxgEuOlima1Q1GJcFSLnp1_AdVipibUmHM2hPJq_PS85zgFVoCwA04Nc2v5XDCqSZrqgnO9JQNeyUrqmP9M5tZ9Xk3J4KBUBsPPrPOvakadhgWFQ6yb3AeWc-r6iGryw"/>
+<span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-primary text-on-primary font-label-sm text-label-sm font-bold shadow-sm">
+              Exclusivo VIP
+            </span>
+<span class="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur text-secondary font-label-sm text-label-sm font-semibold shadow-sm">
+              Só Hoje
+            </span>
+</div>
+<div class="p-4 flex flex-col gap-2">
+<div class="flex items-center justify-between text-outline font-label-sm text-label-sm">
+<span class="font-semibold text-primary">Vivara • L2</span>
+<span>+50 pts</span>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors line-clamp-1">
+              Pingente Life Prata 925
+            </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+              Berloque colecionável banhado a ródio com acabamento artesanal polido.
+            </p>
+</div>
+</div>
+<div class="p-4 pt-0 flex flex-col gap-3">
+<div class="flex items-baseline gap-2 pt-2 border-t border-surface-container">
+<span class="font-body-sm text-body-sm text-outline line-through">R$ 210,00</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">R$ 159,00</span>
+</div>
+<button class="w-full py-2.5 rounded-full bg-surface-container-low hover:bg-primary hover:text-on-primary text-primary font-label-md text-label-md font-bold transition-all text-center">
+            Pegar Voucher
+          </button>
+</div>
+</div>
+<!-- Card 3: Madero Burger -->
+<div class="group rounded-3xl overflow-hidden bg-surface-container-lowest shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div>
+<div class="relative h-48 w-full overflow-hidden bg-surface-container-low">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Gourmet artisan cheeseburger with smoked bacon, melted cheddar cheese, fresh crisp lettuce and seasoned fries in rustic setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWJAgNRkspLn2aOjKSUO-06NGaNMkpBm8ohCrFRtRG9yZmdXT8cISGGBBa8s6rTO0HDNCMrB8L1D0tCFlE7givXYMPGKPfzqatxHlx-FYwtrj-dOWqJJmiSCLT2xgZZ5PLoIXegKJY-I9RRrqyHYriJbV1lcDrg-EUyOgBjvCp6JoeTpGhZH84xFB6uZVdV21cUZuGRowqsHHcIcUEkjAoLB_QvJ4RWOCX744YnxA"/>
+<span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-secondary text-on-secondary font-label-sm text-label-sm font-bold shadow-sm">
+              -25% OFF
+            </span>
+<span class="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur text-outline font-label-sm text-label-sm font-semibold shadow-sm">
+              Válido 18h-22h
+            </span>
+</div>
+<div class="p-4 flex flex-col gap-2">
+<div class="flex items-center justify-between text-outline font-label-sm text-label-sm">
+<span class="font-semibold text-primary">Madero • Praça de Alimentação</span>
+<span>+20 pts</span>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors line-clamp-1">
+              Combo Cheeseburger Bacon
+            </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+              Hambúrguer de 180g grelhado na brasa, batatas crocantes e bebida lata inclusa.
+            </p>
+</div>
+</div>
+<div class="p-4 pt-0 flex flex-col gap-3">
+<div class="flex items-baseline gap-2 pt-2 border-t border-surface-container">
+<span class="font-body-sm text-body-sm text-outline line-through">R$ 52,90</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">R$ 39,60</span>
+</div>
+<button class="w-full py-2.5 rounded-full bg-surface-container-low hover:bg-primary hover:text-on-primary text-primary font-label-md text-label-md font-bold transition-all text-center">
+            Pegar Voucher
+          </button>
+</div>
+</div>
+<!-- Card 4: Farm Rio Dress -->
+<div class="group rounded-3xl overflow-hidden bg-surface-container-lowest shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div>
+<div class="relative h-48 w-full overflow-hidden bg-surface-container-low">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="High-end botanical printed linen dress displayed in bright sunny boutique corner with natural light and tropical plants" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyUf4twHn9rN3R0cmQw4r7PlEWwReQYhA_ExJu56o5F70NrSaHCPUlN2np3iWPWmGCRcJ3Zm1LbltOE5tFVedb8urdeNjiWkEU543V8yjYdmLUvHtgT-i12XH8WF_8Cd2cYiXrlVtAo9A2ZUftp_uRZjlmTU_EPm_pZKmfd6pwYuDMiYPotCDdT2hZUzHeaih9AudqU-1Q-HGBpxeNnSYfDc-n-AESIvXB4gkUu8U"/>
+<span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-secondary text-on-secondary font-label-sm text-label-sm font-bold shadow-sm">
+              -35% OFF
+            </span>
+<span class="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur text-primary font-label-sm text-label-sm font-semibold shadow-sm">
+              Coleção Verão
+            </span>
+</div>
+<div class="p-4 flex flex-col gap-2">
+<div class="flex items-center justify-between text-outline font-label-sm text-label-sm">
+<span class="font-semibold text-primary">Farm Rio • L1</span>
+<span>+35 pts</span>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors line-clamp-1">
+              Vestido Estampa Sol Nascente
+            </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+              Linho puro com caimento fluido e detalhes bordados artesanais.
+            </p>
+</div>
+</div>
+<div class="p-4 pt-0 flex flex-col gap-3">
+<div class="flex items-baseline gap-2 pt-2 border-t border-surface-container">
+<span class="font-body-sm text-body-sm text-outline line-through">R$ 498,00</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">R$ 323,70</span>
+</div>
+<button class="w-full py-2.5 rounded-full bg-surface-container-low hover:bg-primary hover:text-on-primary text-primary font-label-md text-label-md font-bold transition-all text-center">
+            Pegar Voucher
+          </button>
+</div>
+</div>
+<!-- Card 5: Arezzo Bag -->
+<div class="group rounded-3xl overflow-hidden bg-surface-container-lowest shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div>
+<div class="relative h-48 w-full overflow-hidden bg-surface-container-low">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Chic genuine leather handbag in caramel shade with gold metallic hardware placed on polished travertine stand" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDn01BhcQgSt7XJr2kc5hjcuQLI1qA-R4DyPLrw91f8rlwE4o4h2Imb5H7yWzJniRWeXsAjgrZuJgkfkKGW7rZIGz4UDX81wcUfMP4eI0HZJwELPV8sAIbfXyPquBgGL4egLt8od7JVmHI82VgWOqpNYvbqpt4dMU_AynVkBnCV1xufGSOTd3SXdRr91-Qp3O30PmLPp7Y-OyhscBMY5yjGy-lRd6XXqYtJhaiojMk"/>
+<span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-secondary text-on-secondary font-label-sm text-label-sm font-bold shadow-sm">
+              -20% OFF
+            </span>
+<span class="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur text-outline font-label-sm text-label-sm font-semibold shadow-sm">
+              Edição Limitada
+            </span>
+</div>
+<div class="p-4 flex flex-col gap-2">
+<div class="flex items-center justify-between text-outline font-label-sm text-label-sm">
+<span class="font-semibold text-primary">Arezzo • L1</span>
+<span>+30 pts</span>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors line-clamp-1">
+              Bolsa Tiracolo Couro Siena
+            </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+              Estrutura clássica com alça ajustável e fechamento magnético dourado.
+            </p>
+</div>
+</div>
+<div class="p-4 pt-0 flex flex-col gap-3">
+<div class="flex items-baseline gap-2 pt-2 border-t border-surface-container">
+<span class="font-body-sm text-body-sm text-outline line-through">R$ 389,90</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">R$ 311,90</span>
+</div>
+<button class="w-full py-2.5 rounded-full bg-surface-container-low hover:bg-primary hover:text-on-primary text-primary font-label-md text-label-md font-bold transition-all text-center">
+            Pegar Voucher
+          </button>
+</div>
+</div>
+<!-- Card 6: Havanna Torta -->
+<div class="group rounded-3xl overflow-hidden bg-surface-container-lowest shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div>
+<div class="relative h-48 w-full overflow-hidden bg-surface-container-low">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Slice of rich Rogel cake with crispy wafer layers and abundant dulce de leche topped with torched white meringue peaks" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUoARpOEQu7BTHqgqjFjCQgEaFGeaZybhOu-fY678lssilp6pG3OiMbEf2gEy-qWrGBCm_o7VHo6YqLeO3KEziRHaTlhB-rYivbA8wMRUr7-koCWYan2cqN3Lkvz7VFWjwlGqmurWPHPx27tp_-HFKOJ_0LRK7znZI98MOoPqtXUcLOhllY0EpOecTKu037RPJ2ORhY4gdyhsNoEowOECA8ZSqAJ9BAwvmTdW-VLI"/>
+<span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-secondary text-on-secondary font-label-sm text-label-sm font-bold shadow-sm">
+              -40% OFF
+            </span>
+<span class="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur text-error font-label-sm text-label-sm font-semibold shadow-sm">
+              Hoje até 19h
+            </span>
+</div>
+<div class="p-4 flex flex-col gap-2">
+<div class="flex items-center justify-between text-outline font-label-sm text-label-sm">
+<span class="font-semibold text-primary">Havanna Café • L1</span>
+<span>+10 pts</span>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors line-clamp-1">
+              Fatia Torta Rogel + Café Expresso
+            </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+              Massa crocante com camadas puras de doce de leite argentino e merengue.
+            </p>
+</div>
+</div>
+<div class="p-4 pt-0 flex flex-col gap-3">
+<div class="flex items-baseline gap-2 pt-2 border-t border-surface-container">
+<span class="font-body-sm text-body-sm text-outline line-through">R$ 32,50</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">R$ 19,50</span>
+</div>
+<button class="w-full py-2.5 rounded-full bg-surface-container-low hover:bg-primary hover:text-on-primary text-primary font-label-md text-label-md font-bold transition-all text-center">
+            Pegar Voucher
+          </button>
+</div>
+</div>
+<!-- Card 7: L'Occitane Spa Care -->
+<div class="group rounded-3xl overflow-hidden bg-surface-container-lowest shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div>
+<div class="relative h-48 w-full overflow-hidden bg-surface-container-low">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Luxury botanical hand cream tube and natural shea butter jar decorated with dried lavender and almond blossoms" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDg_budGtCOL27sIMrNd-ZvGuiPSiE2EA4VzE9TR59Zj4f0fNrDTx6ASdUGjYiDf3AupxPUz-xJCSGbW5sT20OZnvuQ_ADqPPr_imbR1qxH1Wl7zujuLuFzKUoE_lj4ITuUs-sZnQU_t7mv0KDrB6JgFLJ0zhwnqgY3vATduE5VyPMfzPeCyKp9ncWW5nfRaDY8MKR7GpmwDL5cRTdfdHg67a31Lqk_iiKNEK8Wuq0"/>
+<span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-primary text-on-primary font-label-sm text-label-sm font-bold shadow-sm">
+              Brinde na Compra
+            </span>
+<span class="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur text-primary font-label-sm text-label-sm font-semibold shadow-sm">
+              +25 pts
+            </span>
+</div>
+<div class="p-4 flex flex-col gap-2">
+<div class="flex items-center justify-between text-outline font-label-sm text-label-sm">
+<span class="font-semibold text-primary">L'Occitane au Brésil • L1</span>
+<span>+25 pts</span>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors line-clamp-1">
+              Kit Hidratação Amêndoa Doce
+            </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+              Creme de mãos e óleo corporal enriquecidos com extrato vegetal tocantinense.
+            </p>
+</div>
+</div>
+<div class="p-4 pt-0 flex flex-col gap-3">
+<div class="flex items-baseline gap-2 pt-2 border-t border-surface-container">
+<span class="font-body-sm text-body-sm text-outline line-through">R$ 145,00</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">R$ 108,70</span>
+</div>
+<button class="w-full py-2.5 rounded-full bg-surface-container-low hover:bg-primary hover:text-on-primary text-primary font-label-md text-label-md font-bold transition-all text-center">
+            Pegar Voucher
+          </button>
+</div>
+</div>
+<!-- Card 8: Riachuelo Casa -->
+<div class="group rounded-3xl overflow-hidden bg-surface-container-lowest shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div>
+<div class="relative h-48 w-full overflow-hidden bg-surface-container-low">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Set of pure percale cotton bedsheets in warm neutral beige with minimalist ceramic decor on bed in sunlit modern bedroom" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7qjQQAIlPksN3DC1E3_8X6s8HIdX584UvniF1rO6PiYEFU1fswd8osmQCGWdRDkz4IknBohX5i2q7PRYhx7i6_Rhhz8hhq8fLhs4YBXaRZq6pj20wagG7gk_VgE7Z7_MDpJED0pI4Z-YtvlF1lksUkOdk5GXsG4qPc2l7bgCjUjlxi7K6tWbj_OSP79ejKR4yf8TjIVrO-XIQfhNF92LP7LFvbiFw2yoCmzIAdZY"/>
+<span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-secondary text-on-secondary font-label-sm text-label-sm font-bold shadow-sm">
+              -30% OFF
+            </span>
+<span class="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur text-outline font-label-sm text-label-sm font-semibold shadow-sm">
+              Casa &amp; Conforto
+            </span>
+</div>
+<div class="p-4 flex flex-col gap-2">
+<div class="flex items-center justify-between text-outline font-label-sm text-label-sm">
+<span class="font-semibold text-primary">Riachuelo Casa • L2</span>
+<span>+15 pts</span>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors line-clamp-1">
+              Jogo de Cama Percal 300 Fios Queen
+            </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+              Toque acetinado em algodão egípcio com acabamento premium e antialérgico.
+            </p>
+</div>
+</div>
+<div class="p-4 pt-0 flex flex-col gap-3">
+<div class="flex items-baseline gap-2 pt-2 border-t border-surface-container">
+<span class="font-body-sm text-body-sm text-outline line-through">R$ 299,90</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">R$ 209,90</span>
+</div>
+<button class="w-full py-2.5 rounded-full bg-surface-container-low hover:bg-primary hover:text-on-primary text-primary font-label-md text-label-md font-bold transition-all text-center">
+            Pegar Voucher
+          </button>
+</div>
+</div>
+</div>
+<!-- Pagination & Catalog Expansion -->
+<div class="flex items-center justify-center mt-space-xl">
+<button class="px-8 py-3.5 rounded-full bg-surface-container-low text-on-surface hover:bg-surface-container font-label-lg text-label-lg font-bold shadow-sm transition-all flex items-center gap-2">
+<span>Carregar Mais Ofertas</span>
+<span class="material-symbols-outlined text-lg">expand_more</span>
+</button>
+</div>
+</section>
+<!-- PWA & Mobile App Companion Banner -->
+<section class="w-full px-margin py-space-xl bg-surface-container-low">
+<div class="max-w-[1400px] mx-auto rounded-3xl bg-surface-container-lowest p-space-lg md:p-12 shadow-md flex flex-col lg:flex-row items-center justify-between gap-space-lg">
+<div class="flex flex-col gap-3 max-w-xl">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-fixed/40 text-on-primary-fixed w-fit font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-xs">install_mobile</span>
+<span>Instale sem ocupar memória</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-on-surface">
+          Tenha seu Passaporte Digital sempre à mão no bolso
+        </h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          Adicione o Passaporte Capim Dourado à tela de início do seu iPhone ou Android em segundos. Notificações automáticas de cupons quando você entrar no shopping, leitura instantânea por QR Code e resgate sem filas.
+        </p>
+<div class="flex items-center gap-6 pt-2">
+<div class="flex items-center gap-2 text-on-surface font-label-md text-label-md font-semibold">
+<span class="material-symbols-outlined text-secondary text-lg">check_circle</span>
+<span>Check-in por Geofence</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface font-label-md text-label-md font-semibold">
+<span class="material-symbols-outlined text-secondary text-lg">check_circle</span>
+<span>Sem necessidade de App Store</span>
+</div>
+</div>
+</div>
+<!-- Right: Direct QR Code Scan for Mobile Sync -->
+<div class="flex flex-col sm:flex-row items-center gap-6 p-6 rounded-2xl bg-surface-container-low">
+<div class="w-36 h-36 p-2 rounded-2xl bg-surface-container-lowest shadow-md flex items-center justify-center">
+<!-- Inline Mock QR Code Pattern -->
+<svg class="w-full h-full text-on-surface fill-current" viewbox="0 0 100 100">
+<rect height="30" rx="4" width="30" x="0" y="0"></rect>
+<rect fill="#ffffff" height="20" rx="2" width="20" x="5" y="5"></rect>
+<rect height="10" rx="1" width="10" x="10" y="10"></rect>
+<rect height="30" rx="4" width="30" x="70" y="0"></rect>
+<rect fill="#ffffff" height="20" rx="2" width="20" x="75" y="5"></rect>
+<rect height="10" rx="1" width="10" x="80" y="10"></rect>
+<rect height="30" rx="4" width="30" x="0" y="70"></rect>
+<rect fill="#ffffff" height="20" rx="2" width="20" x="5" y="75"></rect>
+<rect height="10" rx="1" width="10" x="10" y="80"></rect>
+<rect height="20" width="10" x="40" y="10"></rect>
+<rect height="10" width="20" x="10" y="40"></rect>
+<rect height="20" width="20" x="40" y="40"></rect>
+<rect height="10" width="15" x="70" y="45"></rect>
+<rect height="15" width="15" x="45" y="75"></rect>
+<rect height="15" width="15" x="75" y="75"></rect>
+</svg>
+</div>
+<div class="flex flex-col items-center sm:items-start text-center sm:text-left gap-2">
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Abra no Celular</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-[200px]">
+            Aponte a câmera do celular para este QR Code e acesse a versão nativa do passaporte.
+          </p>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-primary font-bold mt-1">
+<span>capimdourado.com.br/app</span>
+<span class="material-symbols-outlined text-xs">arrow_forward</span>
+</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Interactive Modal: Scanner Simulator -->
+<div class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 transition-all" id="scannerModal">
+<div class="bg-surface-container-lowest rounded-3xl max-w-md w-full p-6 shadow-2xl relative flex flex-col gap-4 animate-in fade-in zoom-in duration-200">
+<div class="flex items-center justify-between pb-3 border-b border-surface-container">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold">
+<span class="material-symbols-outlined text-base">qr_code_scanner</span>
+</div>
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Leitor Passaporte Digital</span>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container text-on-surface flex items-center justify-center hover:bg-surface-container-high cursor-pointer" id="closeScannerBtn">
+<span class="material-symbols-outlined text-sm">close</span>
+</button>
+</div>
+<div class="relative w-full h-64 rounded-2xl bg-on-surface overflow-hidden flex items-center justify-center">
+<!-- Reticle Graphic -->
+<div class="w-44 h-44 rounded-2xl border-2 border-primary-fixed relative flex items-center justify-center">
+<div class="w-full h-0.5 bg-primary absolute top-1/2 -translate-y-1/2 shadow-[0_0_8px_#c59b4e] animate-pulse"></div>
+<span class="material-symbols-outlined text-4xl text-primary-fixed/40">crop_free</span>
+</div>
+<div class="absolute bottom-3 inset-x-3 text-center py-1.5 px-3 rounded-lg bg-black/60 backdrop-blur text-white font-label-sm text-label-sm">
+          Aponte para o QR Code da loja ou totem
+        </div>
+</div>
+<div class="flex flex-col gap-2">
+<span class="font-label-sm text-label-sm text-outline uppercase font-semibold">Simulação de Validação Rápida:</span>
+<div class="grid grid-cols-2 gap-2">
+<button class="p-2.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-left text-xs font-semibold text-on-surface" onclick="simulateCheckin('Havanna Café', 10)">
+            + Check-in Havanna (+10 pts)
+          </button>
+<button class="p-2.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-left text-xs font-semibold text-on-surface" onclick="simulateCheckin('Outback', 15)">
+            + Check-in Outback (+15 pts)
+          </button>
+</div>
+</div>
+<div class="hidden p-3 rounded-xl bg-secondary/15 text-secondary text-sm font-medium flex items-center gap-2" id="checkinSuccess">
+<span class="material-symbols-outlined text-base">verified</span>
+<span id="checkinSuccessText">Check-in validado com sucesso!</span>
+</div>
+</div>
+</div>
+<script>
+    const modal = document.getElementById('scannerModal');
+    const openBtn = document.getElementById('openScannerBtn');
+    const closeBtn = document.getElementById('closeScannerBtn');
+    const successMsg = document.getElementById('checkinSuccess');
+    const successText = document.getElementById('checkinSuccessText');
+
+    if (openBtn && modal && closeBtn) {
+      openBtn.addEventListener('click', () => {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      });
+
+      closeBtn.addEventListener('click', () => {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        if (successMsg) successMsg.classList.add('hidden');
+      });
+
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.add('hidden');
+          modal.classList.remove('flex');
+          if (successMsg) successMsg.classList.add('hidden');
+        }
+      });
+    }
+
+    window.simulateCheckin = function(storeName, points) {
+      if (successMsg && successText) {
+        successText.textContent = `Ponto registrado na loja ${storeName}! +${points} pontos creditados no seu Passaporte.`;
+        successMsg.classList.remove('hidden');
+      }
+    };
+  </script>
+</div></main><footer class="w-full bg-surface-container-low text-on-surface mt-space-xl"><div class="w-full px-margin py-space-xl"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-space-lg mb-space-xl"><div class="lg:col-span-2 flex flex-col gap-space-sm pr-space-md"><div class="flex items-center gap-space-sm"><div class="w-9 h-9 rounded-full bg-primary-container flex items-center justify-center text-on-primary shadow-sm"><span class="material-symbols-outlined text-base">local_florist</span></div><span class="font-headline-md text-headline-sm text-primary font-bold">Capim Dourado Shopping</span></div><p class="font-body-md text-body-md text-on-surface-variant max-w-md mt-2">O destino gastronômico, cultural e de compras mais nobre do Tocantins. Acumule pontos no seu Passaporte, destrave benefícios exclusivos e vivencie a sofisticação do cerrado.</p><div class="flex items-center gap-3 mt-3"><div class="flex items-center justify-center w-8 h-8 rounded-full bg-surface-container text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-sm">share</span></div><div class="flex items-center justify-center w-8 h-8 rounded-full bg-surface-container text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-sm">chat</span></div><div class="flex items-center justify-center w-8 h-8 rounded-full bg-surface-container text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-sm">mail</span></div></div></div><div class="flex flex-col gap-space-xs"><span class="font-label-lg text-label-lg font-bold text-on-surface uppercase tracking-wider mb-2">Horário de Funcionamento</span><div class="flex flex-col gap-1"><span class="font-body-md text-body-md text-on-surface font-semibold">Segunda a Sábado</span><span class="font-body-sm text-body-sm text-on-surface-variant">Lojas e Alimentação: 10h às 22h</span></div><div class="flex flex-col gap-1 mt-2"><span class="font-body-md text-body-md text-on-surface font-semibold">Domingos e Feriados</span><span class="font-body-sm text-body-sm text-on-surface-variant">Alimentação &amp; Lazer: 11h às 22h</span><span class="font-body-sm text-body-sm text-on-surface-variant">Lojas Satélites: 14h às 20h</span></div></div><div class="flex flex-col gap-space-xs"><span class="font-label-lg text-label-lg font-bold text-on-surface uppercase tracking-wider mb-2">Localização &amp; Contato</span><p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">Quadra 107 Norte, Av. JK, s/n<br/>Plano Diretor Norte · Palmas - TO<br/>CEP 77001-070</p><p class="font-body-sm text-body-sm text-on-surface-variant mt-2">SAC: (63) 3215-9600<br/>concierge@capimdourado.com.br</p></div><div class="flex flex-col gap-space-xs"><span class="font-label-lg text-label-lg font-bold text-on-surface uppercase tracking-wider mb-2">Portal &amp; Institucional</span><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors py-1" data-path="portal-do-lojista" href="#">Portal do Lojista</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors py-1" data-path="admin-concierge" href="#">Acesso Administrativo</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors py-1" href="#">Regulamento do Passaporte</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors py-1" href="#">Comitê de Sustentabilidade</a></div></div><div class="pt-space-md flex flex-col md:flex-row items-center justify-between gap-4 text-on-surface-variant font-label-md text-label-md"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-base">verified</span><span>© 2025 Condomínio Capim Dourado Shopping. Todos os direitos reservados.</span></div><div class="flex items-center gap-6"><a class="hover:text-primary transition-colors" href="#">Privacidade &amp; LGPD</a><a class="hover:text-primary transition-colors" href="#">Termos de Uso</a><a class="hover:text-primary transition-colors" href="#">Preferências de Cookies</a><a class="hover:text-primary transition-colors" href="#">Canal de Ética</a></div></div></div></footer></body></html>
