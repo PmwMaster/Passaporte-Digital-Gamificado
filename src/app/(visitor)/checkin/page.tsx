@@ -7,7 +7,6 @@ import {
   mockCheckIns,
   mockStores,
 } from '@/infrastructure/database/mock-data';
-import { SHOPPING_CONFIG } from '@/shared/constants';
 import { CheckIn, Mission, Stamp } from '@/shared/types/domain';
 
 interface CheckInSuccessResult {
@@ -17,29 +16,24 @@ interface CheckInSuccessResult {
   newBalance: number;
 }
 
+interface LiveGpsPosition {
+  latitude: number;
+  longitude: number;
+  accuracyMeters: number;
+  capturedAt: number;
+}
+
 function CheckInPageContent() {
   const searchParams = useSearchParams();
   const qrParam = searchParams?.get('qr');
 
-  const [selectedToken, setSelectedToken] = useState(
+  const [scannedToken, setScannedToken] = useState<string | null>(
     qrParam && mockStores.some((s) => s.qrCodeToken === qrParam)
       ? qrParam
-      : mockStores[0].qrCodeToken
+      : null
   );
-
-  useEffect(() => {
-    if (qrParam && mockStores.some((s) => s.qrCodeToken === qrParam)) {
-      setSelectedToken(qrParam);
-    }
-  }, [qrParam]);
-
-  const [latitude, setLatitude] = useState<number>(
-    SHOPPING_CONFIG.defaultCoordinates.latitude
-  );
-  const [longitude, setLongitude] = useState<number>(
-    SHOPPING_CONFIG.defaultCoordinates.longitude
-  );
-  const [accuracyMeters, setAccuracyMeters] = useState<number>(15);
+  const [liveGps, setLiveGps] = useState<LiveGpsPosition | null>(null);
+  const [isCapturingGps, setIsCapturingGps] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [isError, setIsError] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -54,6 +48,54 @@ function CheckInPageContent() {
   } | null>(null);
 
   useEffect(() => {
+    if (qrParam && mockStores.some((s) => s.qrCodeToken === qrParam)) {
+      setScannedToken(qrParam);
+    }
+  }, [qrParam]);
+
+  function requestFreshGpsPosition(): Promise<LiveGpsPosition> {
+    return new Promise((resolve, reject) => {
+      if (typeof navigator === 'undefined' || !navigator.geolocation) {
+        reject(
+          new Error(
+            'Geolocalização não suportada neste navegador. O uso da localização em tempo real é obrigatório para realizar o check-in.'
+          )
+        );
+        return;
+      }
+
+      setIsCapturingGps(true);
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setIsCapturingGps(false);
+          const fresh: LiveGpsPosition = {
+            latitude: Number(pos.coords.latitude.toFixed(6)),
+            longitude: Number(pos.coords.longitude.toFixed(6)),
+            accuracyMeters: Math.round(pos.coords.accuracy || 15),
+            capturedAt: Date.now(),
+          };
+          setLiveGps(fresh);
+          resolve(fresh);
+        },
+        () => {
+          setIsCapturingGps(false);
+          setLiveGps(null);
+          reject(
+            new Error(
+              'Permissão de localização GPS negada ou desativada. É obrigatório permitir o acesso à localização no momento do check-in.'
+            )
+          );
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 12000,
+          maximumAge: 0,
+        }
+      );
+    });
+  }
+
+  useEffect(() => {
     fetch('/api/checkins', { cache: 'no-store' })
       .then((r) => r.json())
       .then((json) => {
@@ -63,6 +105,11 @@ function CheckInPageContent() {
       })
       .catch(() => undefined);
 
+    requestFreshGpsPosition().catch((err: Error) => {
+      setIsError(true);
+      setStatusMessage(err.message);
+    });
+
     return () => {
       if (scannerInstanceRef.current) {
         scannerInstanceRef.current.stop().catch(() => undefined);
@@ -70,87 +117,22 @@ function CheckInPageContent() {
     };
   }, []);
 
-  async function handleStartCameraScanner() {
-    setIsCameraOpen(true);
-    setIsError(false);
-    setStatusMessage(
-      'Aponte a câmera para o QR Code oficial do balcão da loja...'
-    );
-
-    try {
-      const { Html5Qrcode } = await import('html5-qrcode');
-      const qr = new Html5Qrcode('capim-qr-reader');
-      scannerInstanceRef.current = qr;
-
-      await qr.start(
-        { facingMode: 'environment' },
-        { fps: 10, qrbox: { width: 220, height: 220 } },
-        (decodedText) => {
-          setSelectedToken(decodedText.trim());
-          setStatusMessage(`QR Code lido pela câmera: ${decodedText.trim()}`);
-          qr.stop()
-            .then(() => {
-              qr.clear();
-              setIsCameraOpen(false);
-            })
-            .catch(() => setIsCameraOpen(false));
-        },
-        () => undefined
-      );
-    } catch {
-      setIsCameraOpen(false);
-      setIsError(true);
-      setStatusMessage(
-        'Câmera indisponível ou sem HTTPS neste dispositivo. Selecione a loja abaixo para validar seu check-in.'
-      );
-    }
-  }
-
-  async function handleStopCameraScanner() {
-    if (scannerInstanceRef.current) {
-      await scannerInstanceRef.current.stop().catch(() => undefined);
-      scannerInstanceRef.current.clear();
-      scannerInstanceRef.current = null;
-    }
-    setIsCameraOpen(false);
-  }
-
-  function handleCaptureBrowserGps() {
-    if (!navigator.geolocation) {
-      setIsError(true);
-      setStatusMessage('Geolocalização não suportada neste navegador.');
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setLatitude(Number(pos.coords.latitude.toFixed(6)));
-        setLongitude(Number(pos.coords.longitude.toFixed(6)));
-        setAccuracyMeters(Math.round(pos.coords.accuracy || 15));
-        setIsError(false);
-        setStatusMessage('Coordenadas GPS reais capturadas pelo navegador!');
-      },
-      () => {
-        setIsError(true);
-        setStatusMessage(
-          'Permissão de GPS negada ou sem HTTPS na rede local. Use os botões de simulação rápida abaixo.'
-        );
-      }
-    );
-  }
-
-  async function handleCheckInSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  async function submitCheckInWithFreshGps(qrTokenToSubmit: string) {
     setIsSubmitting(true);
+    setIsError(false);
+    setStatusMessage('Coletando localização GPS em tempo real e validando presença...');
+
     try {
+      const freshGps = await requestFreshGpsPosition();
+
       const res = await fetch('/api/checkins', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          qrCodeToken: selectedToken,
-          latitude: Number(latitude),
-          longitude: Number(longitude),
-          accuracyMeters: Number(accuracyMeters),
+          qrCodeToken: qrTokenToSubmit,
+          latitude: freshGps.latitude,
+          longitude: freshGps.longitude,
+          accuracyMeters: freshGps.accuracyMeters,
         }),
       });
 
@@ -177,13 +159,89 @@ function CheckInPageContent() {
       if (historyJson.success) {
         setRecentHistory(historyJson.data.checkIns);
       }
+    } catch (err) {
+      setIsError(true);
+      setLastResult(null);
+      setStatusMessage(
+        err instanceof Error
+          ? err.message
+          : 'Não foi possível validar sua localização GPS no momento do check-in.'
+      );
     } finally {
       setIsSubmitting(false);
     }
   }
 
-  const selectedStore =
-    mockStores.find((s) => s.qrCodeToken === selectedToken) ?? mockStores[0];
+  async function handleStartCameraScanner() {
+    setIsError(false);
+    setStatusMessage(
+      'Verificando permissão obrigatória de localização GPS antes de abrir o leitor...'
+    );
+
+    try {
+      await requestFreshGpsPosition();
+    } catch (err) {
+      setIsError(true);
+      setStatusMessage(
+        err instanceof Error
+          ? err.message
+          : 'Ative a localização GPS do dispositivo para escanear o QR Code.'
+      );
+      return;
+    }
+
+    setIsCameraOpen(true);
+    setStatusMessage(
+      'Aponte a câmera para o QR Code oficial no totem ou balcão da loja...'
+    );
+
+    try {
+      const { Html5Qrcode } = await import('html5-qrcode');
+      const qr = new Html5Qrcode('capim-qr-reader');
+      scannerInstanceRef.current = qr;
+
+      await qr.start(
+        { facingMode: 'environment' },
+        { fps: 10, qrbox: { width: 240, height: 240 } },
+        (decodedText) => {
+          const cleanToken = decodedText.trim();
+          setScannedToken(cleanToken);
+          qr.stop()
+            .then(() => {
+              qr.clear();
+              setIsCameraOpen(false);
+              void submitCheckInWithFreshGps(cleanToken);
+            })
+            .catch(() => {
+              setIsCameraOpen(false);
+              void submitCheckInWithFreshGps(cleanToken);
+            });
+        },
+        () => undefined
+      );
+    } catch {
+      setIsCameraOpen(false);
+      setIsError(true);
+      setStatusMessage(
+        'Não foi possível acessar a câmera neste dispositivo. Permita o uso da câmera e da localização para escanear o QR Code.'
+      );
+    }
+  }
+
+  async function handleStopCameraScanner() {
+    if (scannerInstanceRef.current) {
+      await scannerInstanceRef.current.stop().catch(() => undefined);
+      scannerInstanceRef.current.clear();
+      scannerInstanceRef.current = null;
+    }
+    setIsCameraOpen(false);
+  }
+
+  const scannedStore = scannedToken
+    ? mockStores.find(
+        (s) => s.qrCodeToken.toUpperCase() === scannedToken.toUpperCase()
+      ) ?? null
+    : null;
 
   return (
     <div className="mx-auto max-w-4xl pb-12">
@@ -198,10 +256,10 @@ function CheckInPageContent() {
           </Link>
           <div>
             <span className="text-[10px] font-extrabold uppercase tracking-widest text-primary">
-              Check-in Presencial • QR Code + Geofence Haversine 250m
+              Check-in Presencial • QR Code + GPS em Tempo Real Obrigatório
             </span>
             <h1 className="font-headline text-xl font-extrabold text-on-surface">
-              Escanear QR & Validar Presença
+              Check-in na Loja
             </h1>
           </div>
         </div>
@@ -218,245 +276,183 @@ function CheckInPageContent() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-12">
-        {/* Coluna Principal: Scanner + Seletor + Validação */}
+        {/* Coluna Principal: Scanner QR Code + Status de Localização Obrigatória */}
         <div className="lg:col-span-7 space-y-5">
-          <section className="rounded-3xl border border-outline-variant/25 bg-surface-container-lowest p-5 shadow-card">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <h2 className="font-headline text-lg font-extrabold text-on-surface">
-                  1. Leitor de QR Code da Loja
-                </h2>
-                <p className="text-xs text-on-surface-variant">
-                  Escaneie o totem no balcão ou selecione a loja parceira abaixo.
-                </p>
-              </div>
-
-              {!isCameraOpen ? (
-                <button
-                  type="button"
-                  onClick={handleStartCameraScanner}
-                  className="flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:opacity-95"
-                >
-                  <span className="material-symbols-outlined text-[16px]">
-                    photo_camera
-                  </span>
-                  Abrir Câmera QR
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={handleStopCameraScanner}
-                  className="flex items-center gap-1.5 rounded-xl bg-error px-4 py-2.5 text-xs font-bold text-white"
-                >
-                  <span className="material-symbols-outlined text-[16px]">
-                    close
-                  </span>
-                  Fechar Câmera
-                </button>
-              )}
+          <section className="rounded-3xl border border-outline-variant/25 bg-surface-container-lowest p-6 shadow-card space-y-5">
+            <div>
+              <h2 className="font-headline text-lg font-extrabold text-on-surface">
+                Escanear QR Code da Loja
+              </h2>
+              <p className="mt-1 text-xs text-on-surface-variant">
+                Para aprovar seu check-in e pontuar, é obrigatório estar com a
+                localização ativa no momento da leitura do QR Code no balcão.
+              </p>
             </div>
 
+            {/* Indicador de Requisito de Localização em Tempo Real */}
+            <div
+              className={`flex items-center justify-between gap-3 rounded-2xl border p-4 text-xs ${
+                liveGps
+                  ? 'border-secondary/30 bg-secondary-container/30 text-on-secondary-container'
+                  : 'border-error/30 bg-error-container/40 text-on-error-container'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <span className="material-symbols-outlined text-[22px]">
+                  {liveGps ? 'my_location' : 'location_disabled'}
+                </span>
+                <div>
+                  <p className="font-extrabold">
+                    {isCapturingGps
+                      ? 'Coletando localização GPS atual...'
+                      : liveGps
+                      ? 'Localização GPS ativa e verificada na hora'
+                      : 'Localização GPS obrigatória pendente'}
+                  </p>
+                  <p className="mt-0.5 text-[11px] opacity-90">
+                    {liveGps
+                      ? `Precisão atual: ±${liveGps.accuracyMeters}m • Coletada às ${new Date(
+                          liveGps.capturedAt
+                        ).toLocaleTimeString('pt-BR')}`
+                      : 'Ative o GPS do celular/navegador para liberar a leitura e aprovação do check-in.'}
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                disabled={isCapturingGps}
+                onClick={() => {
+                  setIsError(false);
+                  requestFreshGpsPosition()
+                    .then(() => {
+                      setStatusMessage(
+                        'Localização em tempo real confirmada! Agora escaneie o QR Code da loja.'
+                      );
+                    })
+                    .catch((err: Error) => {
+                      setIsError(true);
+                      setStatusMessage(err.message);
+                    });
+                }}
+                className="shrink-0 rounded-xl border border-current/25 bg-white/80 px-3 py-2 text-[11px] font-extrabold text-on-surface shadow-sm transition hover:bg-white"
+              >
+                {isCapturingGps ? 'Obtendo...' : 'Atualizar GPS'}
+              </button>
+            </div>
+
+            {/* Área da Câmera quando aberta */}
             {isCameraOpen && (
-              <div className="mt-4 overflow-hidden rounded-2xl border-2 border-dashed border-primary bg-surface-container-low p-4">
+              <div className="overflow-hidden rounded-2xl border-2 border-dashed border-primary bg-surface-container-low p-4">
                 <div id="capim-qr-reader" className="mx-auto max-w-xs" />
               </div>
             )}
 
-            {/* Grade Rápida de Lojas para Simulação/Seleção */}
-            <div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-3">
-              {mockStores.map((store) => {
-                const isSelected = store.qrCodeToken === selectedToken;
-                return (
-                  <button
-                    key={store.id}
-                    type="button"
-                    onClick={() => setSelectedToken(store.qrCodeToken)}
-                    className={`flex flex-col items-start justify-between rounded-2xl border p-3 text-left transition ${
-                      isSelected
-                        ? 'border-primary bg-primary-fixed/40 shadow-sm'
-                        : 'border-outline-variant/30 bg-surface-container-low hover:border-primary/40'
-                    }`}
-                  >
-                    <span className="rounded bg-primary/15 px-1.5 py-0.5 text-[9px] font-extrabold uppercase text-primary">
-                      +{store.checkInPoints} pts
-                    </span>
-                    <p className="mt-1.5 font-headline text-xs font-extrabold text-on-surface line-clamp-1">
-                      {store.name}
-                    </p>
-                    <span className="text-[10px] text-on-surface-variant">
-                      {store.floor}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-
-            <form onSubmit={handleCheckInSubmit} className="mt-5 space-y-4">
-              <div className="rounded-2xl border border-outline-variant/30 bg-surface-container-low p-3.5">
+            {/* Caso tenha vindo de um link com QR Code ou acabado de ler um QR Code */}
+            {scannedStore && (
+              <div className="rounded-2xl border border-outline-variant/30 bg-surface-container-low p-4">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">
-                    Loja Selecionada no Leitor
+                    QR Code Identificado
                   </span>
                   <code className="font-mono text-[11px] font-bold text-primary">
-                    {selectedStore.qrCodeToken}
+                    {scannedStore.qrCodeToken}
                   </code>
                 </div>
                 <p className="mt-1 font-headline text-sm font-extrabold text-on-surface">
-                  {selectedStore.name} ({selectedStore.floor}) — +
-                  {selectedStore.checkInPoints} pontos + 1 Carimbo
+                  {scannedStore.name} ({scannedStore.floor}) — +
+                  {scannedStore.checkInPoints} pontos + 1 Carimbo
                 </p>
-              </div>
 
-              {/* Coordenadas GPS */}
-              <div>
-                <div className="mb-2 flex items-center justify-between">
-                  <span className="text-xs font-extrabold text-on-surface">
-                    2. Posição GPS (Geocerca Haversine &le; 250m)
-                  </span>
-                  <span className="text-[10px] text-on-surface-variant">
-                    Centro: -10.18448, -48.33368
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-3 gap-2.5">
-                  <div>
-                    <label className="block text-[10px] font-bold uppercase text-on-surface-variant">
-                      Latitude
-                    </label>
-                    <input
-                      type="number"
-                      step="0.00001"
-                      value={latitude}
-                      onChange={(e) => setLatitude(Number(e.target.value))}
-                      className="mt-1 w-full rounded-xl border border-outline-variant/40 bg-surface-container-lowest px-3 py-2 text-xs font-semibold text-on-surface"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-bold uppercase text-on-surface-variant">
-                      Longitude
-                    </label>
-                    <input
-                      type="number"
-                      step="0.00001"
-                      value={longitude}
-                      onChange={(e) => setLongitude(Number(e.target.value))}
-                      className="mt-1 w-full rounded-xl border border-outline-variant/40 bg-surface-container-lowest px-3 py-2 text-xs font-semibold text-on-surface"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-bold uppercase text-on-surface-variant">
-                      Precisão (m)
-                    </label>
-                    <input
-                      type="number"
-                      min="1"
-                      max="500"
-                      value={accuracyMeters}
-                      onChange={(e) =>
-                        setAccuracyMeters(Number(e.target.value))
-                      }
-                      className="mt-1 w-full rounded-xl border border-outline-variant/40 bg-surface-container-lowest px-3 py-2 text-xs font-semibold text-on-surface"
-                    />
-                  </div>
-                </div>
-
-                <div className="mt-3 flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setLatitude(-10.18442);
-                      setLongitude(-48.33365);
-                      setAccuracyMeters(12);
-                      setIsError(false);
-                      setStatusMessage(
-                        'Coordenada ajustada para dentro do Passe Dourado Shopping (~12m do centro).'
-                      );
-                    }}
-                    className="rounded-xl bg-secondary-container px-3 py-1.5 text-[11px] font-bold text-on-secondary-container"
-                  >
-                    📍 Dentro do Shopping (~12m)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setLatitude(-10.2125);
-                      setLongitude(-48.355);
-                      setAccuracyMeters(15);
-                      setIsError(false);
-                      setStatusMessage(
-                        'Coordenada ajustada para fora do raio (> 250m) para testar bloqueio antifraude.'
-                      );
-                    }}
-                    className="rounded-xl bg-error-container px-3 py-1.5 text-[11px] font-bold text-on-error-container"
-                  >
-                    🚫 Simular Fora do Raio (&gt;250m)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleCaptureBrowserGps}
-                    className="rounded-xl border border-outline-variant/40 bg-surface-container-low px-3 py-1.5 text-[11px] font-bold text-on-surface"
-                  >
-                    🛰️ GPS do Dispositivo
-                  </button>
-                </div>
-              </div>
-
-              {statusMessage && (
-                <div
-                  className={`rounded-2xl p-4 text-xs font-bold ${
-                    isError
-                      ? 'border border-error/30 bg-error-container/50 text-on-error-container'
-                      : 'border border-secondary/30 bg-secondary-container/40 text-on-secondary-container'
-                  }`}
+                <button
+                  type="button"
+                  disabled={isSubmitting || isCapturingGps}
+                  onClick={() =>
+                    submitCheckInWithFreshGps(scannedStore.qrCodeToken)
+                  }
+                  className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-secondary py-3 text-xs font-extrabold text-white shadow-sm transition hover:opacity-95 disabled:opacity-50"
                 >
-                  {statusMessage}
-                </div>
-              )}
+                  <span className="material-symbols-outlined text-[18px]">
+                    verified_user
+                  </span>
+                  {isSubmitting
+                    ? 'Coletando GPS e Validando...'
+                    : `Confirmar Check-in com Localização Atual (+${scannedStore.checkInPoints} pts)`}
+                </button>
+              </div>
+            )}
 
-              {lastResult && !isError && (
-                <div className="rounded-2xl border-2 border-primary/40 bg-primary-fixed/25 p-4 text-xs">
-                  <div className="flex items-center justify-between">
-                    <span className="font-headline text-base font-extrabold text-primary">
-                      ✦ Carimbo Conquistado: {lastResult.stampEarned.badgeTitle}
-                    </span>
-                    <span className="rounded-full bg-secondary px-3 py-1 font-extrabold text-white">
-                      +{lastResult.checkIn.pointsAwarded} pts
-                    </span>
-                  </div>
-                  <p className="mt-1 text-on-surface-variant">
-                    Distância validada: {lastResult.checkIn.distanceMeters}m •
-                    Novo Saldo: <strong>{lastResult.newBalance} pts</strong>
-                  </p>
-
-                  {lastResult.completedMissions.length > 0 && (
-                    <div className="mt-3 rounded-xl bg-secondary-container/60 p-3 text-on-secondary-container">
-                      <p className="font-extrabold">
-                        🎉 Missão Concluída Automaticamente:
-                      </p>
-                      {lastResult.completedMissions.map((m) => (
-                        <p key={m.id} className="mt-0.5">
-                          • <strong>{m.title}</strong> (+{m.rewardPoints} pts
-                          bônus creditados)
-                        </p>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-secondary py-3.5 text-sm font-extrabold text-white shadow-md transition hover:opacity-95 active:scale-98 disabled:opacity-50"
+            {statusMessage && (
+              <div
+                className={`rounded-2xl p-4 text-xs font-bold ${
+                  isError
+                    ? 'border border-error/30 bg-error-container/50 text-on-error-container'
+                    : 'border border-secondary/30 bg-secondary-container/40 text-on-secondary-container'
+                }`}
               >
-                <span className="material-symbols-outlined text-[20px]">
-                  verified_user
+                {statusMessage}
+              </div>
+            )}
+
+            {lastResult && !isError && (
+              <div className="rounded-2xl border-2 border-primary/40 bg-primary-fixed/25 p-4 text-xs">
+                <div className="flex items-center justify-between">
+                  <span className="font-headline text-base font-extrabold text-primary">
+                    ✦ Carimbo Conquistado: {lastResult.stampEarned.badgeTitle}
+                  </span>
+                  <span className="rounded-full bg-secondary px-3 py-1 font-extrabold text-white">
+                    +{lastResult.checkIn.pointsAwarded} pts
+                  </span>
+                </div>
+                <p className="mt-1 text-on-surface-variant">
+                  Distância validada na hora:{' '}
+                  {lastResult.checkIn.distanceMeters}m • Novo Saldo:{' '}
+                  <strong>{lastResult.newBalance} pts</strong>
+                </p>
+
+                {lastResult.completedMissions.length > 0 && (
+                  <div className="mt-3 rounded-xl bg-secondary-container/60 p-3 text-on-secondary-container">
+                    <p className="font-extrabold">
+                      🎉 Missão Concluída Automaticamente:
+                    </p>
+                    {lastResult.completedMissions.map((m) => (
+                      <p key={m.id} className="mt-0.5">
+                        • <strong>{m.title}</strong> (+{m.rewardPoints} pts
+                        bônus creditados)
+                      </p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Botão Único Principal para Escanear o QR Code */}
+            {!isCameraOpen ? (
+              <button
+                type="button"
+                disabled={isSubmitting || isCapturingGps}
+                onClick={handleStartCameraScanner}
+                className="flex w-full items-center justify-center gap-2.5 rounded-2xl bg-secondary py-4 text-sm font-extrabold text-white shadow-md transition hover:opacity-95 active:scale-98 disabled:opacity-50"
+              >
+                <span className="material-symbols-outlined text-[22px]">
+                  qr_code_scanner
                 </span>
                 {isSubmitting
                   ? 'Validando Presença...'
-                  : `Confirmar Check-in (+${selectedStore.checkInPoints} pts)`}
+                  : 'Escanear QR Code da Loja'}
               </button>
-            </form>
+            ) : (
+              <button
+                type="button"
+                onClick={handleStopCameraScanner}
+                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-error py-4 text-sm font-extrabold text-white shadow-md"
+              >
+                <span className="material-symbols-outlined text-[20px]">
+                  close
+                </span>
+                Fechar Câmera
+              </button>
+            )}
           </section>
         </div>
 
@@ -498,22 +494,29 @@ function CheckInPageContent() {
 
           <section className="rounded-3xl border border-outline-variant/25 bg-surface-container-lowest p-5 shadow-card">
             <h3 className="font-headline text-base font-extrabold text-on-surface">
-              Motor Antifraude Ativo
+              Requisito Antifraude de Localização
             </h3>
             <ul className="mt-3 space-y-2 text-xs text-on-surface-variant">
               <li>
-                <strong className="text-on-surface">1. Geocerca 250m:</strong>{' '}
+                <strong className="text-on-surface">
+                  1. GPS Coletado na Hora:
+                </strong>{' '}
+                A posição geográfica é capturada em tempo real pelo navegador no
+                instante do check-in (sem coordenadas manuais).
+              </li>
+              <li>
+                <strong className="text-on-surface">2. Geocerca 250m:</strong>{' '}
                 Fórmula esférica de Haversine calculada no servidor.
               </li>
               <li>
                 <strong className="text-on-surface">
-                  2. Precisão GPS &le; 150m:
+                  3. Precisão GPS &le; 150m:
                 </strong>{' '}
-                Sinais degradados são bloqueados automaticamente.
+                Sinais degradados ou ausentes são bloqueados automaticamente.
               </li>
               <li>
                 <strong className="text-on-surface">
-                  3. 1 Check-in / Loja / Dia:
+                  4. 1 Check-in / Loja / Dia:
                 </strong>{' '}
                 Controle diário no fuso de Palmas (`America/Araguaina`).
               </li>

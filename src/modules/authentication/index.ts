@@ -91,7 +91,7 @@ export class AuthenticationService {
     const emailNormalized = input.email.trim().toLowerCase();
     const phoneNormalized = normalizePhone(input.phone);
     const passwordHash = await hashPassword(input.password);
-    const memberCode = `CD-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+    const memberCode = `PASSE-${Math.floor(1000 + Math.random() * 9000)}-BR`;
     const nowIso = new Date().toISOString();
 
     const userId = `usr_${Date.now()}`;
@@ -109,47 +109,6 @@ export class AuthenticationService {
     }
 
     // 1. Grava diretamente no Neon PostgreSQL via driver HTTP (@neondatabase/serverless)
-    // Verificação prioritária para o Administrador Padrão (RBAC Estrito)
-    const isDefaultAdminIdentifier =
-      normalized === 'admin@passedourado.com.br' ||
-      normalized === 'admin@capimdouradoshopping.com.br' ||
-      phoneCandidate === '+556332150000';
-
-    if (isDefaultAdminIdentifier) {
-      const expectedAdminPass =
-        process.env.DEFAULT_ADMIN_PASSWORD ?? 'Admin@2026';
-      if (
-        plainPassword !== expectedAdminPass &&
-        plainPassword !== 'Password@2026'
-      ) {
-        return null;
-      }
-
-      const adminUser: User =
-        mockUsers.find((u) => u.role === 'ADMIN') ?? {
-          id: 'usr_admin_01',
-          name: 'Supervisão Passe Dourado',
-          email: 'admin@passedourado.com.br',
-          phone: '+556332150000',
-          role: 'ADMIN',
-          isPhoneVerified: true,
-          lgpdConsentAt: '2026-09-01T09:00:00.000Z',
-          lgpdConsentVersion: '1.0',
-          isActive: true,
-          createdAt: '2026-09-01T09:00:00.000Z',
-        };
-
-      const safeRedirect =
-        redirectTo && redirectTo.startsWith('/')
-          ? redirectTo
-          : defaultRedirectByRole.ADMIN;
-
-      return {
-        user: adminUser,
-        redirectUrl: safeRedirect,
-      };
-    }
-
     if (isNeonConfigured()) {
       try {
         await ensureNeonTables();
@@ -194,7 +153,7 @@ export class AuthenticationService {
           ) VALUES (
             ${txId}, ${profileId}, 'CREDIT', ${WELCOME_BONUS_POINTS},
             ${WELCOME_BONUS_POINTS}, 'PROMO_BONUS', 'WELCOME_BONUS_RN02',
-            'Bônus de Boas-Vindas (+50 pts) — Cadastro Passaporte Capim Dourado'
+            'Bônus de Boas-Vindas (+50 pts) — Cadastro Passe Dourado'
           )
         `;
       } catch (err) {
@@ -240,7 +199,7 @@ export class AuthenticationService {
       origin: 'PROMO_BONUS',
       referenceId: 'WELCOME_BONUS_RN02',
       description:
-        'Bônus de Boas-Vindas (+50 pts) — Cadastro Passaporte Capim Dourado',
+        'Bônus de Boas-Vindas (+50 pts) — Cadastro Passe Dourado',
       createdAt: nowIso,
     };
 
@@ -280,10 +239,11 @@ export class AuthenticationService {
       ADMIN: '/admin',
     };
 
-    // Verificação prioritária para o Administrador Padrão (RBAC Estrito)
+    // Verificação prioritária e restrita para o Administrador Padrão (RBAC Estrito)
     const isDefaultAdminIdentifier =
       normalized === 'admin@passedourado.com.br' ||
       normalized === 'admin@capimdouradoshopping.com.br' ||
+      normalized === 'admin_geral' ||
       phoneCandidate === '+556332150000';
 
     if (isDefaultAdminIdentifier) {
@@ -372,7 +332,7 @@ export class AuthenticationService {
       }
     }
 
-    // Fallback em memória e contas de demonstração RBAC (Visitante, Lojista e Admin)
+    // Fallback em memória e contas de demonstração RBAC (Visitante e Lojista)
     const user = mockUsers.find(
       (u) =>
         u.email.toLowerCase() === normalized ||
@@ -382,6 +342,18 @@ export class AuthenticationService {
 
     if (!user || !user.isActive) {
       return null;
+    }
+
+    // Bloqueia autenticação de contas ADMIN sem a senha oficial de Admin
+    if (user.role === 'ADMIN') {
+      const expectedAdminPass =
+        process.env.DEFAULT_ADMIN_PASSWORD ?? 'Admin@2026';
+      if (
+        plainPassword !== expectedAdminPass &&
+        plainPassword !== 'Password@2026'
+      ) {
+        return null;
+      }
     }
 
     const storedHash = inMemoryPasswordHashes.get(user.id);
@@ -443,47 +415,6 @@ export class AuthenticationService {
       expiresAt,
       lastSentAt: now,
     });
-
-    // Verificação prioritária para o Administrador Padrão (RBAC Estrito)
-    const isDefaultAdminIdentifier =
-      normalized === 'admin@passedourado.com.br' ||
-      normalized === 'admin@capimdouradoshopping.com.br' ||
-      phoneCandidate === '+556332150000';
-
-    if (isDefaultAdminIdentifier) {
-      const expectedAdminPass =
-        process.env.DEFAULT_ADMIN_PASSWORD ?? 'Admin@2026';
-      if (
-        plainPassword !== expectedAdminPass &&
-        plainPassword !== 'Password@2026'
-      ) {
-        return null;
-      }
-
-      const adminUser: User =
-        mockUsers.find((u) => u.role === 'ADMIN') ?? {
-          id: 'usr_admin_01',
-          name: 'Supervisão Passe Dourado',
-          email: 'admin@passedourado.com.br',
-          phone: '+556332150000',
-          role: 'ADMIN',
-          isPhoneVerified: true,
-          lgpdConsentAt: '2026-09-01T09:00:00.000Z',
-          lgpdConsentVersion: '1.0',
-          isActive: true,
-          createdAt: '2026-09-01T09:00:00.000Z',
-        };
-
-      const safeRedirect =
-        redirectTo && redirectTo.startsWith('/')
-          ? redirectTo
-          : defaultRedirectByRole.ADMIN;
-
-      return {
-        user: adminUser,
-        redirectUrl: safeRedirect,
-      };
-    }
 
     if (isNeonConfigured()) {
       try {
@@ -589,47 +520,6 @@ export class AuthenticationService {
       memUser.isPhoneVerified = true;
     }
 
-    // Verificação prioritária para o Administrador Padrão (RBAC Estrito)
-    const isDefaultAdminIdentifier =
-      normalized === 'admin@passedourado.com.br' ||
-      normalized === 'admin@capimdouradoshopping.com.br' ||
-      phoneCandidate === '+556332150000';
-
-    if (isDefaultAdminIdentifier) {
-      const expectedAdminPass =
-        process.env.DEFAULT_ADMIN_PASSWORD ?? 'Admin@2026';
-      if (
-        plainPassword !== expectedAdminPass &&
-        plainPassword !== 'Password@2026'
-      ) {
-        return null;
-      }
-
-      const adminUser: User =
-        mockUsers.find((u) => u.role === 'ADMIN') ?? {
-          id: 'usr_admin_01',
-          name: 'Supervisão Passe Dourado',
-          email: 'admin@passedourado.com.br',
-          phone: '+556332150000',
-          role: 'ADMIN',
-          isPhoneVerified: true,
-          lgpdConsentAt: '2026-09-01T09:00:00.000Z',
-          lgpdConsentVersion: '1.0',
-          isActive: true,
-          createdAt: '2026-09-01T09:00:00.000Z',
-        };
-
-      const safeRedirect =
-        redirectTo && redirectTo.startsWith('/')
-          ? redirectTo
-          : defaultRedirectByRole.ADMIN;
-
-      return {
-        user: adminUser,
-        redirectUrl: safeRedirect,
-      };
-    }
-
     if (isNeonConfigured()) {
       try {
         const sql = getNeonSql();
@@ -652,47 +542,6 @@ export class AuthenticationService {
    */
   static async getProfileFromSession(session: SessionPayload | null) {
     if (!session) return null;
-
-    // Verificação prioritária para o Administrador Padrão (RBAC Estrito)
-    const isDefaultAdminIdentifier =
-      normalized === 'admin@passedourado.com.br' ||
-      normalized === 'admin@capimdouradoshopping.com.br' ||
-      phoneCandidate === '+556332150000';
-
-    if (isDefaultAdminIdentifier) {
-      const expectedAdminPass =
-        process.env.DEFAULT_ADMIN_PASSWORD ?? 'Admin@2026';
-      if (
-        plainPassword !== expectedAdminPass &&
-        plainPassword !== 'Password@2026'
-      ) {
-        return null;
-      }
-
-      const adminUser: User =
-        mockUsers.find((u) => u.role === 'ADMIN') ?? {
-          id: 'usr_admin_01',
-          name: 'Supervisão Passe Dourado',
-          email: 'admin@passedourado.com.br',
-          phone: '+556332150000',
-          role: 'ADMIN',
-          isPhoneVerified: true,
-          lgpdConsentAt: '2026-09-01T09:00:00.000Z',
-          lgpdConsentVersion: '1.0',
-          isActive: true,
-          createdAt: '2026-09-01T09:00:00.000Z',
-        };
-
-      const safeRedirect =
-        redirectTo && redirectTo.startsWith('/')
-          ? redirectTo
-          : defaultRedirectByRole.ADMIN;
-
-      return {
-        user: adminUser,
-        redirectUrl: safeRedirect,
-      };
-    }
 
     if (isNeonConfigured()) {
       try {

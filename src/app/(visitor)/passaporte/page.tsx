@@ -836,12 +836,13 @@ function VisitorPassportContent() {
                       </span>
                     ) : (
                       <Link
-                        href={`/checkin?qr=${encodeURIComponent(
-                          slot.qrCodeToken
-                        )}`}
-                        className="mt-2.5 w-full rounded-full bg-[#74520B] py-1.5 text-[10px] font-extrabold text-white"
+                        href="/checkin"
+                        className="mt-2.5 flex w-full items-center justify-center gap-1 rounded-full bg-[#74520B] py-1.5 text-[10px] font-extrabold text-white"
                       >
-                        Carimbar agora
+                        <span className="material-symbols-outlined text-[13px]">
+                          qr_code_scanner
+                        </span>
+                        Escanear QR
                       </Link>
                     )}
                   </div>

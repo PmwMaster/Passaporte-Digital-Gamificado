@@ -9,6 +9,7 @@ export function TopEnvironmentBar() {
   const pathname = usePathname() || '/';
   const [points, setPoints] = useState<number>(150);
   const [userName, setUserName] = useState<string>('Mariana Silva');
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   async function refreshPoints() {
     try {
@@ -22,21 +23,34 @@ export function TopEnvironmentBar() {
     }
   }
 
+  async function refreshAuthSession() {
+    try {
+      const r = await fetch('/api/auth/me', { cache: 'no-store' });
+      const j = await r.json();
+      if (j?.success && j?.data?.user) {
+        setUserName(
+          String(j.data.user.name).split(' ').slice(0, 2).join(' ')
+        );
+        setUserRole(String(j.data.user.role || 'VISITOR'));
+      } else {
+        setUserRole(null);
+      }
+    } catch {
+      setUserRole(null);
+    }
+  }
+
   useEffect(() => {
     refreshPoints();
-    fetch('/api/auth/me')
-      .then((r) => r.json())
-      .then((j) => {
-        if (j?.data?.user?.name) {
-          setUserName(j.data.user.name.split(' ').slice(0, 2).join(' '));
-        }
-      })
-      .catch(() => {});
+    refreshAuthSession();
 
     const handlePointsUpdated = () => refreshPoints();
+    const handleAuthUpdated = () => refreshAuthSession();
     window.addEventListener('passport:points-updated', handlePointsUpdated);
+    window.addEventListener('passport:auth-updated', handleAuthUpdated);
     return () => {
       window.removeEventListener('passport:points-updated', handlePointsUpdated);
+      window.removeEventListener('passport:auth-updated', handleAuthUpdated);
     };
   }, [pathname]);
 
@@ -139,16 +153,18 @@ export function TopEnvironmentBar() {
             >
               Lojista
             </Link>
-            <Link
-              href="/admin"
-              className={`px-3.5 py-2 rounded-full text-xs font-bold transition-all ${
-                isAdmin
-                  ? 'bg-[#1F1A11] text-white'
-                  : 'text-[#6A5D47] hover:bg-[#F3ECE0]'
-              }`}
-            >
-              Admin
-            </Link>
+            {(userRole === 'ADMIN' || isAdmin) && (
+              <Link
+                href="/admin"
+                className={`px-3.5 py-2 rounded-full text-xs font-bold transition-all ${
+                  isAdmin
+                    ? 'bg-[#1F1A11] text-white'
+                    : 'text-[#6A5D47] hover:bg-[#F3ECE0]'
+                }`}
+              >
+                🔒 Admin
+              </Link>
+            )}
           </nav>
 
           {/* Right Actions: Search + Points Chip + Avatar */}
@@ -168,19 +184,21 @@ export function TopEnvironmentBar() {
                   storefront
                 </span>
               </Link>
-              <Link
-                href="/admin"
-                title="Painel Admin"
-                className={`flex h-9 w-9 items-center justify-center rounded-full border transition-colors ${
-                  isAdmin
-                    ? 'bg-[#1F1A11] text-white border-[#1F1A11]'
-                    : 'bg-white text-[#5C503C] border-[#E5DEC9]'
-                }`}
-              >
-                <span className="material-symbols-outlined text-[18px]">
-                  bar_chart
-                </span>
-              </Link>
+              {(userRole === 'ADMIN' || isAdmin) && (
+                <Link
+                  href="/admin"
+                  title="Painel Admin (Restrito)"
+                  className={`flex h-9 w-9 items-center justify-center rounded-full border transition-colors ${
+                    isAdmin
+                      ? 'bg-[#1F1A11] text-white border-[#1F1A11]'
+                      : 'bg-white text-[#5C503C] border-[#E5DEC9]'
+                  }`}
+                >
+                  <span className="material-symbols-outlined text-[18px]">
+                    bar_chart
+                  </span>
+                </Link>
+              )}
             </div>
 
             {/* Golden Points Chip */}

@@ -20,13 +20,17 @@ export function getLocalCheckInDate(date: Date = new Date()): string {
 }
 
 /**
- * Verifica se a precisão reportada pelo GPS do dispositivo está dentro do limite aceitável (<= 150m).
+ * Verifica se a precisão reportada pelo GPS do dispositivo está presente e dentro do limite aceitável (<= 150m).
  */
 export function isGpsAccuracyAcceptable(accuracyMeters?: number): boolean {
-  if (accuracyMeters === undefined) {
-    return true;
+  if (accuracyMeters === undefined || accuracyMeters === null) {
+    return false;
   }
-  return Number.isFinite(accuracyMeters) && accuracyMeters >= 0 && accuracyMeters <= MAX_ACCEPTABLE_GPS_ACCURACY_METERS;
+  return (
+    Number.isFinite(accuracyMeters) &&
+    accuracyMeters >= 0 &&
+    accuracyMeters <= MAX_ACCEPTABLE_GPS_ACCURACY_METERS
+  );
 }
 
 /**

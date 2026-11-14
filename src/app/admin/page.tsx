@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AdministrationService } from '@/modules/administration';
 import { Campaign, Store, StoreCategory } from '@/shared/types/domain';
 import { PasseDouradoLogo } from '@/components/shared/PasseDouradoLogo';

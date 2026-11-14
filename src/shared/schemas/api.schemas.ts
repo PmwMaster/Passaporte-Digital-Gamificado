@@ -60,12 +60,29 @@ export const updateVisitorProfileSchema = z.object({
   optInMarketing: z.boolean().optional(),
 });
 
-// Funcionalidade 04 — Check-in QR Code + GPS
+// Funcionalidade 04 — Check-in QR Code + GPS (Localização em tempo real obrigatória)
 export const createCheckInSchema = z.object({
-  qrCodeToken: z.string().min(5, 'QR Code inválido'),
-  latitude: z.number().min(-90).max(90),
-  longitude: z.number().min(-180).max(180),
-  accuracyMeters: z.number().nonnegative().optional(),
+  qrCodeToken: z.string().min(5, 'Escaneie um QR Code válido da loja'),
+  latitude: z
+    .number({
+      required_error:
+        'A localização GPS coletada na hora é obrigatória para o check-in',
+    })
+    .min(-90)
+    .max(90),
+  longitude: z
+    .number({
+      required_error:
+        'A localização GPS coletada na hora é obrigatória para o check-in',
+    })
+    .min(-180)
+    .max(180),
+  accuracyMeters: z
+    .number({
+      required_error:
+        'A precisão do GPS em tempo real é obrigatória para aprovar o check-in',
+    })
+    .nonnegative(),
 });
 
 // Funcionalidade 07 (Fase 3) — Resgate de Recompensa

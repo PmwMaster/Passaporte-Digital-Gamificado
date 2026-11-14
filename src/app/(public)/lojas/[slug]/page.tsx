@@ -79,10 +79,9 @@ export default function StoreDetailPage() {
     mockVisitorProfile.currentPoints
   );
   const [allRewards, setAllRewards] = useState<Reward[]>(mockRewards);
-  const [checkedInToday, setCheckedInToday] = useState<boolean>(() =>
+  const [checkedInToday] = useState<boolean>(() =>
     mockCheckIns.some((c) => c.storeId === store.id && c.status === 'VALID')
   );
-  const [isCheckingIn, setIsCheckingIn] = useState(false);
   const [selectedOfferModal, setSelectedOfferModal] =
     useState<StoreExclusiveOffer | null>(null);
   const [redeemedVoucherModal, setRedeemedVoucherModal] =
@@ -123,43 +122,6 @@ export default function StoreDetailPage() {
     setTimeout(() => {
       setToastMessage((prev) => (prev === msg ? null : prev));
     }, 4000);
-  }
-
-  async function handleQuickCheckIn() {
-    if (checkedInToday || isCheckingIn) return;
-    setIsCheckingIn(true);
-    try {
-      const res = await fetch('/api/checkins', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          qrCodeToken: store.qrCodeToken,
-          latitude: -10.18448,
-          longitude: -48.33368,
-          accuracyMeters: 12,
-        }),
-      });
-      const json = await res.json();
-      if (json.success) {
-        setCheckedInToday(true);
-        setCurrentPoints(json.data.newBalance);
-        window.dispatchEvent(new Event('passport:points-updated'));
-        showToast(
-          `✓ Check-in confirmado em ${store.name}! +${json.data.checkIn.pointsAwarded} pontos creditados.`
-        );
-      } else {
-        if (json.error?.code === 'DUPLICATE_DAILY_CHECKIN') {
-          setCheckedInToday(true);
-        }
-        showToast(
-          json.error?.message ?? 'Check-in já realizado hoje nesta loja.'
-        );
-      }
-    } catch {
-      showToast('Erro de conexão ao registrar check-in.');
-    } finally {
-      setIsCheckingIn(false);
-    }
   }
 
   async function handleRedeemReward(reward: Reward) {
@@ -336,12 +298,12 @@ export default function StoreDetailPage() {
             Segunda a Domingo: 10h às 22h
           </p>
 
-          {/* Box Creme Interno: Loja do Passaporte + Botão Fazer check-in */}
+          {/* Box Creme Interno: Loja do Passaporte + Redirecionamento para Escanear QR Code */}
           <div className="mt-4 rounded-2xl bg-[#EFE4C8]/85 p-4">
             <div className="flex items-center gap-3">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-[#74520B] shadow-sm">
                 <span className="material-symbols-outlined text-[22px]">
-                  location_on
+                  qr_code_scanner
                 </span>
               </div>
               <div>
@@ -349,27 +311,26 @@ export default function StoreDetailPage() {
                   Loja do Passaporte
                 </h2>
                 <p className="text-xs text-[#5A5243]">
-                  +{store.checkInPoints} pontos por check-in presencial
+                  +{store.checkInPoints} pontos • Escaneie o QR Code com GPS ativo na hora
                 </p>
               </div>
             </div>
 
-            <button
-              type="button"
-              onClick={handleQuickCheckIn}
-              disabled={checkedInToday || isCheckingIn}
-              className={`mt-3.5 w-full rounded-full py-3.5 text-xs font-extrabold text-white shadow-sm transition active:scale-98 ${
-                checkedInToday
-                  ? 'bg-[#256B30]'
-                  : 'bg-[#74520B] hover:bg-[#5E4108]'
-              }`}
-            >
-              {checkedInToday
-                ? '✓ Check-in realizado hoje'
-                : isCheckingIn
-                ? 'Validando presença...'
-                : 'Fazer check-in'}
-            </button>
+            {checkedInToday ? (
+              <div className="mt-3.5 w-full rounded-full bg-[#256B30] py-3.5 text-center text-xs font-extrabold text-white shadow-sm">
+                ✓ Check-in realizado hoje
+              </div>
+            ) : (
+              <Link
+                href="/checkin"
+                className="mt-3.5 flex w-full items-center justify-center gap-2 rounded-full bg-[#74520B] py-3.5 text-xs font-extrabold text-white shadow-sm transition hover:bg-[#5E4108] active:scale-98"
+              >
+                <span className="material-symbols-outlined text-[18px]">
+                  qr_code_scanner
+                </span>
+                Escanear QR Code para Check-in
+              </Link>
+            )}
           </div>
         </div>
       </section>
