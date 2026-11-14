@@ -8,7 +8,7 @@ import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('Iniciando seed no Neon Serverless PostgreSQL...');
+  console.log('Iniciando seed no Neon Serverless PostgreSQL (neondb)...');
 
   const defaultHash = await bcrypt.hash('Password@2026', 10);
 
@@ -23,11 +23,12 @@ async function main() {
         longitude: -48.3337,
         radiusMeters: 250,
       }),
-      description: 'Coordenadas oficiais e raio Haversine (250m) do Capim Dourado Shopping',
+      description:
+        'Coordenadas oficiais e raio Haversine (250m) do Capim Dourado Shopping',
     },
   });
 
-  // 2. Loja Parceira inicial
+  // 2. Lojas Parceiras iniciais
   const cafeJalapao = await prisma.store.upsert({
     where: { slug: 'cafe-jalapao-gourmet' },
     update: {},
@@ -48,7 +49,86 @@ async function main() {
     },
   });
 
-  // 3. Visitante Demo
+  const atelierOuro = await prisma.store.upsert({
+    where: { slug: 'atelier-ouro-do-cerrado' },
+    update: {},
+    create: {
+      slug: 'atelier-ouro-do-cerrado',
+      name: 'Atelier Ouro do Cerrado',
+      category: 'MODA',
+      floor: 'Piso 1 • Ala Norte',
+      unitNumber: 'L-118',
+      description:
+        'Joias autorais em capim dourado legítimo, bolsas artesanais e acessórios exclusivos de alta curadoria.',
+      qrCodeToken: 'QR-CD-STORE-02-VERIFIED',
+      checkInPoints: 60,
+      latitude: -10.18452,
+      longitude: -48.33371,
+      isFeatured: true,
+      isActive: true,
+    },
+  });
+
+  await prisma.store.upsert({
+    where: { slug: 'gelateria-sol-de-palmas' },
+    update: {},
+    create: {
+      slug: 'gelateria-sol-de-palmas',
+      name: 'Gelateria Sol de Palmas',
+      category: 'GASTRONOMIA',
+      floor: 'Piso 2 • Praça de Alimentação',
+      unitNumber: 'Q-219',
+      description:
+        'Gelatos italianos artesanais com sabores clássicos e frutas nativas como buriti, cajá e murici.',
+      qrCodeToken: 'QR-CD-STORE-03-VERIFIED',
+      checkInPoints: 35,
+      latitude: -10.18445,
+      longitude: -48.33362,
+      isFeatured: true,
+      isActive: true,
+    },
+  });
+
+  // 3. Recompensa inicial na loja Café Jalapão
+  await prisma.reward.upsert({
+    where: { id: 'rew_seed_01' },
+    update: {},
+    create: {
+      id: 'rew_seed_01',
+      storeId: cafeJalapao.id,
+      title: 'Espresso Duplo + Pão de Queijo Recheado',
+      description:
+        'Degustação especial preparada por barista com grãos selecionados e pão de queijo artesanal na chapa.',
+      rules:
+        'Válido para consumo presencial na loja em até 2 horas após a emissão do voucher.',
+      pointsCost: 160,
+      initialStock: 50,
+      availableStock: 18,
+      maxPerVisitor: 2,
+      voucherValidityHours: 2,
+      approvalStatus: 'APPROVED',
+      isActive: true,
+    },
+  });
+
+  // 4. Campanha inicial aprovada
+  await prisma.campaign.upsert({
+    where: { slug: 'temporada-ouro-do-cerrado' },
+    update: {},
+    create: {
+      storeId: atelierOuro.id,
+      title: 'Temporada Ouro do Cerrado • Pontos em Dobro',
+      slug: 'temporada-ouro-do-cerrado',
+      description:
+        'Realize check-in nas lojas participantes e acumule selos especiais no seu Passaporte Digital.',
+      bonusMultiplier: 2.0,
+      status: 'APPROVED',
+      startsAt: new Date('2026-11-01T00:00:00.000Z'),
+      endsAt: new Date('2026-12-31T23:59:59.000Z'),
+    },
+  });
+
+  // 5. Visitante Demo
   await prisma.user.upsert({
     where: { email: 'mariana.alves@exemplo.com.br' },
     update: {},
@@ -74,7 +154,7 @@ async function main() {
     },
   });
 
-  // 4. Lojista Demo
+  // 6. Lojista Demo
   await prisma.user.upsert({
     where: { email: 'gerencia@cafejalapao.com.br' },
     update: {},
@@ -98,7 +178,7 @@ async function main() {
     },
   });
 
-  // 5. Administrador Demo
+  // 7. Administrador Demo
   await prisma.user.upsert({
     where: { email: 'admin@capimdouradoshopping.com.br' },
     update: {},
